@@ -1,0 +1,73 @@
+option, warn,info;
+system,"rm -rf temp"; system,"mkdir temp";
+system,"ln -fns /afs/cern.ch/eng/lhc/optics/HLLHCV1.3 slhc";
+system,"ln -fns /afs/cern.ch/eng/lhc/optics/runIII lhc";
+
+Option, -echo,-warn,-info;
+call,file="lhc/lhc.seq";
+call,file="slhc/toolkit/macro.madx";
+call,file="slhc/toolkit/optics_log.madx";
+Option, -echo,warn,-info,no_fatal_stop;
+
+
+exec,mk_beam(7000);
+seqedit,sequence=lhcb1; flatten; cycle,start=s.ds.l3.b1; endedit;
+seqedit,sequence=lhcb2; flatten; cycle,start=s.ds.l3.b2; endedit;
+
+call,file="slhc/hllhc_sequence.madx";
+call,file="slhc/opt_500_500_500_500.madx";
+exec,check_ip(b1); exec,check_ip(b2);
+
+make_opt(bbb): macro={
+if(is_thin==0){
+if (bbb<=500){call,file="slhc/squeeze/opt_bbb_bbb_bbb_bbb.madx";};
+if (bbb>500) {call,file="slhc/squeeze/opt_squeeze_bbb_3000.madx";};
+};
+if(is_thin==1){
+if (bbb<=500){call,file="slhc/squeeze/opt_bbb_bbb_bbb_bbb_thin.madx";};
+if (bbb>500) {call,file="slhc/squeeze/opt_squeeze_bbb_3000_thin.madx";};
+};
+exec,check_ip(b1); exec,check_ip(b2);
+
+scxir1=betx_IP1/betx0_IP1;
+scyir1=bety_IP1/bety0_IP1;
+
+
+exec,selectIRAUX(7,8,1,2,3,b1,scxir1,scyir1,betx0_ip1,bety0_ip1);
+exec,selectIRAUX(7,8,1,2,3,b2,scxir1,scyir1,betx0_ip1,bety0_ip1);
+on_holdselect=1;
+exec,mk_irtwiss(8,b1); exec,mk_irtwiss(8,b2);
+betxip8b1=3;
+betxip8b2:=betxip8b1;
+betyip8b1:=betxip8b1;
+betyip8b2:=betxip8b1;
+apq8=2512; apq6=apq8; apq7=apq8;
+scl=0.15; sch=0.99;
+no_match_beta=0; jac_calls=10; jac_tol=1e-14;
+while(betxip8b1>1.4){
+  betxip8b1=betxip8b1-0.1;
+  match_on_triplet=0; call,file="slhc/toolkit/rematch_ir8b12.madx";
+};
+call,file="slhc/toolkit/rematch_xing_ir28.madx";
+call,file="slhc/toolkit/rematch_w.madx";
+call,file="slhc/toolkit/rematch_disp.madx";
+
+if (bbb<=500){
+    if (is_thin==0){exec,save_optics_hllhc(opt_bbb_bbb_bbb_bbb.madx);};
+    if (is_thin==1){exec,save_optics_hllhc(opt_bbb_bbb_bbb_bbb_thin.madx);};
+};
+if (bbb>500){
+    if (is_thin==0){exec,save_optics_hllhc(opt_squeeze_bbb_1500.madx);};
+    if (is_thin==1){exec,save_optics_hllhc(opt_squeeze_bbb_1500_thin.madx);};
+};
+
+};
+
+
+exec,make_opt(%BBB);
+exec,myslice;
+exec,make_opt(%BBB);
+
+system,"tar cvfz result.tgz *.madx *.tfs";
+
+stop;
