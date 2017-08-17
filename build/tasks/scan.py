@@ -75,6 +75,7 @@ class Scan(object):
         else:
            outline='transfer_output_files   = %s'%out
         data['outline']=outline
+        data['cases']=', '.join([self.get_case_dir(case) for case in self.get_cases()])
         tmp="""\
         executable              = madx_wrapper.sh
         arguments               = {mask}
@@ -85,7 +86,8 @@ class Scan(object):
         transfer_input_files    = {mask}
         {outline}
         +MaxRuntime = {runtime}
-        queue dirname matching ({studydir}/*)
+        queue dirname in {cases}
+        ##queue dirname matching ({studydir}/*)
         """.format(**data)
         fn="%s.condor"%self.studydir
         open(fn,'w').write(tmp)
