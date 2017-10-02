@@ -453,8 +453,8 @@ match, sequence=lhcb1,lhcb2, beta0= birirnb1,birirnb2,
   vary,name=acbyhvs4.lirnb2, step=1.0E-12,lower=-climmcby4,upper=climmcby4;
   vary,name=acbyhvs4.rirnb2, step=1.0E-12,lower=-climmcby4,upper=climmcby4;
   acbyhv4.lirnb1 :=acbyhvs4.lirnb1;
-  acbyhv4.rirnb2 :=acbyhvs4.rirnb2;
-  acbyhv4.lirnb1 :=acbyhvs4.lirnb1;
+  acbyhv4.lirnb2 :=acbyhvs4.lirnb2;
+  acbyhv4.rirnb1 :=acbyhvs4.rirnb1;
   acbyhv4.rirnb2 :=acbyhvs4.rirnb2;
   vary,name=acbyhvs5.lirnb1, step=1.0E-12,lower=-climmcby5,upper=climmcby5;
   vary,name=acbyhvs5.lirnb2, step=1.0E-12,lower=-climmcby5,upper=climmcby5;
