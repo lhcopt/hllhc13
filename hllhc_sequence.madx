@@ -1849,6 +1849,9 @@ if (mbh_ir7q10>0){ exec,install_mbh(b,10,7,6,8); };
 
 !end slhc/toolkit/install_mbh.madx
 
+!set default lag for cavities
 
+LAGRF400.B1=0.5;
+LAGRF400.B2=0.;
 
 endedit;

@@ -51,4 +51,23 @@ value,table(twiss,IP5,t),table(twiss,IP5,x),table(twiss,IP5,px)*z_crab;
 value,table(twiss,IP1,t),table(twiss,IP1,y),table(twiss,IP1,py)*z_crab;
 z_crab=0;
 
+! sixtrack model
+
+exec,myslice;
+
+call,file="slhc/opt_150_150_150_150_thin.madx";
+exec,check_ip(b1); exec,check_ip(b2);
+
+
+on_sep1:=-0;on_x1:=295;phi_IR1 := 90; on_sol_atlas:=0;on_crab1:=0;
+on_sep5:= 0;on_x5:=295;phi_IR5 :=  0; on_sol_cms  :=0;on_crab5:=0;
+on_sep2:= ;on_x2:= 200;on_a2=0;on_alice:=7000/nrj;on_sol_alice:=0;
+on_sep8:=-;on_x8:=-250;on_a8=0;on_lhcb :=7000/nrj;
+on_disp=1;
+
+
+exec,check_ip(b1);
+
+sixtrack,cavall, radius=0.017;
+
 
