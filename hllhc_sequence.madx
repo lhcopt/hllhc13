@@ -1172,6 +1172,16 @@ MS.10R5.B2: MS,K2:=0, polarity=+1*bv_aux;
 on_cutMS.10f=1;
 };
 
+DISABLE_SEXT_F_ALT(MS.14):macro={
+MS.14R8.B1: MS,K2:=0;
+MS.14R4.B1: MS,K2:=0;
+MS.14L2.B2: MS,K2:=0, polarity=+1*bv_aux;
+MS.14L6.B2: MS,K2:=0, polarity=+1*bv_aux;
+on_cutMS.14f=1;
+};
+
+
+
 DISABLE_SEXT_D(MS.10):macro={
 MS.10R1.B1: MS,K2:=0;
 MS.10R5.B1: MS,K2:=0;
