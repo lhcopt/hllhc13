@@ -1,0 +1,20 @@
+
+opt_150_150_150_150_thin.madx
+and 
+opt_150_150_150_150_alt2_thin.madx
+
+to be used with
+
+exec,DISABLE_SEXT(MS.10);
+exec,DISABLE_SEXT_F(MS.14);!remove MS14 focusing in IR1/5
+
+
+
+opt_150_150_150_150_alt_thin.madx
+opt_150_150_150_150_alt3_thin.madx
+
+to be used with
+
+exec,DISABLE_SEXT(MS.10);
+exec,DISABLE_SEXT_F_ALT(MS.14); !remove MS14 focusing in IR4/6/2/8
+
