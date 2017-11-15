@@ -163,10 +163,10 @@ if (ir5q4sym==1){
   vary,name=KQ4.L5B2   ,UPPER=-scl*qtlimq4,LOWER=-sch*qtlimq4;!,slope=-1;
 };
 if (ir5q4sym==-2){
-  vary,name=KQ4.R5b1   ,UPPER= sch*qtlimq4,LOWER= scl*qtlimq4;!,slope=1;
-  vary,name=KQ4.R5B2   ,UPPER=-scl*qtlimq4,LOWER=-sch*qtlimq4;!,slope=-1;
-  vary,name=KQ4.L5b2   ,UPPER= sch*qtlimq4,LOWER= scl*qtlimq4;!,slope=1;
-  vary,name=KQ4.L5B1   ,UPPER=-scl*qtlimq4,LOWER=-sch*qtlimq4;!,slope=-1;
+  vary,name=KQ4.R5b2   ,UPPER= sch*qtlimq4,LOWER= scl*qtlimq4;!,slope=1;
+  vary,name=KQ4.R5B1   ,UPPER=-scl*qtlimq4,LOWER=-sch*qtlimq4;!,slope=-1;
+  vary,name=KQ4.L5b1   ,UPPER= sch*qtlimq4,LOWER= scl*qtlimq4;!,slope=1;
+  vary,name=KQ4.L5B2   ,UPPER=-scl*qtlimq4,LOWER=-sch*qtlimq4;!,slope=-1;
 };
 if (ir5q5sym==0){
   Kq5.L5B1=Kq5.L5B1;Kq5.R5B1=Kq5.R5B1;

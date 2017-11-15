@@ -86,6 +86,11 @@ if (tarsqueeze>1e-15 || match_optics_only==1){return;};
 call,file="slhc/toolkit/rematch_xing_ir15.madx";
 call,file="slhc/toolkit/rematch_xing_ir28.madx";
 
+value,tar_xing_ir15,tar_xing_ir28;
+
+ksf=0.06;ksd=-0.099;
+exec,set_sext_all(ksf,ksd,ksf,ksd); k2max=0.38;
+
 if (match_w2==0){
 call,file="slhc/toolkit/rematch_w.madx";
 call,file="slhc/toolkit/rematch_disp.madx";

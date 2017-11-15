@@ -59,9 +59,9 @@ refdmuxkickb1_tcdqb=table(twiss,TCDQA.B4R6.B1,mux)-table(twiss,MKD.H5L6.B1,mux);
 refdmuxkickb1_tcdqa=table(twiss,TCDQA.A4R6.B1,mux)-table(twiss,MKD.H5L6.B1,mux);
 refdmuxkickb1=refdmuxkickb1_tcdqc;
 if(abs(refdmuxkickb1_tcdqa-0.25)>abs(refdmuxkickb1-0.25)){
-refdmuxkickb1=refdmuxkickb2_tcdqa;};
+refdmuxkickb1=refdmuxkickb1_tcdqa;};
 if(abs(refdmuxkickb1_tcdqb-0.25)>abs(refdmuxkickb1-0.25)){
-refdmuxkickb1=refdmuxkickb2_tcdqb;};
+refdmuxkickb1=refdmuxkickb1_tcdqb;};
 
 refdxq5l6b1=abs(table(twiss,MQY.5L6.B1,dx));
 refdxq4r6b1=abs(table(twiss,MQY.4R6.B1,dx));
@@ -95,7 +95,7 @@ reftcdqgapb1 = chi6_nsig*sqrt(chi6_emitx*refbetxtcdqb1);
 if(abs(dmuxkickb1_tcsg)>0){
 constraint,weight=1000,expr= refdmuxkickb1_tcsg=dmuxkickb1_tcsg;
 } else {
-constraint,weight=1000,expr= abs(refdmuxkickb1-0.250)<0.0111;!90+-4 deviation
+constraint,weight=1e6,expr= abs(refdmuxkickb1-0.250)<0.0111;!90+-4 deviation
 };
 if(bxdumpb1>0 && bydumpb1>0){
 constraint,expr=refbxdumpb1=bxdumpb1;
@@ -112,7 +112,7 @@ if(betxtcdqb1>0){
   constraint, sequence=lhcb1,range=TCDQA.A4R6.B1,betx > 430;
 };
 if(betytcdqb1>0){
-  constraint,expr=refbetytcdsb2 > betytcdqb1;
+  constraint,expr=refbetytcdsb1 > betytcdqb1;
 } else {
   constraint, sequence=lhcb1,range=TCDQA.A4R6.B1,bety >145;
 };
@@ -120,10 +120,10 @@ constraint, sequence=lhcb1,range=TCDSA.4L6.B1,bety > 170;
 if (NRJ<451){constraint, sequence=lhcb1,range=TCDSA.4L6.B1,betx < 175; };
 
 !dispersion in straight section <0.5
-constraint,expr= refdxq5l6b1<0.6; !was 0.5
-constraint,expr= refdxq4r6b1<0.6; !was 0.5
+constraint,expr= refdxq5l6b1<0.7; !was 0.5
+constraint,expr= refdxq4r6b1<0.7; !was 0.5
 constraint,expr= abs(refdxtcdqb1)<0.5;
-constraint,sequence=lhcb2,range=MQY.5R6.B1,bety<1500;
+constraint,sequence=lhcb2,range=MQY.5R6.B1,bety<905;
 constraint,sequence=lhcb2,range=MQY.4L6.B1,bety<1500;
 
 if (dmuxkickb1_bdsa>0){ constraint,expr=refdmuxkickb1_bdsa=dmuxkickb1_bdsa;};
@@ -147,10 +147,10 @@ constraint,range=MQY.4R6.B1,betx   < betir;
 constraint,range=MQY.5R6.B1,bety   < betir;
 constraint,range=mqml.10l6.b1,bety < betir;
 constraint,range=mqm.9l6.b1,betx   < betir;
-constraint,range=MQY.5R6.B1,bety   < 684;
-constraint,range=tcdqm.b4r6.b1,betx <590,dx<-0.31;
-constraint,range=tcdqm.b4l6.b1,bety <599;
-constraint,range=MQY.5R6.B1,bety   < 800;
+!constraint,range=MQY.5R6.B1,bety   < 684;
+!constraint,range=tcdqm.b4r6.b1,betx <590,dx<-0.31;
+!constraint,range=tcdqm.b4l6.b1,bety <599;
+!constraint,range=MQY.5R6.B1,bety   < 800;
 };
 if(match_on_aperture==1){
 !constraint,range=mqm.9r6.b1,bety<205;

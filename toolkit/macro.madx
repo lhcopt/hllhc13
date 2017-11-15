@@ -2023,11 +2023,11 @@ on_disp=0;
 OFF_DISPCOR: macro = {
 !switch off all MCB participating in the dispersion correction in sectors 81/12/45/56
 !Left IR5-B1
-acbh14.r4b1=0;acbh16.r4b1=0;acbh14.l5b1=0;acbh12.l5b1=0;
+acbh12.r4b1=0;acbh14.r4b1=0;acbh16.r4b1=0;acbh14.l5b1=0;acbh12.l5b1=0;
 acbv13.r4b1=0;acbv15.r4b1=0;acbv15.l5b1=0;acbv13.l5b1=0;
-acbh14.r4b1x=0;acbh16.r4b1x=0;acbh14.l5b1x=0;acbh12.l5b1x=0;
+acbh12.r4b1x=0;acbh14.r4b1x=0;acbh16.r4b1x=0;acbh14.l5b1x=0;acbh12.l5b1x=0;
 acbv13.r4b1x=0;acbv15.r4b1x=0;acbv15.l5b1x=0;acbv13.l5b1x=0;
-acbh14.r4b1s=0;acbh16.r4b1s=0;acbh14.l5b1s=0;acbh12.l5b1s=0;
+acbh12.r4b1s=0;acbh14.r4b1s=0;acbh16.r4b1s=0;acbh14.l5b1s=0;acbh12.l5b1s=0;
 acbv13.r4b1s=0;acbv15.r4b1s=0;acbv15.l5b1s=0;acbv13.l5b1s=0;
 !Right IR5-B1
 acbh13.r5b1=0;acbh15.r5b1=0;acbh15.l6b1=0;acbh13.l6b1=0;
@@ -2037,11 +2037,11 @@ acbv12.r5b1x=0;acbv14.r5b1x=0;acbv16.l6b1x=0;acbv14.l6b1x=0;
 acbh13.r5b1s=0;acbh15.r5b1s=0;acbh15.l6b1s=0;acbh13.l6b1s=0;
 acbv12.r5b1s=0;acbv14.r5b1s=0;acbv16.l6b1s=0;acbv14.l6b1s=0;
 !Left IR1-B1
-acbh14.r8b1=0;acbh16.r8b1=0;acbh14.l1b1=0;acbh12.l1b1=0;
+acbh12.r8b1=0;acbh14.r8b1=0;acbh16.r8b1=0;acbh14.l1b1=0;acbh12.l1b1=0;
 acbv13.r8b1=0;acbv15.r8b1=0;acbv15.l1b1=0;acbv13.l1b1=0;
-acbh14.r8b1x=0;acbh16.r8b1x=0;acbh14.l1b1x=0;acbh12.l1b1x=0;
+acbh12.r8b1x=0;acbh14.r8b1x=0;acbh16.r8b1x=0;acbh14.l1b1x=0;acbh12.l1b1x=0;
 acbv13.r8b1x=0;acbv15.r8b1x=0;acbv15.l1b1x=0;acbv13.l1b1x=0;
-acbh14.r8b1s=0;acbh16.r8b1s=0;acbh14.l1b1s=0;acbh12.l1b1s=0;
+acbh12.r8b1s=0;acbh14.r8b1s=0;acbh16.r8b1s=0;acbh14.l1b1s=0;acbh12.l1b1s=0;
 acbv13.r8b1s=0;acbv15.r8b1s=0;acbv15.l1b1s=0;acbv13.l1b1s=0;
 !Right IR1-B1
 acbh13.r1b1=0;acbh15.r1b1=0;acbh15.l2b1=0;acbh13.l2b1=0;
@@ -2058,11 +2058,11 @@ acbv14.r4b2x=0;acbv16.r4b2x=0;acbv14.l5b2x=0;acbv12.l5b2x=0;
 acbh13.r4b2s=0;acbh15.r4b2s=0;acbh15.l5b2s=0;acbh13.l5b2s=0;
 acbv14.r4b2s=0;acbv16.r4b2s=0;acbv14.l5b2s=0;acbv12.l5b2s=0;
 !Right IR5-B2
-acbh12.r5b2=0;acbh14.r5b2=0;acbh16.l6b2=0;acbh14.l6b2=0;
+acbh12.r5b2=0;acbh14.r5b2=0;acbh16.l6b2=0;acbh14.l6b2=0;acbh12.l6b2=0;
 acbv13.r5b2=0;acbv15.r5b2=0;acbv15.l6b2=0;acbv13.l6b2=0;
-acbh12.r5b2x=0;acbh14.r5b2x=0;acbh16.l6b2x=0;acbh14.l6b2x=0;
+acbh12.r5b2x=0;acbh14.r5b2x=0;acbh16.l6b2x=0;acbh14.l6b2x=0;acbh12.l6b2x=0;
 acbv13.r5b2x=0;acbv15.r5b2x=0;acbv15.l6b2x=0;acbv13.l6b2x=0;
-acbh12.r5b2s=0;acbh14.r5b2s=0;acbh16.l6b2s=0;acbh14.l6b2s=0;
+acbh12.r5b2s=0;acbh14.r5b2s=0;acbh16.l6b2s=0;acbh14.l6b2s=0;acbh12.l6b2s=0;
 acbv13.r5b2s=0;acbv15.r5b2s=0;acbv15.l6b2s=0;acbv13.l6b2s=0;
 !Left IR1-B2
 acbh13.r8b2=0;acbh15.r8b2=0;acbh15.l1b2=0;acbh13.l1b2=0;
@@ -2072,11 +2072,11 @@ acbv14.r8b2x=0;acbv16.r8b2x=0;acbv14.l1b2x=0;acbv12.l1b2x=0;
 acbh13.r8b2s=0;acbh15.r8b2s=0;acbh15.l1b2s=0;acbh13.l1b2s=0;
 acbv14.r8b2s=0;acbv16.r8b2s=0;acbv14.l1b2s=0;acbv12.l1b2s=0;
 !Right IR1-B2
-acbh12.r1b2=0;acbh14.r1b2=0;acbh16.l2b2=0;acbh14.l2b2=0;
+acbh12.r1b2=0;acbh14.r1b2=0;acbh16.l2b2=0;acbh14.l2b2=0;acbh12.l2b2=0;
 acbv13.r1b2=0;acbv15.r1b2=0;acbv15.l2b2=0;acbv13.l2b2=0;
-acbh12.r1b2x=0;acbh14.r1b2x=0;acbh16.l2b2x=0;acbh14.l2b2x=0;
+acbh12.r1b2x=0;acbh14.r1b2x=0;acbh16.l2b2x=0;acbh14.l2b2x=0;acbh12.l2b2x=0;
 acbv13.r1b2x=0;acbv15.r1b2x=0;acbv15.l2b2x=0;acbv13.l2b2x=0;
-acbh12.r1b2s=0;acbh14.r1b2s=0;acbh16.l2b2s=0;acbh14.l2b2s=0;
+acbh12.r1b2s=0;acbh14.r1b2s=0;acbh16.l2b2s=0;acbh14.l2b2s=0;acbh12.l2b2s=0;
 acbv13.r1b2s=0;acbv15.r1b2s=0;acbv15.l2b2s=0;acbv13.l2b2s=0;
 
 on_disp=0;
@@ -2237,6 +2237,7 @@ CABLE_DISPCOR: macro = {
 on_xx1:=on_x1;on_ssep1:=on_sep1;
 on_xx5:=on_x5;on_ssep5:=on_sep5;
 !Left IR5-B1
+acbh12.r4b1:=(acbh12.r4b1x*cos(twopi*PHI_IR5/360.)*on_xx5+acbh12.r4b1s*sin(twopi*PHI_IR5/360.)*on_ssep5)*ON_DISP;
 acbh14.r4b1:=(acbh14.r4b1x*cos(twopi*PHI_IR5/360.)*on_xx5+acbh14.r4b1s*sin(twopi*PHI_IR5/360.)*on_ssep5)*ON_DISP;
 acbh16.r4b1:=(acbh16.r4b1x*cos(twopi*PHI_IR5/360.)*on_xx5+acbh16.r4b1s*sin(twopi*PHI_IR5/360.)*on_ssep5)*ON_DISP;
 acbh14.l5b1:=(acbh14.l5b1x*cos(twopi*PHI_IR5/360.)*on_xx5+acbh14.l5b1s*sin(twopi*PHI_IR5/360.)*on_ssep5)*ON_DISP;
@@ -2255,6 +2256,7 @@ acbv14.r5b1:=(acbv14.r5b1x*sin(twopi*PHI_IR5/360.)*on_xx5+acbv14.r5b1s*cos(twopi
 acbv16.l6b1:=(acbv16.l6b1x*sin(twopi*PHI_IR5/360.)*on_xx5+acbv16.l6b1s*cos(twopi*PHI_IR5/360.)*on_ssep5)*ON_DISP;
 acbv14.l6b1:=(acbv14.l6b1x*sin(twopi*PHI_IR5/360.)*on_xx5+acbv14.l6b1s*cos(twopi*PHI_IR5/360.)*on_ssep5)*ON_DISP;
 !Left IR1-B1
+acbh12.r8b1:=(acbh12.r8b1x*cos(twopi*PHI_IR1/360.)*on_xx1+acbh12.r8b1s*sin(twopi*PHI_IR1/360.)*on_ssep1)*ON_DISP;
 acbh14.r8b1:=(acbh14.r8b1x*cos(twopi*PHI_IR1/360.)*on_xx1+acbh14.r8b1s*sin(twopi*PHI_IR1/360.)*on_ssep1)*ON_DISP;
 acbh16.r8b1:=(acbh16.r8b1x*cos(twopi*PHI_IR1/360.)*on_xx1+acbh16.r8b1s*sin(twopi*PHI_IR1/360.)*on_ssep1)*ON_DISP;
 acbh14.l1b1:=(acbh14.l1b1x*cos(twopi*PHI_IR1/360.)*on_xx1+acbh14.l1b1s*sin(twopi*PHI_IR1/360.)*on_ssep1)*ON_DISP;
@@ -2286,6 +2288,7 @@ acbh12.r5b2:=(acbh12.r5b2x*cos(twopi*PHI_IR5/360.)*on_xx5+acbh12.r5b2s*sin(twopi
 acbh14.r5b2:=(acbh14.r5b2x*cos(twopi*PHI_IR5/360.)*on_xx5+acbh14.r5b2s*sin(twopi*PHI_IR5/360.)*on_ssep5)*ON_DISP;
 acbh16.l6b2:=(acbh16.l6b2x*cos(twopi*PHI_IR5/360.)*on_xx5+acbh16.l6b2s*sin(twopi*PHI_IR5/360.)*on_ssep5)*ON_DISP;
 acbh14.l6b2:=(acbh14.l6b2x*cos(twopi*PHI_IR5/360.)*on_xx5+acbh14.l6b2s*sin(twopi*PHI_IR5/360.)*on_ssep5)*ON_DISP;
+acbh12.l6b2:=(acbh12.l6b2x*cos(twopi*PHI_IR5/360.)*on_xx5+acbh12.l6b2s*sin(twopi*PHI_IR5/360.)*on_ssep5)*ON_DISP;
 acbv13.r5b2:=(acbv13.r5b2x*sin(twopi*PHI_IR5/360.)*on_xx5+acbv13.r5b2s*cos(twopi*PHI_IR5/360.)*on_ssep5)*ON_DISP;
 acbv15.r5b2:=(acbv15.r5b2x*sin(twopi*PHI_IR5/360.)*on_xx5+acbv15.r5b2s*cos(twopi*PHI_IR5/360.)*on_ssep5)*ON_DISP;
 acbv15.l6b2:=(acbv15.l6b2x*sin(twopi*PHI_IR5/360.)*on_xx5+acbv15.l6b2s*cos(twopi*PHI_IR5/360.)*on_ssep5)*ON_DISP;
@@ -2304,6 +2307,7 @@ acbh12.r1b2:=(acbh12.r1b2x*cos(twopi*PHI_IR1/360.)*on_xx1+acbh12.r1b2s*sin(twopi
 acbh14.r1b2:=(acbh14.r1b2x*cos(twopi*PHI_IR1/360.)*on_xx1+acbh14.r1b2s*sin(twopi*PHI_IR1/360.)*on_ssep1)*ON_DISP;
 acbh16.l2b2:=(acbh16.l2b2x*cos(twopi*PHI_IR1/360.)*on_xx1+acbh16.l2b2s*sin(twopi*PHI_IR1/360.)*on_ssep1)*ON_DISP;
 acbh14.l2b2:=(acbh14.l2b2x*cos(twopi*PHI_IR1/360.)*on_xx1+acbh14.l2b2s*sin(twopi*PHI_IR1/360.)*on_ssep1)*ON_DISP;
+acbh12.l2b2:=(acbh12.l2b2x*cos(twopi*PHI_IR1/360.)*on_xx1+acbh12.l2b2s*sin(twopi*PHI_IR1/360.)*on_ssep1)*ON_DISP;
 acbv13.r1b2:=(acbv13.r1b2x*sin(twopi*PHI_IR1/360.)*on_xx1+acbv13.r1b2s*cos(twopi*PHI_IR1/360.)*on_ssep1)*ON_DISP;
 acbv15.r1b2:=(acbv15.r1b2x*sin(twopi*PHI_IR1/360.)*on_xx1+acbv15.r1b2s*cos(twopi*PHI_IR1/360.)*on_ssep1)*ON_DISP;
 acbv15.l2b2:=(acbv15.l2b2x*sin(twopi*PHI_IR1/360.)*on_xx1+acbv15.l2b2s*cos(twopi*PHI_IR1/360.)*on_ssep1)*ON_DISP;

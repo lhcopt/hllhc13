@@ -72,8 +72,7 @@ NRJ= 7000.0 ; ! collision
 ! A Laundau octupole current 20A inj, -570A col
 !I_MO=0;
 !I_MO=-20;
-I_MO=-300;
-!I_MO=-570;
+I_MO=-570;
 
 !General switch to select collision (0/1)
 ON_COLLISION:=1;

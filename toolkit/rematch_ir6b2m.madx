@@ -92,11 +92,11 @@ reftcdqgapb2 = chi6_nsig*sqrt(chi6_emitx*refbetxtcdqb2);
 
 
 if(abs(dmuxkickb2_tcsg)>0){
-constraint,weight=1000,expr=refdmuxkickb2_tcsg=dmuxkickb2_tcsg;
+constraint,weight=1000,expr=refdmuxkickb2_tcsg<dmuxkickb2_tcsg;
 } else{
 constraint,weight=1000,expr= abs(refdmuxkickb2-0.250)<0.0111;!90+-4 deviation
 };
-if(bxdumpb1>0 && bydumpb1>0){
+if(bxdumpb2>0 && bydumpb2>0){
 constraint,expr=refbxdumpb2=bxdumpb2;
 constraint,expr=refbydumpb2=bydumpb2;
 } else {
@@ -115,13 +115,13 @@ if(betytcdsb2>0){
 }else{
   constraint,sequence=lhcb2,range=TCDSA.4R6.B2,bety>145;
 };
-constraint, sequence=lhcb1,range=TCDSA.4R6.B2,bety > 170;
+constraint, sequence=lhcb2,range=TCDSA.4R6.B2,bety > 170;
 if (NRJ<451){constraint, sequence=lhcb2,range=TCDSA.4R6.B2,betx < 175; };
 
 !dispersion in straight section <0.5
 constraint,expr=refdxq5r6b2<1.0; !was 0.5
 constraint,expr=refdxq4l6b2<0.5; !was 0.5
-constraint,expr=refdxtcdqb2<0.6;  !was 0.5
+constraint,expr=refdxtcdqb2<0.5;  !was 0.5
 constraint,sequence=lhcb2,range=MQY.5L6.B2,bety<1500;
 constraint,sequence=lhcb2,range=MQY.4R6.B2,bety<1100;
 
@@ -149,9 +149,9 @@ constraint,sequence=lhcb2,range=mqm.9l6.b2,bety   < betir;
 constraint,sequence=lhcb2,range=mqm.9r6.b2,betx   < betir;
 constraint,sequence=lhcb2,range=mqml.10l6.b2,betx < betir;
 constraint,sequence=lhcb2,range=mqml.10r6.b2,bety < betir;
-constraint,sequence=lhcb2,range=MQY.5L6.B2,   bety <677;
-constraint,sequence=lhcb2,range=tcdqm.b4r6.b2,bety <603;
-constraint,sequence=lhcb2,range=tcdqm.b4l6.b2,betx <590;
+!constraint,sequence=lhcb2,range=MQY.5L6.B2,   bety <677;
+!constraint,sequence=lhcb2,range=tcdqm.b4r6.b2,bety <603;
+!constraint,sequence=lhcb2,range=tcdqm.b4l6.b2,betx <590;
 };
 if(match_on_aperture==1){
 constraint,range=mq.11l6.b2,bety< 173+epsap;
