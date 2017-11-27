@@ -4736,4 +4736,50 @@ value,tar_kkkk;
 kkkk=kkkkaux;
 };
 
+set_mo:macro={
+brho:=NRJ*1e9/clight;
+
+KOF.A12B1:=Kmax_MO*I_MOF/Imax_MO/brho; KOF.A23B1:=Kmax_MO*I_MOF/Imax_MO/brho;
+KOF.A34B1:=Kmax_MO*I_MOF/Imax_MO/brho; KOF.A45B1:=Kmax_MO*I_MOF/Imax_MO/brho;
+KOF.A56B1:=Kmax_MO*I_MOF/Imax_MO/brho; KOF.A67B1:=Kmax_MO*I_MOF/Imax_MO/brho;
+KOF.A78B1:=Kmax_MO*I_MOF/Imax_MO/brho; KOF.A81B1:=Kmax_MO*I_MOF/Imax_MO/brho;
+KOD.A12B1:=Kmax_MO*I_MOD/Imax_MO/brho; KOD.A23B1:=Kmax_MO*I_MOD/Imax_MO/brho;
+KOD.A34B1:=Kmax_MO*I_MOD/Imax_MO/brho; KOD.A45B1:=Kmax_MO*I_MOD/Imax_MO/brho;
+KOD.A56B1:=Kmax_MO*I_MOD/Imax_MO/brho; KOD.A67B1:=Kmax_MO*I_MOD/Imax_MO/brho;
+KOD.A78B1:=Kmax_MO*I_MOD/Imax_MO/brho; KOD.A81B1:=Kmax_MO*I_MOD/Imax_MO/brho;
+
+KOF.A12B2:=Kmax_MO*I_MOF/Imax_MO/brho; KOF.A23B2:=Kmax_MO*I_MOF/Imax_MO/brho;
+KOF.A34B2:=Kmax_MO*I_MOF/Imax_MO/brho; KOF.A45B2:=Kmax_MO*I_MOF/Imax_MO/brho;
+KOF.A56B2:=Kmax_MO*I_MOF/Imax_MO/brho; KOF.A67B2:=Kmax_MO*I_MOF/Imax_MO/brho;
+KOF.A78B2:=Kmax_MO*I_MOF/Imax_MO/brho; KOF.A81B2:=Kmax_MO*I_MOF/Imax_MO/brho;
+KOD.A12B2:=Kmax_MO*I_MOD/Imax_MO/brho; KOD.A23B2:=Kmax_MO*I_MOD/Imax_MO/brho;
+KOD.A34B2:=Kmax_MO*I_MOD/Imax_MO/brho; KOD.A45B2:=Kmax_MO*I_MOD/Imax_MO/brho;
+KOD.A56B2:=Kmax_MO*I_MOD/Imax_MO/brho; KOD.A67B2:=Kmax_MO*I_MOD/Imax_MO/brho;
+KOD.A78B2:=Kmax_MO*I_MOD/Imax_MO/brho; KOD.A81B2:=Kmax_MO*I_MOD/Imax_MO/brho;
+
+I_MOF:=I_MO; I_MOD:=I_MO;
+};
+
+
+madchrom2(bim): macro={
+  use,sequence=lhcbim; twiss;
+  qx0bim=table(summ,q1);
+  qx1bim=table(summ,dq1);
+  qy0bim=table(summ,q2);
+  qy1bim=table(summ,dq2);
+  dpp=.000001;
+  twiss,deltap=dpp;
+  qxppbim=table(summ,q1);
+  qyppbim=table(summ,q2);
+  twiss,deltap=-dpp;
+  qxmpbim=table(summ,q1);
+  qympbim=table(summ,q2);
+  qx2bim=(qxppbim-2*qx0bim+qxmpbim)/dpp^2;
+  qy2bim=(qyppbim-2*qy0bim+qympbim)/dpp^2;
+  qx1abim=(qxppbim-qxmpbim)/dpp/2;
+  qy1abim=(qyppbim-qympbim)/dpp/2;
+  value,qx0bim,qx1bim,qx2bim;
+  value,qy0bim,qy1bim,qy2bim;
+};
+
 
