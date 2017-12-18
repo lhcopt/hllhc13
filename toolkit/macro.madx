@@ -4555,6 +4555,10 @@ alfxip2b1=0;alfyip2b1=0;
 alfxip2b2=0;alfyip2b2=0;
 alfxip8b1=0;alfyip8b1=0;
 alfxip8b2=0;alfyip8b2=0;
+exec,round(dxip2b1,3); exec,round(dpxip2b1,3);
+exec,round(dxip2b2,3); exec,round(dpxip2b2,3);
+exec,round(dxip8b1,3); exec,round(dpxip8b1,3);
+exec,round(dxip8b2,3); exec,round(dpxip8b2,3);
 };
 
 check_phasearc(BIM): macro={

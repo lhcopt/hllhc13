@@ -458,8 +458,8 @@ kqt12.r5b2 =kqt12.r5b2 ;
 kqt13.l5b2 =kqt13.l5b2 ;
 kqt13.r5b2 =kqt13.r5b2 ;
 
-betx_ip1=betx_ip5;
-bety_ip1=bety_ip5;
+betxip1b1=betxip5b1; betyip1b1=betyip5b1;
+betxip1b2=betxip5b2; betyip1b2=betyip5b2;
 
 
 kqx1.l1     =       kqx1.l5         ;
