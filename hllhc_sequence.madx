@@ -1682,10 +1682,10 @@ mbh_ir5q8=0;mbh_ir5q9=0;mbh_ir5q10=0;
 !call,file="slhc/toolkit/install_mbh.madx";
 
 
-l.MBH                = 5.5;
-Kmax_MBH             = 11.00;
+l.MBH                = 5.307; !28/11/2017 F. Savary
+Kmax_MBH             = 11.23;
 Kmin_MBH             = 0.2460;!..to be reviewed
-Imax_MBH             = 11850; !..to be reviewed
+Imax_MBH             = 11850;
 l.tcld              = 1;
 
 
