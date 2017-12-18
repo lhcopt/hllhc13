@@ -328,10 +328,10 @@ mkknob(ssss,kkkk): macro={
   kkkk=0;
 };
 
-if(testkqx2> 210.) {acbxx.ir2= 0.10e-5/170;acbxs.ir2= 1.80e-5/2;};
-if(testkqx8> 210.) {acbxx.ir8= 0.10e-5/170;acbxs.ir8= 1.80e-5/2;};
-if(testkqx2< 210.) {acbxx.ir2= 1.10e-5/170;acbxs.ir2= 1.60e-5/2;};
-if(testkqx8< 210.) {acbxx.ir8= 1.10e-5/170;acbxs.ir8= 1.60e-5/2;};
+if(testkqx2> 210.) {acbxx.ir2= 10.0e-6/170;acbxs.ir2= 18.0e-6/2;};
+if(testkqx8> 210.) {acbxx.ir8= 10.0e-6/170;acbxs.ir8= 18.0e-6/2;};
+if(testkqx2< 210.) {acbxx.ir2= 11.0e-6/170;acbxs.ir2= 16.0e-6/2;};
+if(testkqx8< 210.) {acbxx.ir8= 11.0e-6/170;acbxs.ir8= 16.0e-6/2;};
 
 xang=170;psep=2;off=0.5;aoff=30;
 
@@ -346,6 +346,9 @@ on_sep2v=psep;exec,mkknob(ir2v,on_sep2v);
 on_o2v=off   ;exec,mkknob(ir2v,on_o2v);
 
 on_x8h=xang;exec,mkknob(ir8h,on_x8h);
+if(tar_on_x8h>1e-10){
+acbxx.ir8= 8.0e-6/170;exec,mkknob(ir8h,on_x8h); !fix for sflat
+};
 on_a8h=aoff;exec,mkknob(ir8h,on_a8h);
 on_x8v=xang;exec,mkknob(ir8v,on_x8v);
 on_a8v=aoff;exec,mkknob(ir8v,on_a8v);
