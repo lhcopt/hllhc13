@@ -887,58 +887,58 @@ dposMCBY.B4 := (l.MQY + l.MCBYV)/2 + 0.372; !same as nominal note that in IR2-8-
 dposMCBY.4  := dposMCBY.B4 + (l.MCBYH + l.MCBYV)/2 + 0.396; !be better
 dposMCBY.A4 := dposMCBY.4  + (l.MCBYV + l.MCBYH)/2 + 0.396;
 
-value,dposMCBY.B4,dposMCBY.4,dposMCBY.A4
+value,dposMCBY.B4,dposMCBY.4,dposMCBY.A4;
 
 
-MCBYV.4L1.B1:MCBYV, KICK:=  acbyv4.l1b1, polarity=+1;
+!MCBYV.4L1.B1:MCBYV, KICK:=  acbyv4.l1b1, polarity=+1;
 MCBYH.4L1.B1:MCBYH, KICK:=  acbyh4.l1b1, polarity=+1;
 MCBYV.4R1.B1:MCBYV, KICK:=  acbyv4.r1b1, polarity=+1;
-MCBYH.4R1.B1:MCBYH, KICK:=  acbyh4.r1b1, polarity=+1;
-MCBYV.4L5.B1:MCBYV, KICK:=  acbyv4.l5b1, polarity=+1;
+!MCBYH.4R1.B1:MCBYH, KICK:=  acbyh4.r1b1, polarity=+1;
+!MCBYV.4L5.B1:MCBYV, KICK:=  acbyv4.l5b1, polarity=+1;
 MCBYH.4L5.B1:MCBYH, KICK:=  acbyh4.l5b1, polarity=+1;
 MCBYV.4R5.B1:MCBYV, KICK:=  acbyv4.r5b1, polarity=+1;
-MCBYH.4R5.B1:MCBYH, KICK:=  acbyh4.r5b1, polarity=+1;
-MCBYV.A4L1.B1:MCBYV, KICK:=  acbyv4.l1b1, polarity=+1;
-MCBYH.A4L1.B1:MCBYH, KICK:=  acbyh4.l1b1, polarity=+1;
-MCBYV.A4R1.B1:MCBYV, KICK:=  acbyv4.r1b1, polarity=+1;
-MCBYH.A4R1.B1:MCBYH, KICK:=  acbyh4.r1b1, polarity=+1;
-MCBYV.A4L5.B1:MCBYV, KICK:=  acbyv4.l5b1, polarity=+1;
-MCBYH.A4L5.B1:MCBYH, KICK:=  acbyh4.l5b1, polarity=+1;
-MCBYV.A4R5.B1:MCBYV, KICK:=  acbyv4.r5b1, polarity=+1;
-MCBYH.A4R5.B1:MCBYH, KICK:=  acbyh4.r5b1, polarity=+1;
-MCBYV.B4L1.B1:MCBYV, KICK:=  acbyvs4.l1b1, polarity=+1;
-MCBYH.B4L1.B1:MCBYH, KICK:=  acbyhs4.l1b1, polarity=+1;
-MCBYV.B4R1.B1:MCBYV, KICK:=  acbyvs4.r1b1, polarity=+1;
-MCBYH.B4R1.B1:MCBYH, KICK:=  acbyhs4.r1b1, polarity=+1;
-MCBYV.B4L5.B1:MCBYV, KICK:=  acbyvs4.l5b1, polarity=+1;
-MCBYH.B4L5.B1:MCBYH, KICK:=  acbyhs4.l5b1, polarity=+1;
-MCBYV.B4R5.B1:MCBYV, KICK:=  acbyvs4.r5b1, polarity=+1;
-MCBYH.B4R5.B1:MCBYH, KICK:=  acbyhs4.r5b1, polarity=+1;
+!MCBYH.4R5.B1:MCBYH, KICK:=  acbyh4.r5b1, polarity=+1;
+MCBYV.A4L1.B1:MCBYV, KICK:=  acbyvs4.l1b1, polarity=+1;
+MCBYH.A4L1.B1:MCBYH, KICK:=  acbyhs4.l1b1, polarity=+1;
+MCBYV.A4R1.B1:MCBYV, KICK:=  acbyvs4.r1b1, polarity=+1;
+MCBYH.A4R1.B1:MCBYH, KICK:=  acbyhs4.r1b1, polarity=+1;
+MCBYV.A4L5.B1:MCBYV, KICK:=  acbyvs4.l5b1, polarity=+1;
+MCBYH.A4L5.B1:MCBYH, KICK:=  acbyhs4.l5b1, polarity=+1;
+MCBYV.A4R5.B1:MCBYV, KICK:=  acbyvs4.r5b1, polarity=+1;
+MCBYH.A4R5.B1:MCBYH, KICK:=  acbyhs4.r5b1, polarity=+1;
+MCBYV.B4L1.B1:MCBYV, KICK:=  acbyv4.l1b1, polarity=+1;
+MCBYH.B4L1.B1:MCBYH, KICK:=  acbyh4.l1b1, polarity=+1;
+MCBYV.B4R1.B1:MCBYV, KICK:=  acbyv4.r1b1, polarity=+1;
+MCBYH.B4R1.B1:MCBYH, KICK:=  acbyh4.r1b1, polarity=+1;
+MCBYV.B4L5.B1:MCBYV, KICK:=  acbyv4.l5b1, polarity=+1;
+MCBYH.B4L5.B1:MCBYH, KICK:=  acbyh4.l5b1, polarity=+1;
+MCBYV.B4R5.B1:MCBYV, KICK:=  acbyv4.r5b1, polarity=+1;
+MCBYH.B4R5.B1:MCBYH, KICK:=  acbyh4.r5b1, polarity=+1;
 
 MCBYV.4L1.B2:MCBYV, KICK:= -acbyv4.l1b2*bv_aux, polarity=+1;
-MCBYH.4L1.B2:MCBYH, KICK:= -acbyh4.l1b2, polarity=+1;
-MCBYV.4R1.B2:MCBYV, KICK:= -acbyv4.r1b2*bv_aux, polarity=+1;
+!MCBYH.4L1.B2:MCBYH, KICK:= -acbyh4.l1b2, polarity=+1;
+!MCBYV.4R1.B2:MCBYV, KICK:= -acbyv4.r1b2*bv_aux, polarity=+1;
 MCBYH.4R1.B2:MCBYH, KICK:= -acbyh4.r1b2, polarity=+1;
 MCBYV.4L5.B2:MCBYV, KICK:= -acbyv4.l5b2*bv_aux, polarity=+1;
-MCBYH.4L5.B2:MCBYH, KICK:= -acbyh4.l5b2, polarity=+1;
-MCBYV.4R5.B2:MCBYV, KICK:= -acbyv4.r5b2*bv_aux, polarity=+1;
+!MCBYH.4L5.B2:MCBYH, KICK:= -acbyh4.l5b2, polarity=+1;
+!MCBYV.4R5.B2:MCBYV, KICK:= -acbyv4.r5b2*bv_aux, polarity=+1;
 MCBYH.4R5.B2:MCBYH, KICK:= -acbyh4.r5b2, polarity=+1;
-MCBYV.A4L1.B2:MCBYV, KICK:= -acbyv4.l1b2*bv_aux, polarity=+1;
-MCBYH.A4L1.B2:MCBYH, KICK:= -acbyh4.l1b2, polarity=+1;
-MCBYV.A4R1.B2:MCBYV, KICK:= -acbyv4.r1b2*bv_aux, polarity=+1;
-MCBYH.A4R1.B2:MCBYH, KICK:= -acbyh4.r1b2, polarity=+1;
-MCBYV.A4L5.B2:MCBYV, KICK:= -acbyv4.l5b2*bv_aux, polarity=+1;
-MCBYH.A4L5.B2:MCBYH, KICK:= -acbyh4.l5b2, polarity=+1;
-MCBYV.A4R5.B2:MCBYV, KICK:= -acbyv4.r5b2*bv_aux, polarity=+1;
-MCBYH.A4R5.B2:MCBYH, KICK:= -acbyh4.r5b2, polarity=+1;
-MCBYV.B4L1.B2:MCBYV, KICK:= -acbyvs4.l1b2*bv_aux, polarity=+1;
-MCBYH.B4L1.B2:MCBYH, KICK:= -acbyhs4.l1b2, polarity=+1;
-MCBYV.B4R1.B2:MCBYV, KICK:= -acbyvs4.r1b2*bv_aux, polarity=+1;
-MCBYH.B4R1.B2:MCBYH, KICK:= -acbyhs4.r1b2, polarity=+1;
-MCBYV.B4L5.B2:MCBYV, KICK:= -acbyvs4.l5b2*bv_aux, polarity=+1;
-MCBYH.B4L5.B2:MCBYH, KICK:= -acbyhs4.l5b2, polarity=+1;
-MCBYV.B4R5.B2:MCBYV, KICK:= -acbyvs4.r5b2*bv_aux, polarity=+1;
-MCBYH.B4R5.B2:MCBYH, KICK:= -acbyhs4.r5b2, polarity=+1;
+MCBYV.A4L1.B2:MCBYV, KICK:= -acbyvs4.l1b2*bv_aux, polarity=+1;
+MCBYH.A4L1.B2:MCBYH, KICK:= -acbyhs4.l1b2, polarity=+1;
+MCBYV.A4R1.B2:MCBYV, KICK:= -acbyvs4.r1b2*bv_aux, polarity=+1;
+MCBYH.A4R1.B2:MCBYH, KICK:= -acbyhs4.r1b2, polarity=+1;
+MCBYV.A4L5.B2:MCBYV, KICK:= -acbyvs4.l5b2*bv_aux, polarity=+1;
+MCBYH.A4L5.B2:MCBYH, KICK:= -acbyhs4.l5b2, polarity=+1;
+MCBYV.A4R5.B2:MCBYV, KICK:= -acbyvs4.r5b2*bv_aux, polarity=+1;
+MCBYH.A4R5.B2:MCBYH, KICK:= -acbyhs4.r5b2, polarity=+1;
+MCBYV.B4L1.B2:MCBYV, KICK:= -acbyv4.l1b2*bv_aux, polarity=+1;
+MCBYH.B4L1.B2:MCBYH, KICK:= -acbyh4.l1b2, polarity=+1;
+MCBYV.B4R1.B2:MCBYV, KICK:= -acbyv4.r1b2*bv_aux, polarity=+1;
+MCBYH.B4R1.B2:MCBYH, KICK:= -acbyh4.r1b2, polarity=+1;
+MCBYV.B4L5.B2:MCBYV, KICK:= -acbyv4.l5b2*bv_aux, polarity=+1;
+MCBYH.B4L5.B2:MCBYH, KICK:= -acbyh4.l5b2, polarity=+1;
+MCBYV.B4R5.B2:MCBYV, KICK:= -acbyv4.r5b2*bv_aux, polarity=+1;
+MCBYH.B4R5.B2:MCBYH, KICK:= -acbyh4.r5b2, polarity=+1;
 
 exec,newel_ir15_b12(BPMYA.4,BPMYA);
 
@@ -978,7 +978,7 @@ install,element=MCBYH.B4L1.B2, at=-(posQ4-dposMCBY.B4)*bv_aux, from= IP1.L1;!IP 
 install,element=MCBYV.B4R1.B2, at= (posQ4-dposMCBY.B4)*bv_aux, from= IP1;   !IP side
 install,element=MCBYH.B4L5.B2, at=-(posQ4-dposMCBY.B4)*bv_aux, from= IP5;   !IP side
 install,element=MCBYV.B4R5.B2, at= (posQ4-dposMCBY.B4)*bv_aux, from= IP5;   !IP side
-!
+
 ! .... MCBY.4
 install,element=MCBYV.4L1.B2, at=-(posQ4-dposMCBY.4)*bv_aux, from= IP1.L1;!IP side
 install,element=MCBYH.4R1.B2, at= (posQ4-dposMCBY.4)*bv_aux, from= IP1;   !IP side
@@ -1080,32 +1080,32 @@ dposBPM   := l.MQML/2 + 0.745; !3.145
 if(bv_aux == 1){
 seqedit,sequence=lhcb1;
 ! .... BPMYA.5
-install,element=BPM.5L1.B1, at=-(posQ5+dposBPM), from= IP1.L1;!non-IP side
-install,element=BPM.5R1.B1, at= (posQ5+dposBPM), from= IP1;   !non-IP side
-install,element=BPM.5L5.B1, at= (posQ5+dposBPM), from= IP5;   !non-IP side
-install,element=BPM.5R5.B1, at=-(posQ5+dposBPM), from= IP5;   !non-IP side
+install,element=BPMR.5L1.B1, at=-(posQ5-dposBPM), from= IP1.L1;!IP side
+install,element=BPM.5R1.B1,  at= (posQ5+dposBPM), from= IP1;   !non-IP side
+install,element=BPMR.5L5.B1, at=-(posQ5+dposBPM), from= IP5;   !non-IP side
+install,element=BPM.5R5.B1,  at= (posQ5-dposBPM), from= IP5;   !IP side
 !
 ! .... MCBC.5
-install,element=MCBCV.5L1.B1, at=-(posQ5-dposMCBC), from= IP1.L1;!IP side
+install,element=MCBCV.5L1.B1, at=-(posQ5+dposMCBC), from= IP1.L1;!non-IP side
 install,element=MCBCH.5R1.B1, at= (posQ5-dposMCBC), from= IP1;   !IP side
-install,element=MCBCV.5L5.B1, at= (posQ5-dposMCBC), from= IP5;   !IP side
-install,element=MCBCH.5R5.B1, at=-(posQ5-dposMCBC), from= IP5;   !IP side
+install,element=MCBCV.5L5.B1, at=-(posQ5-dposMCBC), from= IP5;   !IP side
+install,element=MCBCH.5R5.B1, at= (posQ5+dposMCBC), from= IP5;   !non-IP side
 
 endedit;
 };
 
 seqedit,sequence=lhcb2;
 ! .... BPMYA.5
-install,element=BPM.5L1.B2, at=-(posQ5+dposBPM)*bv_aux, from= IP1.L1;!non-IP side
-install,element=BPM.5R1.B2, at= (posQ5+dposBPM)*bv_aux, from= IP1;   !non-IP side
-install,element=BPM.5L5.B2, at= (posQ5+dposBPM)*bv_aux, from= IP5;   !non-IP side
-install,element=BPM.5R5.B2, at=-(posQ5+dposBPM)*bv_aux, from= IP5;   !non-IP side
+install,element=BPM.5L1.B2, at=-(posQ5-dposBPM)*bv_aux, from= IP1.L1;!IP side
+install,element=BPMR.5R1.B2,at= (posQ5+dposBPM)*bv_aux, from= IP1;   !non-IP side
+install,element=BPM.5L5.B2, at=-(posQ5+dposBPM)*bv_aux, from= IP5;   !non-IP side
+install,element=BPMR.5R5.B2,at= (posQ5-dposBPM)*bv_aux, from= IP5;   !IP side
 !
 ! .... MCBY.B5
-install,element=MCBCH.5L1.B2, at=-(posQ5-dposMCBC)*bv_aux, from= IP1.L1;!IP side
+install,element=MCBCH.5L1.B2, at=-(posQ5+dposMCBC)*bv_aux, from= IP1.L1;!non-IP side
 install,element=MCBCV.5R1.B2, at= (posQ5-dposMCBC)*bv_aux, from= IP1;   !IP side
-install,element=MCBCH.5L5.B2, at= (posQ5-dposMCBC)*bv_aux, from= IP5;   !IP side
-install,element=MCBCV.5R5.B2, at=-(posQ5-dposMCBC)*bv_aux, from= IP5;   !IP side
+install,element=MCBCH.5L5.B2, at=-(posQ5-dposMCBC)*bv_aux, from= IP5;   !IP side
+install,element=MCBCV.5R5.B2, at= (posQ5+dposMCBC)*bv_aux, from= IP5;   !non-IP side
 !
 endedit;
 
@@ -1539,14 +1539,14 @@ exec,crab_install(D,posCRABD1,posCRABD2);
 l.TCLMB=1.0;
 l.TCLMC=1.0;
 
-!posTCLMB.5  := posQ5 - dposMCBY.A5 - l.MCBY/2 - l.TCLMB/2 - 1.835;!930+655+500/2
+!posTCLMC.5  := posQ5 - dposMCBY.A5 - l.MCBY/2 - l.TCLMB/2 - 1.835;!930+655+500/2
 !posTCLMC.6C := posQ6 - dposMCBCH - l.TCLMC/2 - 1.831;!926+655+500/2
 !posTCLMC.6Q := posQ6 - dposMCBCH - l.TCLMC/2 - 1.831;
-!value,posTCLMB.5,posTCLMC.6C,posTCLMC.6Q;
+!value,posTCLMC.5,posTCLMC.6C,posTCLMC.6Q;
 
 posTCLMB.4C := posQ4 - 2.348-1.237-1.237-1.380-1.405;
-posTCLMB.5C := posQ5 - l.mqml/2-0.192-l.mcbch-0.926-1.405;
-posTCLMB.5Q := posQ5 - l.mqml/2-1.411-1.405;!- 5.216;
+posTCLMC.5C := posQ5 - l.mqml/2-0.192-l.mcbch-0.926-1.405;
+posTCLMC.5Q := posQ5 - l.mqml/2-1.411-1.405;!- 5.216;
 posTCLMC.6C := posQ6 - l.mqml/2-0.192-l.mcbch-0.926-1.405;
 posTCLMC.6Q := posQ6 - l.mqml/2-1.411-1.405;!- 5.216;
 
@@ -1555,12 +1555,12 @@ TCLMC : RCOLLIMATOR, L := l.TCLMC;
 
 
 exec,newel_ir15_b12(TCLMB.4,TCLMB);
-exec,newel_ir15_b12(TCLMB.5,TCLMB);
+exec,newel_ir15_b12(TCLMC.5,TCLMC);
 exec,newel_ir15_b12(TCLMC.6,TCLMC);
 
 !mask Q5
 exec,install_ir15_b1_b2_inv(TCLMB.4, posTCLMB.4C, posTCLMB.4C );
-exec,install_ir15_b1_b2_inv(TCLMB.5, posTCLMB.5C, posTCLMB.5C );
+exec,install_ir15_b1_b2_inv(TCLMC.5, posTCLMC.5C, posTCLMC.5Q );
 exec,install_ir15_b1_b2_inv(TCLMC.6, posTCLMC.6C, posTCLMC.6Q );
 
 !!mask Q6
@@ -1604,8 +1604,11 @@ value,posTAXN,posTCTV,posTCTXH,posTCLX;
 
 !Q5/Q6 region
 !IP side
-posTCL.5C := posQ5 -  2.522-1.296-1.296-1.380-1.405-2.010 ; !-9.83 different from 9.659 was 1.931
-posTCL.5Q := posQ5 -  6.300 ;
+!posTCL.5C := posQ5 -  2.522-1.296-1.296-1.380-1.405-2.010 ; !-9.83 different from 9.659 was 1.931
+!posTCL.5Q := posQ5 -  6.300 ;
+
+posTCL.5C := posQ5 - l.mqml/2-0.192-l.mcbch-0.926-1.405-2.010  ; !was 1.760
+posTCL.5Q := posQ5 - l.mqml/2-1.411-1.405-2.010;! 6.976 ;
 
 posTCL.6C := posQ6 - l.mqml/2-0.192-l.mcbch-0.926-1.405-2.010  ; !was 1.760
 posTCL.6Q := posQ6 - l.mqml/2-1.411-1.405-2.010;! 6.976 ;
@@ -1651,16 +1654,23 @@ l.BPTXaux=0.285;
 posBPTX=posTCLMB.4C-1.5/2-0.301-l.BPTXaux/2;
 
 
-APWL.5R5.B1: APWL; APWL.5R5.B2: APWL;
-APWL.5L5.B1: APWL; APWL.5L5.B2: APWL;
-APWL.5R1.B1: APWL; APWL.5R1.B2: APWL;
-APWL.5L1.B1: APWL; APWL.5L1.B2: APWL;
+APWL.4R5.B1: APWL; APWL.4R5.B2: APWL;
+APWL.4L5.B1: APWL; APWL.4L5.B2: APWL;
+APWL.4R1.B1: APWL; APWL.4R1.B2: APWL;
+APWL.4L1.B1: APWL; APWL.4L1.B2: APWL;
+
+
+BPTX.4R5.B1: BPTX; BPTX.4R5.B2: BPTX;
+BPTX.4L5.B1: BPTX; BPTX.4L5.B2: BPTX;
+BPTX.4R1.B1: BPTX; BPTX.4R1.B2: BPTX;
+BPTX.4L1.B1: BPTX; BPTX.4L1.B2: BPTX;
+
 
 L.APWLaux=0.6;
 posAPWL1=posTCLMB.4C-1.5/2-0.301-0.285-1.002-L.APWLaux/2;
 posAPWL2=posAPWL1-L.APWLaux ;
 
-exec,install_ir15_b1_b2(APWL.5,posAPWL1,posAPWL2);
+exec,install_ir15_b1_b2(APWL.4,posAPWL1,posAPWL2);
 exec,install_ir15_cmn(TAXN.4,posTAXN);
 
 if(bv_aux == 1){
@@ -1679,12 +1689,12 @@ install,element=TCTV.6L5.B1, at= -posTCTV.6Q,   from= IP5;
 install,element=TCLX.4R1.B1,  at= posTCLX, from=IP1;
 install,element=TCLX.4R5.B1,  at= posTCLX, from=IP5;
 install,element=TCL.5R1.B1,  at= posTCL.5C, from=IP1;
-install,element=TCL.5R5.B1,  at= posTCL.5C, from=IP5;
+install,element=TCL.5R5.B1,  at= posTCL.5Q, from=IP5;
 install,element=TCL.6R1.B1,  at= posTCL.6C, from=IP1;
 install,element=TCL.6R5.B1,  at= posTCL.6Q, from=IP5;
 ! ... BPTX
-install,element=BPTX.5L1.B1, at= -posBPTX, from=IP1.L1;
-install,element=BPTX.5L5.B1, at= -posBPTX, from=IP5;
+install,element=BPTX.4L1.B1, at= -posBPTX, from=IP1.L1;
+install,element=BPTX.4L5.B1, at= -posBPTX, from=IP5;
 endedit;
 };
 
@@ -1702,13 +1712,13 @@ install,element=TCTV.6R5.B2, at= posTCTV.6Q*bv_aux, from=IP5;
 ! ... TCL
 install,element=TCLX.4L1.B2,  at= -posTCLX*bv_aux, from=IP1.L1;
 install,element=TCLX.4L5.B2,  at= -posTCLX*bv_aux, from=IP5;
-install,element=TCL.5L1.B2,  at= -posTCL.5C*bv_aux, from=IP1.L1;
+install,element=TCL.5L1.B2,  at= -posTCL.5Q*bv_aux, from=IP1.L1;
 install,element=TCL.5L5.B2,  at= -posTCL.5C*bv_aux, from=IP5;
 install,element=TCL.6L1.B2,  at= -posTCL.6Q*bv_aux, from=IP1.L1;
 install,element=TCL.6L5.B2,  at= -posTCL.6C*bv_aux, from=IP5;
 ! ... BPTX
-install,element=BPTX.5R1.B2, at= posBPTX*bv_aux, from=IP1;
-install,element=BPTX.5R5.B2, at= posBPTX*bv_aux, from=IP5;
+install,element=BPTX.4R1.B2, at= posBPTX*bv_aux, from=IP1;
+install,element=BPTX.4R5.B2, at= posBPTX*bv_aux, from=IP5;
 
 ! Install MBH
 
