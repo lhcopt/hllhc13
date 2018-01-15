@@ -130,6 +130,13 @@ match, sequence=lhcb1,lhcb2, beta0= bir8b1,bir8b2,
   vary,name=acbyhs5.r8b1,step=1.0e-15,lower=-limitmcbc,upper=limitmcbc;
   vary,name=acbyhs5.r8b2,step=1.0e-15,lower=-limitmcbc,upper=limitmcbc;
   jacobian, calls = 10, tolerance=1.e-30,bisec=3;
+  vary,name=ACBXH1.R8,step=1.0e-15,lower=-limitmcbx,upper=limitmcbx;
+  vary,name=ACBXH2.R8,step=1.0e-15,lower=-limitmcbx,upper=limitmcbx;
+  vary,name=ACBXH3.R8,step=1.0e-15,lower=-limitmcbx,upper=limitmcbx;
+  vary,name=ACBXH1.L8,step=1.0e-15,lower=-limitmcbx,upper=limitmcbx;
+  vary,name=ACBXH2.L8,step=1.0e-15,lower=-limitmcbx,upper=limitmcbx;
+  vary,name=ACBXH3.L8,step=1.0e-15,lower=-limitmcbx,upper=limitmcbx;
+  jacobian, calls = 20, tolerance=1.e-30,bisec=3;
   endmatch;
 };
 
@@ -152,6 +159,13 @@ match, sequence=lhcb1,lhcb2, beta0= bir8b1,bir8b2,
   vary,name=acbyvs5.r8b1,step=1.0e-15,lower=-limitmcby,upper=limitmcby;
   vary,name=acbyvs5.r8b2,step=1.0e-15,lower=-limitmcby,upper=limitmcby;
   jacobian, calls = 10, tolerance=1.e-30,bisec=3;
+  vary,name=ACBXV1.R8,step=1.0e-15,lower=-limitmcbx,upper=limitmcbx;
+  vary,name=ACBXV2.R8,step=1.0e-15,lower=-limitmcbx,upper=limitmcbx;
+  vary,name=ACBXV3.R8,step=1.0e-15,lower=-limitmcbx,upper=limitmcbx;
+  vary,name=ACBXV1.L8,step=1.0e-15,lower=-limitmcbx,upper=limitmcbx;
+  vary,name=ACBXV2.L8,step=1.0e-15,lower=-limitmcbx,upper=limitmcbx;
+  vary,name=ACBXV3.L8,step=1.0e-15,lower=-limitmcbx,upper=limitmcbx;
+  jacobian, calls = 20, tolerance=1.e-30,bisec=3;
   endmatch;
 };
 
@@ -277,31 +291,35 @@ setvars_const,table=orbit_ir8v;
 testkqx2=abs(kqx.l2)*7000./0.3;
 testkqx8=abs(kqx.l8)*7000./0.3;
 
+set_mcbx2: macro={
 ACBXH1.L2:=ACBXS.IR2* on_sep2h+ACBXX.IR2* on_x2h  ;
 ACBXH2.L2:=ACBXS.IR2* on_sep2h+ACBXX.IR2* on_x2h  ;
 ACBXH3.L2:=ACBXS.IR2* on_sep2h+ACBXX.IR2* on_x2h  ;
 ACBXV1.L2:=ACBXX.IR2* on_x2v  +ACBXS.IR2* on_sep2v;
 ACBXV2.L2:=ACBXX.IR2* on_x2v  +ACBXS.IR2* on_sep2v;
 ACBXV3.L2:=ACBXX.IR2* on_x2v  +ACBXS.IR2* on_sep2v;
-ACBXH1.L8:=ACBXX.IR8* on_x8h  +ACBXS.IR8* on_sep8h;
-ACBXH2.L8:=ACBXX.IR8* on_x8h  +ACBXS.IR8* on_sep8h;
-ACBXH3.L8:=ACBXX.IR8* on_x8h  +ACBXS.IR8* on_sep8h;
-ACBXV1.L8:=ACBXS.IR8* on_sep8v+ACBXX.IR8* on_x8v  ;
-ACBXV2.L8:=ACBXS.IR8* on_sep8v+ACBXX.IR8* on_x8v  ;
-ACBXV3.L8:=ACBXS.IR8* on_sep8v+ACBXX.IR8* on_x8v  ;
-
 ACBXH1.R2 := ACBXS.IR2* on_sep2h-ACBXX.IR2* on_x2h  ;
 ACBXH2.R2 := ACBXS.IR2* on_sep2h-ACBXX.IR2* on_x2h  ;
 ACBXH3.R2 := ACBXS.IR2* on_sep2h-ACBXX.IR2* on_x2h  ;
 ACBXV1.R2 :=-ACBXX.IR2* on_x2v  +ACBXS.IR2* on_sep2v;
 ACBXV2.R2 :=-ACBXX.IR2* on_x2v  +ACBXS.IR2* on_sep2v;
 ACBXV3.R2 :=-ACBXX.IR2* on_x2v  +ACBXS.IR2* on_sep2v;
+};
+
+set_mcbx8: macro={
+ACBXH1.L8:=ACBXX.IR8* on_x8h  +ACBXS.IR8* on_sep8h;
+ACBXH2.L8:=ACBXX.IR8* on_x8h  +ACBXS.IR8* on_sep8h;
+ACBXH3.L8:=ACBXX.IR8* on_x8h  +ACBXS.IR8* on_sep8h;
+ACBXV1.L8:=ACBXS.IR8* on_sep8v+ACBXX.IR8* on_x8v  ;
+ACBXV2.L8:=ACBXS.IR8* on_sep8v+ACBXX.IR8* on_x8v  ;
+ACBXV3.L8:=ACBXS.IR8* on_sep8v+ACBXX.IR8* on_x8v  ;
 ACBXH1.R8 :=-ACBXX.IR8* on_x8h  +ACBXS.IR8* on_sep8h;
 ACBXH2.R8 :=-ACBXX.IR8* on_x8h  +ACBXS.IR8* on_sep8h;
 ACBXH3.R8 :=-ACBXX.IR8* on_x8h  +ACBXS.IR8* on_sep8h;
 ACBXV1.R8 := ACBXS.IR8* on_sep8v-ACBXX.IR8* on_x8v  ;
 ACBXV2.R8 := ACBXS.IR8* on_sep8v-ACBXX.IR8* on_x8v  ;
 ACBXV3.R8 := ACBXS.IR8* on_sep8v-ACBXX.IR8* on_x8v  ;
+};
 
 xip2b1 :=1e-3*(on_o2h   +on_sep2h);
 xip2b2 :=1e-3*(on_o2h   -on_sep2h);
@@ -333,6 +351,9 @@ if(testkqx8> 210.) {acbxx.ir8= 10.0e-6/170;acbxs.ir8= 18.0e-6/2;};
 if(testkqx2< 210.) {acbxx.ir2= 11.0e-6/170;acbxs.ir2= 16.0e-6/2;};
 if(testkqx8< 210.) {acbxx.ir8= 11.0e-6/170;acbxs.ir8= 16.0e-6/2;};
 
+exec,set_mcbx2;
+
+
 xang=170;psep=2;off=0.5;aoff=30;
 
 on_x2h=xang;exec,mkknob(ir2h,on_x2h);
@@ -345,18 +366,18 @@ on_o2h=off   ;exec,mkknob(ir2h,on_o2h);
 on_sep2v=psep;exec,mkknob(ir2v,on_sep2v);
 on_o2v=off   ;exec,mkknob(ir2v,on_o2v);
 
-on_x8h=xang;exec,mkknob(ir8h,on_x8h);
-if(tar_on_x8h>1e-10){
-acbxx.ir8= 8.0e-6/170;exec,mkknob(ir8h,on_x8h); !fix for sflat
-};
-on_a8h=aoff;exec,mkknob(ir8h,on_a8h);
-on_x8v=xang;exec,mkknob(ir8v,on_x8v);
-on_a8v=aoff;exec,mkknob(ir8v,on_a8v);
+exec,set_mcbx8; on_x8h=xang;exec,mkknob(ir8h,on_x8h);
+!if(tar_on_x8h>1e-10){
+!acbxx.ir8= 8.0e-6/170;exec,mkknob(ir8h,on_x8h); !fix for sflat
+!};
+exec,set_mcbx8; on_a8h=aoff;exec,mkknob(ir8h,on_a8h);
+exec,set_mcbx8; on_x8v=xang;exec,mkknob(ir8v,on_x8v);
+exec,set_mcbx8; on_a8v=aoff;exec,mkknob(ir8v,on_a8v);
 
-on_sep8h=psep;exec,mkknob(ir8h,on_sep8h);
-on_o8h=off   ;exec,mkknob(ir8h,on_o8h);
-on_sep8v=psep;exec,mkknob(ir8v,on_sep8v);
-on_o8v=off   ;exec,mkknob(ir8v,on_o8v);
+exec,set_mcbx8; on_sep8h=psep;exec,mkknob(ir8h,on_sep8h);
+exec,set_mcbx8; on_o8h=off   ;exec,mkknob(ir8h,on_o8h);
+exec,set_mcbx8; on_sep8v=psep;exec,mkknob(ir8v,on_sep8v);
+exec,set_mcbx8; on_o8v=off   ;exec,mkknob(ir8v,on_o8v);
 
 
 ! setting knobs
