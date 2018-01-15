@@ -44,7 +44,7 @@ eeeR5.B2,APERTYPE=ttt,APERTURE:={ap1,ap2,ap3,ap4},APER_TOL:={rtol,htol,vtol};
 };
 
 !D2 NOMINAL B.S. ORIENTATION
-g_D2=0.026400-1.5*(1-no_bs_tol);r_D2=0.031300-1.5*(1-no_bs_tol); !nominal D2 beam-screen 
+g_D2=0.026400+1.5e-3*no_bs_tol;r_D2=0.031300+1.5e-3*no_bs_tol; !nominal D2 beam-screen 
 ! g_D2=0.033500;r_D2=0.038500; !new D2 beam-screen 
 ! g_D2=0.033500*1.35;r_D2=0.038500*1.35; !new D2 beam-screen 
 ! g_D2=0.037000;r_D2=0.042000; !new D2 beam-screen for crab 106mm
@@ -130,7 +130,7 @@ exec,aperture_2in1_def(MCBRDV.4,rectellipse,r_C2,g_C2,r_C2,r_C2,r_tol_C2, h_tol_
 
 
 !Q4 NOMINAL B.S. ORIENTATION
-g_Q4=0.024000-1.0*(1-no_bs_tol);r_Q4=0.028900-1.0*(1-no_bs_tol); !nominal MQY beam-screen
+g_Q4=0.024000+1e-3*no_bs_tol;r_Q4=0.028900+1.0e-3*no_bs_tol; !nominal MQY beam-screen
 !g_Q4=0.030000; r_Q4=0.035000; !new MQY beam-screen
 !g_Q4=0.032000; r_Q4=0.037000; !new MQY beam-screen 90 mm
 !r_tol_Q4 =0.0006; h_tol_Q4 :=0.0010+h_tol_Q4_mod; v_tol_Q4 :=0.0010+v_tol_Q4_mod;
@@ -225,8 +225,8 @@ MQY.4R5.B2,   APERTYPE=RECTELLIPSE, APERTURE:={ r_Q4,g_Q4,r_Q4,r_Q4}, APER_TOL:=
 !          r_q4,g_q4,angle1_q4,angle2_q4,r_tol_q4 , h_tol_q4 , v_tol_q4);
 !
 
-!Q5  NOMINAL B.S ORIENTATION
- g_Q5=0.017650;r_Q5=0.022550; !nominal MQM b.s.
+!Q5
+ g_Q5=0.017650+1e-3*no_bs_tol;r_Q5=0.022550+1e-3*no_bs_tol; !nominal MQM b.s.
 ! g_Q5=0.024000;r_Q5=0.028900; !nominal MQY beam-screen
 ! r_tol_Q5 =0.0006; h_tol_Q5 :=0.0010+h_tol_Q5_mod; v_tol_Q5 :=0.0010+v_tol_Q5_mod;
  r_tol_Q5:=0.00084+r_tol_Q5_mod; h_tol_Q5 :=0.00126+h_tol_Q5_mod; v_tol_Q5 :=0.0006+v_tol_Q5_mod;
@@ -302,7 +302,7 @@ r_tol_BPM_Q6 =r_tol_Q5; h_tol_BPM_Q6 =h_tol_Q5; v_tol_BPM_Q6 =v_tol_Q5;
 !a_TAN=0.0370; b_TAN=0.0320; !95mm
 !was a 26 mm radius circle nominally,see also offset files
 !where the aperture sep. of the TAN has been reduced from 160 mm to 155 mm
-a_TAN=0.0425-1.5*(1-no_bs_tol); b_TAN=0.0425-1.5*(1-no_bs_tol);
+a_TAN=0.0425-1.5e-3*(1-no_bs_tol); b_TAN=0.0425-1.5e-3*(1-no_bs_tol);
 r_tol_TAN:=0.00084+r_tol_TAN_mod;
 h_tol_TAN:=0.00136+h_tol_TAN_mod;v_tol_TAN:=0.001+v_tol_TAN_mod;
 
