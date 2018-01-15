@@ -1,11 +1,18 @@
 ! Revised version for SLHCV3.1b (new IT corrector package), March 2012: S. Fartoukh
 ! Revised version including a hard limit: correctors cannot go higher than 100% of their maximum value, December 2017: F.F. Van der Veken
 
+
+! This macro checks wether the assigned strength does not exceed a given maximum.
+! If it does exceed it, the strength is redefined as this maximum (while its sign is retained).
+! The maximum is scaled with energy. If NRJ=7000, the maximum is achieved at 100%, but if NRJ=7500,
+! it is achieved only at 107.142857% (=100% * 7500/700). This is because we assume that all magnets
+! can go up to ultimate energy.
 verify_assigned_limit(magnet,maximum): macro={
 	magnet.PERCENT = magnet / maximum * 100 ;
-	IF (ABS(magnet.PERCENT)>100){
-		magnet = maximum * magnet / ABS(magnet);
-		printf,text="magnet:   %f%% (limited to maximum; desired strength is %f%%)", value = 100* magnet.PERCENT / ABS(magnet.PERCENT),magnet.PERCENT;
+	IF (ABS(magnet.PERCENT)>100*NRJ/7000){
+		magnet.LIMIT = magnet / ABS(magnet) * NRJ / 7000 ;
+		magnet = maximum * magnet.LIMIT;
+		printf,text="magnet:   %f%% (limited to maximum; desired strength is %f%%)", value = 100 * magnet.LIMIT,magnet.PERCENT;
 	} ELSE {
 		printf,text="magnet:   %f%%", value=magnet.PERCENT;
 	};
@@ -145,72 +152,72 @@ if(mylhcbeam==1)
 {
 !MQT (120 T/m)
 kMQTmax:=120*0.3/NRJ;
-exec verify_assigned_limit(KQTF.A12B1,kMQTmax);
-exec verify_assigned_limit(KQTD.A12B1,kMQTmax);
-exec verify_assigned_limit(KQTF.A23B1,kMQTmax);
-exec verify_assigned_limit(KQTD.A23B1,kMQTmax);
-exec verify_assigned_limit(KQTF.A34B1,kMQTmax);
-exec verify_assigned_limit(KQTD.A34B1,kMQTmax);
-exec verify_assigned_limit(KQTF.A45B1,kMQTmax);
-exec verify_assigned_limit(KQTD.A45B1,kMQTmax);
-exec verify_assigned_limit(KQTF.A56B1,kMQTmax);
-exec verify_assigned_limit(KQTD.A56B1,kMQTmax);
-exec verify_assigned_limit(KQTF.A67B1,kMQTmax);
-exec verify_assigned_limit(KQTD.A67B1,kMQTmax);
-exec verify_assigned_limit(KQTF.A78B1,kMQTmax);
-exec verify_assigned_limit(KQTD.A78B1,kMQTmax);
-exec verify_assigned_limit(KQTF.A81B1,kMQTmax);
-exec verify_assigned_limit(KQTD.A81B1,kMQTmax);
+!exec verify_assigned_limit(KQTF.A12B1,kMQTmax);
+!exec verify_assigned_limit(KQTD.A12B1,kMQTmax);
+!exec verify_assigned_limit(KQTF.A23B1,kMQTmax);
+!exec verify_assigned_limit(KQTD.A23B1,kMQTmax);
+!exec verify_assigned_limit(KQTF.A34B1,kMQTmax);
+!exec verify_assigned_limit(KQTD.A34B1,kMQTmax);
+!exec verify_assigned_limit(KQTF.A45B1,kMQTmax);
+!exec verify_assigned_limit(KQTD.A45B1,kMQTmax);
+!exec verify_assigned_limit(KQTF.A56B1,kMQTmax);
+!exec verify_assigned_limit(KQTD.A56B1,kMQTmax);
+!exec verify_assigned_limit(KQTF.A67B1,kMQTmax);
+!exec verify_assigned_limit(KQTD.A67B1,kMQTmax);
+!exec verify_assigned_limit(KQTF.A78B1,kMQTmax);
+!exec verify_assigned_limit(KQTD.A78B1,kMQTmax);
+!exec verify_assigned_limit(KQTF.A81B1,kMQTmax);
+!exec verify_assigned_limit(KQTD.A81B1,kMQTmax);
 
 !MQS (120 T/m)
 kMQSmax:=120*0.3/NRJ;
-exec verify_assigned_limit(KQS.R1B1,kMQSmax);
-exec verify_assigned_limit(KQS.L2B1,kMQSmax);
-exec verify_assigned_limit(KQS.A23B1,kMQSmax);
-exec verify_assigned_limit(KQS.R3B1,kMQSmax);
-exec verify_assigned_limit(KQS.L4B1,kMQSmax);
-exec verify_assigned_limit(KQS.A45B1,kMQSmax);
-exec verify_assigned_limit(KQS.R5B1,kMQSmax);
-exec verify_assigned_limit(KQS.L6B1,kMQSmax);
-exec verify_assigned_limit(KQS.A67B1,kMQSmax);
-exec verify_assigned_limit(KQS.R7B1,kMQSmax);
-exec verify_assigned_limit(KQS.L8B1,kMQSmax);
-exec verify_assigned_limit(KQS.A81B1,kMQSmax);
+!exec verify_assigned_limit(KQS.R1B1,kMQSmax);
+!exec verify_assigned_limit(KQS.L2B1,kMQSmax);
+!exec verify_assigned_limit(KQS.A23B1,kMQSmax);
+!exec verify_assigned_limit(KQS.R3B1,kMQSmax);
+!exec verify_assigned_limit(KQS.L4B1,kMQSmax);
+!exec verify_assigned_limit(KQS.A45B1,kMQSmax);
+!exec verify_assigned_limit(KQS.R5B1,kMQSmax);
+!exec verify_assigned_limit(KQS.L6B1,kMQSmax);
+!exec verify_assigned_limit(KQS.A67B1,kMQSmax);
+!exec verify_assigned_limit(KQS.R7B1,kMQSmax);
+!exec verify_assigned_limit(KQS.L8B1,kMQSmax);
+!exec verify_assigned_limit(KQS.A81B1,kMQSmax);
 
 !MS (1.28 T @ 17 mm)
 kMSmax:=1.280*2/0.017^2*0.3/NRJ;
-exec verify_assigned_limit(KSF1.A12B1,kMSmax);
-exec verify_assigned_limit(KSF2.A12B1,kMSmax);
-exec verify_assigned_limit(KSF1.A23B1,kMSmax);
-exec verify_assigned_limit(KSF2.A23B1,kMSmax);
-exec verify_assigned_limit(KSF1.A34B1,kMSmax);
-exec verify_assigned_limit(KSF2.A34B1,kMSmax);
-exec verify_assigned_limit(KSF1.A45B1,kMSmax);
-exec verify_assigned_limit(KSF2.A45B1,kMSmax);
-exec verify_assigned_limit(KSF1.A56B1,kMSmax);
-exec verify_assigned_limit(KSF2.A56B1,kMSmax);
-exec verify_assigned_limit(KSF1.A67B1,kMSmax);
-exec verify_assigned_limit(KSF2.A67B1,kMSmax);
-exec verify_assigned_limit(KSF1.A78B1,kMSmax);
-exec verify_assigned_limit(KSF2.A78B1,kMSmax);
-exec verify_assigned_limit(KSF1.A81B1,kMSmax);
-exec verify_assigned_limit(KSF2.A81B1,kMSmax);
-exec verify_assigned_limit(KSD1.A12B1,kMSmax);
-exec verify_assigned_limit(KSD2.A12B1,kMSmax);
-exec verify_assigned_limit(KSD1.A23B1,kMSmax);
-exec verify_assigned_limit(KSD2.A23B1,kMSmax);
-exec verify_assigned_limit(KSD1.A34B1,kMSmax);
-exec verify_assigned_limit(KSD2.A34B1,kMSmax);
-exec verify_assigned_limit(KSD1.A45B1,kMSmax);
-exec verify_assigned_limit(KSD2.A45B1,kMSmax);
-exec verify_assigned_limit(KSD1.A56B1,kMSmax);
-exec verify_assigned_limit(KSD2.A56B1,kMSmax);
-exec verify_assigned_limit(KSD1.A67B1,kMSmax);
-exec verify_assigned_limit(KSD2.A67B1,kMSmax);
-exec verify_assigned_limit(KSD1.A78B1,kMSmax);
-exec verify_assigned_limit(KSD2.A78B1,kMSmax);
-exec verify_assigned_limit(KSD1.A81B1,kMSmax);
-exec verify_assigned_limit(KSD2.A81B1,kMSmax);
+!exec verify_assigned_limit(KSF1.A12B1,kMSmax);
+!exec verify_assigned_limit(KSF2.A12B1,kMSmax);
+!exec verify_assigned_limit(KSF1.A23B1,kMSmax);
+!exec verify_assigned_limit(KSF2.A23B1,kMSmax);
+!exec verify_assigned_limit(KSF1.A34B1,kMSmax);
+!exec verify_assigned_limit(KSF2.A34B1,kMSmax);
+!exec verify_assigned_limit(KSF1.A45B1,kMSmax);
+!exec verify_assigned_limit(KSF2.A45B1,kMSmax);
+!exec verify_assigned_limit(KSF1.A56B1,kMSmax);
+!exec verify_assigned_limit(KSF2.A56B1,kMSmax);
+!exec verify_assigned_limit(KSF1.A67B1,kMSmax);
+!exec verify_assigned_limit(KSF2.A67B1,kMSmax);
+!exec verify_assigned_limit(KSF1.A78B1,kMSmax);
+!exec verify_assigned_limit(KSF2.A78B1,kMSmax);
+!exec verify_assigned_limit(KSF1.A81B1,kMSmax);
+!exec verify_assigned_limit(KSF2.A81B1,kMSmax);
+!exec verify_assigned_limit(KSD1.A12B1,kMSmax);
+!exec verify_assigned_limit(KSD2.A12B1,kMSmax);
+!exec verify_assigned_limit(KSD1.A23B1,kMSmax);
+!exec verify_assigned_limit(KSD2.A23B1,kMSmax);
+!exec verify_assigned_limit(KSD1.A34B1,kMSmax);
+!exec verify_assigned_limit(KSD2.A34B1,kMSmax);
+!exec verify_assigned_limit(KSD1.A45B1,kMSmax);
+!exec verify_assigned_limit(KSD2.A45B1,kMSmax);
+!exec verify_assigned_limit(KSD1.A56B1,kMSmax);
+!exec verify_assigned_limit(KSD2.A56B1,kMSmax);
+!exec verify_assigned_limit(KSD1.A67B1,kMSmax);
+!exec verify_assigned_limit(KSD2.A67B1,kMSmax);
+!exec verify_assigned_limit(KSD1.A78B1,kMSmax);
+!exec verify_assigned_limit(KSD2.A78B1,kMSmax);
+!exec verify_assigned_limit(KSD1.A81B1,kMSmax);
+!exec verify_assigned_limit(KSD2.A81B1,kMSmax);
 
 !MSS (1.28 T @ 17 mm)
 kMSSmax:=1.280*2/0.017^2*0.3/NRJ;
@@ -258,22 +265,22 @@ exec verify_assigned_limit(KCD.A81B1,kMCDmax);
 
 !MO (0.29 T @ 17 mm)
 kMOmax:=0.29*6/0.017^3*0.3/NRJ;
-exec verify_assigned_limit(KOF.A12B1,kMOmax);
-exec verify_assigned_limit(KOF.A23B1,kMOmax);
-exec verify_assigned_limit(KOF.A34B1,kMOmax);
-exec verify_assigned_limit(KOF.A45B1,kMOmax);
-exec verify_assigned_limit(KOF.A56B1,kMOmax);
-exec verify_assigned_limit(KOF.A67B1,kMOmax);
-exec verify_assigned_limit(KOF.A78B1,kMOmax);
-exec verify_assigned_limit(KOF.A81B1,kMOmax);
-exec verify_assigned_limit(KOD.A12B1,kMOmax);
-exec verify_assigned_limit(KOD.A23B1,kMOmax);
-exec verify_assigned_limit(KOD.A34B1,kMOmax);
-exec verify_assigned_limit(KOD.A45B1,kMOmax);
-exec verify_assigned_limit(KOD.A56B1,kMOmax);
-exec verify_assigned_limit(KOD.A67B1,kMOmax);
-exec verify_assigned_limit(KOD.A78B1,kMOmax);
-exec verify_assigned_limit(KOD.A81B1,kMOmax);
+!exec verify_assigned_limit(KOF.A12B1,kMOmax);
+!exec verify_assigned_limit(KOF.A23B1,kMOmax);
+!exec verify_assigned_limit(KOF.A34B1,kMOmax);
+!exec verify_assigned_limit(KOF.A45B1,kMOmax);
+!exec verify_assigned_limit(KOF.A56B1,kMOmax);
+!exec verify_assigned_limit(KOF.A67B1,kMOmax);
+!exec verify_assigned_limit(KOF.A78B1,kMOmax);
+!exec verify_assigned_limit(KOF.A81B1,kMOmax);
+!exec verify_assigned_limit(KOD.A12B1,kMOmax);
+!exec verify_assigned_limit(KOD.A23B1,kMOmax);
+!exec verify_assigned_limit(KOD.A34B1,kMOmax);
+!exec verify_assigned_limit(KOD.A45B1,kMOmax);
+!exec verify_assigned_limit(KOD.A56B1,kMOmax);
+!exec verify_assigned_limit(KOD.A67B1,kMOmax);
+!exec verify_assigned_limit(KOD.A78B1,kMOmax);
+!exec verify_assigned_limit(KOD.A81B1,kMOmax);
 
 };
 
@@ -282,72 +289,72 @@ if(mylhcbeam > 1)
 {
 !MQT (120 T/m)
 kMQTmax:=120*0.3/NRJ;
-exec verify_assigned_limit(KQTF.A12B2,kMQTmax);
-exec verify_assigned_limit(KQTD.A12B2,kMQTmax);
-exec verify_assigned_limit(KQTF.A23B2,kMQTmax);
-exec verify_assigned_limit(KQTD.A23B2,kMQTmax);
-exec verify_assigned_limit(KQTF.A34B2,kMQTmax);
-exec verify_assigned_limit(KQTD.A34B2,kMQTmax);
-exec verify_assigned_limit(KQTF.A45B2,kMQTmax);
-exec verify_assigned_limit(KQTD.A45B2,kMQTmax);
-exec verify_assigned_limit(KQTF.A56B2,kMQTmax);
-exec verify_assigned_limit(KQTD.A56B2,kMQTmax);
-exec verify_assigned_limit(KQTF.A67B2,kMQTmax);
-exec verify_assigned_limit(KQTD.A67B2,kMQTmax);
-exec verify_assigned_limit(KQTF.A78B2,kMQTmax);
-exec verify_assigned_limit(KQTD.A78B2,kMQTmax);
-exec verify_assigned_limit(KQTF.A81B2,kMQTmax);
-exec verify_assigned_limit(KQTD.A81B2,kMQTmax);
+!exec verify_assigned_limit(KQTF.A12B2,kMQTmax);
+!exec verify_assigned_limit(KQTD.A12B2,kMQTmax);
+!exec verify_assigned_limit(KQTF.A23B2,kMQTmax);
+!exec verify_assigned_limit(KQTD.A23B2,kMQTmax);
+!exec verify_assigned_limit(KQTF.A34B2,kMQTmax);
+!exec verify_assigned_limit(KQTD.A34B2,kMQTmax);
+!exec verify_assigned_limit(KQTF.A45B2,kMQTmax);
+!exec verify_assigned_limit(KQTD.A45B2,kMQTmax);
+!exec verify_assigned_limit(KQTF.A56B2,kMQTmax);
+!exec verify_assigned_limit(KQTD.A56B2,kMQTmax);
+!exec verify_assigned_limit(KQTF.A67B2,kMQTmax);
+!exec verify_assigned_limit(KQTD.A67B2,kMQTmax);
+!exec verify_assigned_limit(KQTF.A78B2,kMQTmax);
+!exec verify_assigned_limit(KQTD.A78B2,kMQTmax);
+!exec verify_assigned_limit(KQTF.A81B2,kMQTmax);
+!exec verify_assigned_limit(KQTD.A81B2,kMQTmax);
 
 !MQS (120 T/m)
 kMQSmax:=120*0.3/NRJ;
-exec verify_assigned_limit(KQS.A12B2,kMQSmax);
-exec verify_assigned_limit(KQS.R2B2,kMQSmax);
-exec verify_assigned_limit(KQS.L3B2,kMQSmax);
-exec verify_assigned_limit(KQS.A34B2,kMQSmax);
-exec verify_assigned_limit(KQS.R4B2,kMQSmax);
-exec verify_assigned_limit(KQS.L5B2,kMQSmax);
-exec verify_assigned_limit(KQS.A56B2,kMQSmax);
-exec verify_assigned_limit(KQS.R6B2,kMQSmax);
-exec verify_assigned_limit(KQS.L7B2,kMQSmax);
-exec verify_assigned_limit(KQS.A78B2,kMQSmax);
-exec verify_assigned_limit(KQS.R8B2,kMQSmax);
-exec verify_assigned_limit(KQS.L1B2,kMQSmax);
+!exec verify_assigned_limit(KQS.A12B2,kMQSmax);
+!exec verify_assigned_limit(KQS.R2B2,kMQSmax);
+!exec verify_assigned_limit(KQS.L3B2,kMQSmax);
+!exec verify_assigned_limit(KQS.A34B2,kMQSmax);
+!exec verify_assigned_limit(KQS.R4B2,kMQSmax);
+!exec verify_assigned_limit(KQS.L5B2,kMQSmax);
+!exec verify_assigned_limit(KQS.A56B2,kMQSmax);
+!exec verify_assigned_limit(KQS.R6B2,kMQSmax);
+!exec verify_assigned_limit(KQS.L7B2,kMQSmax);
+!exec verify_assigned_limit(KQS.A78B2,kMQSmax);
+!exec verify_assigned_limit(KQS.R8B2,kMQSmax);
+!exec verify_assigned_limit(KQS.L1B2,kMQSmax);
 
 !MS (1.28 T @ 17 mm)
 kMSmax:=1.280*2/0.017^2*0.3/NRJ;
-exec verify_assigned_limit(KSF1.A12B2,kMSmax);
-exec verify_assigned_limit(KSF2.A12B2,kMSmax);
-exec verify_assigned_limit(KSF1.A23B2,kMSmax);
-exec verify_assigned_limit(KSF2.A23B2,kMSmax);
-exec verify_assigned_limit(KSF1.A34B2,kMSmax);
-exec verify_assigned_limit(KSF2.A34B2,kMSmax);
-exec verify_assigned_limit(KSF1.A45B2,kMSmax);
-exec verify_assigned_limit(KSF2.A45B2,kMSmax);
-exec verify_assigned_limit(KSF1.A56B2,kMSmax);
-exec verify_assigned_limit(KSF2.A56B2,kMSmax);
-exec verify_assigned_limit(KSF1.A67B2,kMSmax);
-exec verify_assigned_limit(KSF2.A67B2,kMSmax);
-exec verify_assigned_limit(KSF1.A78B2,kMSmax);
-exec verify_assigned_limit(KSF2.A78B2,kMSmax);
-exec verify_assigned_limit(KSF1.A81B2,kMSmax);
-exec verify_assigned_limit(KSF2.A81B2,kMSmax);
-exec verify_assigned_limit(KSD1.A12B2,kMSmax);
-exec verify_assigned_limit(KSD2.A12B2,kMSmax);
-exec verify_assigned_limit(KSD1.A23B2,kMSmax);
-exec verify_assigned_limit(KSD2.A23B2,kMSmax);
-exec verify_assigned_limit(KSD1.A34B2,kMSmax);
-exec verify_assigned_limit(KSD2.A34B2,kMSmax);
-exec verify_assigned_limit(KSD1.A45B2,kMSmax);
-exec verify_assigned_limit(KSD2.A45B2,kMSmax);
-exec verify_assigned_limit(KSD1.A56B2,kMSmax);
-exec verify_assigned_limit(KSD2.A56B2,kMSmax);
-exec verify_assigned_limit(KSD1.A67B2,kMSmax);
-exec verify_assigned_limit(KSD2.A67B2,kMSmax);
-exec verify_assigned_limit(KSD1.A78B2,kMSmax);
-exec verify_assigned_limit(KSD2.A78B2,kMSmax);
-exec verify_assigned_limit(KSD1.A81B2,kMSmax);
-exec verify_assigned_limit(KSD2.A81B2,kMSmax);
+!exec verify_assigned_limit(KSF1.A12B2,kMSmax);
+!exec verify_assigned_limit(KSF2.A12B2,kMSmax);
+!exec verify_assigned_limit(KSF1.A23B2,kMSmax);
+!exec verify_assigned_limit(KSF2.A23B2,kMSmax);
+!exec verify_assigned_limit(KSF1.A34B2,kMSmax);
+!exec verify_assigned_limit(KSF2.A34B2,kMSmax);
+!exec verify_assigned_limit(KSF1.A45B2,kMSmax);
+!exec verify_assigned_limit(KSF2.A45B2,kMSmax);
+!exec verify_assigned_limit(KSF1.A56B2,kMSmax);
+!exec verify_assigned_limit(KSF2.A56B2,kMSmax);
+!exec verify_assigned_limit(KSF1.A67B2,kMSmax);
+!exec verify_assigned_limit(KSF2.A67B2,kMSmax);
+!exec verify_assigned_limit(KSF1.A78B2,kMSmax);
+!exec verify_assigned_limit(KSF2.A78B2,kMSmax);
+!exec verify_assigned_limit(KSF1.A81B2,kMSmax);
+!exec verify_assigned_limit(KSF2.A81B2,kMSmax);
+!exec verify_assigned_limit(KSD1.A12B2,kMSmax);
+!exec verify_assigned_limit(KSD2.A12B2,kMSmax);
+!exec verify_assigned_limit(KSD1.A23B2,kMSmax);
+!exec verify_assigned_limit(KSD2.A23B2,kMSmax);
+!exec verify_assigned_limit(KSD1.A34B2,kMSmax);
+!exec verify_assigned_limit(KSD2.A34B2,kMSmax);
+!exec verify_assigned_limit(KSD1.A45B2,kMSmax);
+!exec verify_assigned_limit(KSD2.A45B2,kMSmax);
+!exec verify_assigned_limit(KSD1.A56B2,kMSmax);
+!exec verify_assigned_limit(KSD2.A56B2,kMSmax);
+!exec verify_assigned_limit(KSD1.A67B2,kMSmax);
+!exec verify_assigned_limit(KSD2.A67B2,kMSmax);
+!exec verify_assigned_limit(KSD1.A78B2,kMSmax);
+!exec verify_assigned_limit(KSD2.A78B2,kMSmax);
+!exec verify_assigned_limit(KSD1.A81B2,kMSmax);
+!exec verify_assigned_limit(KSD2.A81B2,kMSmax);
 
 !MSS (1.28 T @ 17 mm)
 kMSSmax:=1.280*2/0.017^2*0.3/NRJ;
@@ -395,22 +402,22 @@ exec verify_assigned_limit(KCD.A81B2,kMCDmax);
 
 !MO (0.29 T @ 17 mm)
 kMOmax:=0.29*6/0.017^3*0.3/NRJ;
-exec verify_assigned_limit(KOF.A12B2,kMOmax);
-exec verify_assigned_limit(KOF.A23B2,kMOmax);
-exec verify_assigned_limit(KOF.A34B2,kMOmax);
-exec verify_assigned_limit(KOF.A45B2,kMOmax);
-exec verify_assigned_limit(KOF.A56B2,kMOmax);
-exec verify_assigned_limit(KOF.A67B2,kMOmax);
-exec verify_assigned_limit(KOF.A78B2,kMOmax);
-exec verify_assigned_limit(KOF.A81B2,kMOmax);
-exec verify_assigned_limit(KOD.A12B2,kMOmax);
-exec verify_assigned_limit(KOD.A23B2,kMOmax);
-exec verify_assigned_limit(KOD.A34B2,kMOmax);
-exec verify_assigned_limit(KOD.A45B2,kMOmax);
-exec verify_assigned_limit(KOD.A56B2,kMOmax);
-exec verify_assigned_limit(KOD.A67B2,kMOmax);
-exec verify_assigned_limit(KOD.A78B2,kMOmax);
-exec verify_assigned_limit(KOD.A81B2,kMOmax);
+!exec verify_assigned_limit(KOF.A12B2,kMOmax);
+!exec verify_assigned_limit(KOF.A23B2,kMOmax);
+!exec verify_assigned_limit(KOF.A34B2,kMOmax);
+!exec verify_assigned_limit(KOF.A45B2,kMOmax);
+!exec verify_assigned_limit(KOF.A56B2,kMOmax);
+!exec verify_assigned_limit(KOF.A67B2,kMOmax);
+!exec verify_assigned_limit(KOF.A78B2,kMOmax);
+!exec verify_assigned_limit(KOF.A81B2,kMOmax);
+!exec verify_assigned_limit(KOD.A12B2,kMOmax);
+!exec verify_assigned_limit(KOD.A23B2,kMOmax);
+!exec verify_assigned_limit(KOD.A34B2,kMOmax);
+!exec verify_assigned_limit(KOD.A45B2,kMOmax);
+!exec verify_assigned_limit(KOD.A56B2,kMOmax);
+!exec verify_assigned_limit(KOD.A67B2,kMOmax);
+!exec verify_assigned_limit(KOD.A78B2,kMOmax);
+!exec verify_assigned_limit(KOD.A81B2,kMOmax);
 
 };
 

@@ -44,7 +44,7 @@ eeeR5.B2,APERTYPE=ttt,APERTURE:={ap1,ap2,ap3,ap4},APER_TOL:={rtol,htol,vtol};
 };
 
 !D2 NOMINAL B.S. ORIENTATION
-!g_D2=0.026400;r_D2=0.031300; !nominal D2 beam-screen 
+g_D2=0.026400-1.5*(1-no_bs_tol);r_D2=0.031300-1.5*(1-no_bs_tol); !nominal D2 beam-screen 
 ! g_D2=0.033500;r_D2=0.038500; !new D2 beam-screen 
 ! g_D2=0.033500*1.35;r_D2=0.038500*1.35; !new D2 beam-screen 
 ! g_D2=0.037000;r_D2=0.042000; !new D2 beam-screen for crab 106mm
@@ -71,31 +71,33 @@ g_D2=r_D2 - t_CT_D2;
 !r2_D2=42.5;
 !r1_D2:=39-1.5*(1-no_bs_tol);   !C. Garion 9/4/2015 3mm CB, 1.5mm mech tol
 !r2_D2:=43.5-1.5*(1-no_bs_tol); !C. Garion 9/4/2015 3mm CB, 1.5mm mech tol
-r1_D2:=38.5-1.5*(1-no_bs_tol)-2.5;  !C. Garion 30/11/2015 3mm CB, 1.5mm mech tol 100mm
-r2_D2:=43-1.5*(1-no_bs_tol)-2.5;    !C. Garion 30/11/2015 3mm CB, 1.5mm mech tol 100mm
+!r1_D2:=38.5-1.5*(1-no_bs_tol)-2.5;  !C. Garion 30/11/2015 3mm CB, 1.5mm mech tol 100mm
+!r2_D2:=43-1.5*(1-no_bs_tol)-2.5;    !C. Garion 30/11/2015 3mm CB, 1.5mm mech tol 100mm
+!r1_D2:=38.5-1.5*(1-no_bs_tol);  !C. Garion 30/11/2015 3mm CB, 1.5mm mech tol
+!r2_D2:=43-1.5*(1-no_bs_tol);    !C. Garion 30/11/2015 3mm CB, 1.5mm mech tol
 
-r_D2=sqrt((sqrt(2)*r1_D2-r2_D2)^2+r2_D2^2)/1e3;
-g_D2=r1_D2/1e3;
-hv_D2=r2_D2/1e3;
+!r_D2=sqrt((sqrt(2)*r1_D2-r2_D2)^2+r2_D2^2)/1e3;
+!g_D2=r1_D2/1e3;
+!hv_D2=r2_D2/1e3;
 
-angle1_D2=45-acos(g_d2/r_d2)/pi*180; !22.5 regular octagon
-angle2_D2=90-angle1_D2;
+!angle1_D2=45-acos(g_d2/r_d2)/pi*180; !22.5 regular octagon
+!angle2_D2=90-angle1_D2;
 
-value,r_D2,g_D2,angle1_D2,angle2_D2;
+!value,r_D2,g_D2,angle1_D2,angle2_D2;
 
-xx1=r_D2*cos(angle1_D2/180*pi);!conversion to m
-yy1=r_D2*sin(angle1_D2/180*pi);
-xx2=r_D2*cos(angle2_D2/180*pi);
-yy2=r_D2*sin(angle2_D2/180*pi);
+!xx1=r_D2*cos(angle1_D2/180*pi);!conversion to m
+!yy1=r_D2*sin(angle1_D2/180*pi);
+!xx2=r_D2*cos(angle2_D2/180*pi);
+!yy2=r_D2*sin(angle2_D2/180*pi);
 
-value,xx1,yy1,xx2,yy2;
+!value,xx1,yy1,xx2,yy2;
 
-system,"rm d2_aperture";assign, echo="d2_aperture";
-exec,write_OCTAGON(xx1,yy1,xx2,yy2);
-assign, echo=terminal;
+!system,"rm d2_aperture";assign, echo="d2_aperture";
+!exec,write_OCTAGON(xx1,yy1,xx2,yy2);
+!assign, echo=terminal;
 
-exec,aperture_2in1_def(MBRD.4,d2_aperture,
-          hv_D2,hv_D2,angle1_D2,angle2_D2,r_tol_D2, h_tol_D2, v_tol_D2);
+!exec,aperture_2in1_def(MBRD.4,d2_aperture,
+!          hv_D2,hv_D2,angle1_D2,angle2_D2,r_tol_D2, h_tol_D2, v_tol_D2);
 !exec,aperture_2in1_def(TCLMA.4,d2_aperture,
 !          hv_D2,hv_D2,angle1_D2,angle2_D2,r_tol_D2, h_tol_D2, v_tol_D2);
 
@@ -105,16 +107,30 @@ exec,aperture_2in1_def(MBRD.4,d2_aperture,
 !g_MC2=g_D2;r_MC2=r_D2; !equal to D2 for the time being
 !r_tol_MC2 =r_tol_D2; h_tol_MC2 :=h_tol_D2+h_tol_MC2_mod; v_tol_MC2 :=v_tol_D2+v_tol_MC2_mod;
 
-exec,aperture_2in1_def(MCBRDH.4,d2_aperture,
-          hv_D2,hv_D2,angle1_D2,angle2_D2,r_tol_C2 , h_tol_C2 , v_tol_C2);
-exec,aperture_2in1_def(MCBRDV.4,d2_aperture,
-          hv_D2,hv_D2,angle1_D2,angle2_D2,r_tol_C2 , h_tol_C2 , v_tol_C2);
+!exec,aperture_2in1_def(MCBRDH.4,d2_aperture,
+!          hv_D2,hv_D2,angle1_D2,angle2_D2,r_tol_C2 , h_tol_C2 , v_tol_C2);
+!exec,aperture_2in1_def(MCBRDV.4,d2_aperture,
+!          hv_D2,hv_D2,angle1_D2,angle2_D2,r_tol_C2 , h_tol_C2 , v_tol_C2);
+
+exec,aperture_2in1_def(MBRD.4,rectellipse,r_D2,g_D2,r_D2,r_D2,r_tol_D2, h_tol_D2, v_tol_D2);
+exec,aperture_2in1_def(MCBRDH.4,rectellipse,r_C2,g_C2,r_C2,r_C2,r_tol_C2, h_tol_C2, v_tol_C2);
+exec,aperture_2in1_def(MCBRDV.4,rectellipse,r_C2,g_C2,r_C2,r_C2,r_tol_C2, h_tol_C2, v_tol_C2);
+
+
+!exec,aperture_2in1_def(MBRD.4,rectellipse,
+!          hv_D2,hv_D2,angle1_D2,angle2_D2,r_tol_D2, h_tol_D2, v_tol_D2);
+!exec,aperture_2in1_def(MCBRDH.4,rectellipse,
+!          hv_D2,hv_D2,angle1_D2,angle2_D2,r_tol_C2 , h_tol_C2 , v_tol_C2);
+!exec,aperture_2in1_def(MCBRDV.4,rectellipse,
+!          hv_D2,hv_D2,angle1_D2,angle2_D2,r_tol_C2 , h_tol_C2 , v_tol_C2);
+
+
 
 
 
 
 !Q4 NOMINAL B.S. ORIENTATION
-g_Q4=0.024000;r_Q4=0.028900; !nominal MQY beam-screen
+g_Q4=0.024000-1.0*(1-no_bs_tol);r_Q4=0.028900-1.0*(1-no_bs_tol); !nominal MQY beam-screen
 !g_Q4=0.030000; r_Q4=0.035000; !new MQY beam-screen
 !g_Q4=0.032000; r_Q4=0.037000; !new MQY beam-screen 90 mm
 !r_tol_Q4 =0.0006; h_tol_Q4 :=0.0010+h_tol_Q4_mod; v_tol_Q4 :=0.0010+v_tol_Q4_mod;
