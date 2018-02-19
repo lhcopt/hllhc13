@@ -88,11 +88,7 @@ exec,aperture_2in1_def(MCBRDV.4,OCTAGON,hv_D2,hv_D2,angle1_D2,angle2_D2,r_tol_C2
 
 
 !Q4 NOMINAL B.S. ORIENTATION
-<<<<<<< HEAD
-g_Q4=0.024000;r_Q4=0.028900; !nominal MQY beam-screen
-=======
 g_Q4=0.024000+1.2e-3*no_bs_tol;r_Q4=0.028900+1.2e-3*no_bs_tol; !nominal MQY beam-screen
->>>>>>> 9e487816f43bbaff90bbacd611bab3ca2050c365
 !g_Q4=0.030000; r_Q4=0.035000; !new MQY beam-screen
 !g_Q4=0.032000; r_Q4=0.037000; !new MQY beam-screen 90 mm
 !r_tol_Q4 =0.0006; h_tol_Q4 :=0.0010+h_tol_Q4_mod; v_tol_Q4 :=0.0010+v_tol_Q4_mod;
@@ -189,11 +185,7 @@ MQY.4R5.B2,   APERTYPE=RECTELLIPSE, APERTURE:={ r_Q4,g_Q4,r_Q4,r_Q4}, APER_TOL:=
 
 !Q5  NOMINAL B.S ORIENTATION
 ! g_Q5=0.017650;r_Q5=0.022550; !nominal MQM b.s.
-<<<<<<< HEAD
- g_Q5=0.024000;r_Q5=0.028900; !nominal MQY beam-screen
-=======
  g_Q5=0.024000+1.2e-3*no_bs_tol;r_Q5=0.028900+1.2e-3*no_bs_tol; !nominal MQY beam-screen
->>>>>>> 9e487816f43bbaff90bbacd611bab3ca2050c365
 ! r_tol_Q5 =0.0006; h_tol_Q5 :=0.0010+h_tol_Q5_mod; v_tol_Q5 :=0.0010+v_tol_Q5_mod;
  r_tol_Q5:=0.00084+r_tol_Q5_mod; h_tol_Q5 :=0.00126+h_tol_Q5_mod; v_tol_Q5 :=0.0006+v_tol_Q5_mod;
  r_tol_C5:=0.00084+r_tol_C5_mod; h_tol_C5 :=0.00126+h_tol_C5_mod; v_tol_C5 :=0.0006+v_tol_C5_mod;
