@@ -236,7 +236,8 @@ endmatch;
 tarir2b1=tar;
 
 if (relax_match15>0){
-  call,file="slhc/toolkit/xing.IP28.madx";
+!  call,file="slhc/toolkit/xing.IP28.madx";
+  call,file="slhc/toolkit/rematch_xing_ir28.madx";
 };
 
 value,tarir3b1,tarir7b1,tarir4b1,tarir6b1,tarir2b1,tarir8b1;
