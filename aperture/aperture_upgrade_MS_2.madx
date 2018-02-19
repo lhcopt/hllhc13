@@ -54,14 +54,14 @@ g_D2=0.026400+1.5e-3*no_bs_tol;r_D2=0.031300+1.5e-3*no_bs_tol; !nominal D2 beam-
 r_tol_D2 :=0.00084+r_tol_D2_mod; h_tol_D2 :=0.00136+h_tol_D2_mod; v_tol_D2 :=0.0010+v_tol_D2_mod;
 r_tol_C2 :=0.00084+r_tol_C2_mod; h_tol_C2 :=0.00136+h_tol_C2_mod; v_tol_C2 :=0.0010+v_tol_C2_mod;
 
-coil_ID_D2=105.; !Coil inner
-t_HE_D2=1.; ! Helium thickness
-t_CB_D2=2.5; ! Cold bore thickness + 0.5 kapton
-d_CB_BS_D2=1.; ! Distance Cold Bore to Beam Screen
-t_BS_D2=1.; ! Beam Screen thickness
-t_CT_D2=5.; ! Cooling tube thickness
-r_D2=coil_ID_D2/2 - t_HE_D2 - t_CB_D2 - d_CB_BS_D2 - t_BS_D2 ;
-g_D2=r_D2 - t_CT_D2;
+!coil_ID_D2=105.; !Coil inner
+!t_HE_D2=1.; ! Helium thickness
+!t_CB_D2=2.5; ! Cold bore thickness + 0.5 kapton
+!d_CB_BS_D2=1.; ! Distance Cold Bore to Beam Screen
+!t_BS_D2=1.; ! Beam Screen thickness
+!t_CT_D2=5.; ! Cooling tube thickness
+!r_D2=coil_ID_D2/2 - t_HE_D2 - t_CB_D2 - d_CB_BS_D2 - t_BS_D2 ;
+!g_D2=r_D2 - t_CT_D2;!
 
 !r_D2=42+3+0.8; ! TO be check
 !g_D2=r_D2-0.8*2-3*2; ! TO be check
@@ -112,9 +112,9 @@ g_D2=r_D2 - t_CT_D2;
 !exec,aperture_2in1_def(MCBRDV.4,d2_aperture,
 !          hv_D2,hv_D2,angle1_D2,angle2_D2,r_tol_C2 , h_tol_C2 , v_tol_C2);
 
-exec,aperture_2in1_def(MBRD.4,RECTELLIPSE,r_D2,g_D2,r_D2,r_D2,r_tol_D2, h_tol_D2, v_tol_D2);
-exec,aperture_2in1_def(MCBRDH.4,RECTELLIPSE,r_C2,g_C2,r_C2,r_C2,r_tol_C2, h_tol_C2, v_tol_C2);
-exec,aperture_2in1_def(MCBRDV.4,RECTELLIPSE,r_C2,g_C2,r_C2,r_C2,r_tol_C2, h_tol_C2, v_tol_C2);
+exec,aperture_2in1_def(MBRD.4,rectellipse,r_D2,g_D2,r_D2,r_D2,r_tol_D2, h_tol_D2, v_tol_D2);
+exec,aperture_2in1_def(MCBRDH.4,rectellipse,r_D2,g_D2,r_D2,r_D2,r_tol_C2, h_tol_C2, v_tol_C2);
+exec,aperture_2in1_def(MCBRDV.4,rectellipse,r_D2,g_D2,r_D2,r_D2,r_tol_C2, h_tol_C2, v_tol_C2);
 
 
 !exec,aperture_2in1_def(MBRD.4,RECTELLIPSE,
@@ -130,7 +130,7 @@ exec,aperture_2in1_def(MCBRDV.4,RECTELLIPSE,r_C2,g_C2,r_C2,r_C2,r_tol_C2, h_tol_
 
 
 !Q4 NOMINAL B.S. ORIENTATION
-g_Q4=0.024000+1e-3*no_bs_tol;r_Q4=0.028900+1.0e-3*no_bs_tol; !nominal MQY beam-screen
+g_Q4=0.024000+1.2e-3*no_bs_tol;r_Q4=0.028900+1.2e-3*no_bs_tol; !nominal MQY beam-screen
 !g_Q4=0.030000; r_Q4=0.035000; !new MQY beam-screen
 !g_Q4=0.032000; r_Q4=0.037000; !new MQY beam-screen 90 mm
 !r_tol_Q4 =0.0006; h_tol_Q4 :=0.0010+h_tol_Q4_mod; v_tol_Q4 :=0.0010+v_tol_Q4_mod;
@@ -226,7 +226,7 @@ MQY.4R5.B2,   APERTYPE=RECTELLIPSE, APERTURE:={ r_Q4,g_Q4,r_Q4,r_Q4}, APER_TOL:=
 !
 
 !Q5
- g_Q5=0.017650+1e-3*no_bs_tol;r_Q5=0.022550+1e-3*no_bs_tol; !nominal MQM b.s.
+ g_Q5=0.017650+1.2e-3*no_bs_tol;r_Q5=0.022550+1.2e-3*no_bs_tol; !nominal MQM b.s.
 ! g_Q5=0.024000;r_Q5=0.028900; !nominal MQY beam-screen
 ! r_tol_Q5 =0.0006; h_tol_Q5 :=0.0010+h_tol_Q5_mod; v_tol_Q5 :=0.0010+v_tol_Q5_mod;
  r_tol_Q5:=0.00084+r_tol_Q5_mod; h_tol_Q5 :=0.00126+h_tol_Q5_mod; v_tol_Q5 :=0.0006+v_tol_Q5_mod;
