@@ -85,6 +85,10 @@ r_BPMSQ := 0.123/2;      ! was 60 mm in slhcv1 and slhcv2
 r_BPMSQ4:= 0.150/2;      ! was 60 mm in slhcv1 and slhcv2
 r_BPMSQ4W:= 0.150/2;      ! was 60 mm in slhcv1 and slhcv2
 
+
+! F. Galan 15/1/2017 0.5 mechanical tolerances should be addeded, however ground motion should be smaller since we can realign every YTS.
+! Fiducializatin of 0.5 mm should be also Ok
+
 !(r,h,v) tolerance for TAS-IT-CP-D1
 
 r_tol_TAS:=0.0020+r_tol_TAS_mod; h_tol_TAS:=0.0005+h_tol_TAS_mod; v_tol_TAS:=0.0005+v_tol_TAS_mod;

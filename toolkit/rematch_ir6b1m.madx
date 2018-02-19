@@ -111,8 +111,13 @@ if(betxtcdqb1>0){
 } else {
   constraint, sequence=lhcb1,range=TCDQA.A4R6.B1,betx > 430;
 };
+if(betytcdsb1>0){
+  constraint,expr=refbetytcdsb1>betytcdsb1;
+}else{
+  constraint,sequence=lhcb2,range=TCDSA.4L6.B1,bety>200;
+};
 if(betytcdqb1>0){
-  constraint,expr=refbetytcdsb1 > betytcdqb1;
+  constraint,expr=refbetytcdqb1> betytcdqb1;
 } else {
   constraint, sequence=lhcb1,range=TCDQA.A4R6.B1,bety >145;
 };
