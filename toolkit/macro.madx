@@ -4707,9 +4707,9 @@ call,file="/tmp/optknob_final.madx";
 system,"rm tmp/optknob_*";
 };
 
-check_ipknob(kkkk,irn): macro={
+check_ipknob(kkkk,irn,vvvv): macro={
 kkkkaux=kkkk;
-kkkk=1;
+kkkk=vvvv;
 exec,mk_irtwiss(irn,b1);
 exec,mk_irtwiss(irn,b2);
 show,refxipirnb1;
@@ -4737,6 +4737,7 @@ tar_kkkk=(refxipirnb1-xipirnb1)^2+
          (refpyipirnb1-pyipirnb1)^2+
          (refpyipirnb2-pyipirnb2)^2;
 value,tar_kkkk;
+value,kkkk;
 kkkk=kkkkaux;
 };
 

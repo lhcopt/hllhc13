@@ -93,7 +93,7 @@ exec,set_sext_all(ksf,ksd,ksf,ksd); k2max=0.38;
 
 if (match_w2==0){
 call,file="slhc/toolkit/rematch_w.madx";
-call,file="slhc/toolkit/rematch_disp.madx";
+call,file="slhc/toolkit/rematch_disp_new.madx";
 };
 if (match_w2==2){
 call,file="slhc/toolkit/rematch_w2.madx";

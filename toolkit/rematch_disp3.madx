@@ -302,25 +302,28 @@ on_disp=1;phi_ir1=90.0;phi_ir5=90.0; exec REF_OPT; exec GENER_BUMP(s,x);
 !exec PLOT_DISPCO(b1,1);
 !exec PLOT_DISPCO(b2,1);
 
-
+delete,table=knob_on_dx1h;
 create,table=knob_on_dx1h,
        column=acbh12.r8b1,acbh14.r8b1,acbh16.r8b1,acbh14.l1b1,acbh12.l1b1,
               acbh13.r1b1,acbh15.r1b1,acbh15.l2b1,acbh13.l2b1,
               acbh13.r8b2,acbh15.r8b2,acbh15.l1b2,acbh13.l1b2,
               acbh12.r1b2,acbh14.r1b2,acbh16.l2b2,acbh14.l2b2,acbh12.l2b2;
 
+delete,table=knob_on_dsep1h;
 create,table=knob_on_dsep1h,
        column=acbh12.r8b1,acbh14.r8b1,acbh16.r8b1,acbh14.l1b1,acbh12.l1b1,
               acbh13.r1b1,acbh15.r1b1,acbh15.l2b1,acbh13.l2b1,
               acbh13.r8b2,acbh15.r8b2,acbh15.l1b2,acbh13.l1b2,
               acbh12.r1b2,acbh14.r1b2,acbh16.l2b2,acbh14.l2b2,acbh12.l2b2;
 
+delete,table=knob_on_dx1v;
 create,table=knob_on_dx1v,
        column=acbv13.r8b1,acbv15.r8b1,acbv15.l1b1,acbv13.l1b1,
               acbv12.r1b1,acbv14.r1b1,acbv16.l2b1,acbv14.l2b1,
               acbv14.r8b2,acbv16.r8b2,acbv14.l1b2,acbv12.l1b2,
               acbv13.r1b2,acbv15.r1b2,acbv15.l2b2,acbv13.l2b2;
 
+delete,table=knob_on_dsep1v;
 create,table=knob_on_dsep1v,
        column=acbv13.r8b1,acbv15.r8b1,acbv15.l1b1,acbv13.l1b1,
               acbv12.r1b1,acbv14.r1b1,acbv16.l2b1,acbv14.l2b1,
@@ -328,24 +331,28 @@ create,table=knob_on_dsep1v,
               acbv13.r1b2,acbv15.r1b2,acbv15.l2b2,acbv13.l2b2;
 
 
+delete,table=knob_on_dx5h;
 create,table=knob_on_dx5h,
        column=acbh12.r4b1,acbh14.r4b1,acbh16.r4b1,acbh14.l5b1,acbh12.l5b1,
               acbh13.r5b1,acbh15.r5b1,acbh15.l6b1,acbh13.l6b1,
               acbh13.r4b2,acbh15.r4b2,acbh15.l5b2,acbh13.l5b2,
               acbh12.r5b2,acbh14.r5b2,acbh16.l6b2,acbh14.l6b2,acbh12.l6b2;
 
+delete,table=knob_on_dsep5h;
 create,table=knob_on_dsep5h,
        column=acbh12.r4b1,acbh14.r4b1,acbh16.r4b1,acbh14.l5b1,acbh12.l5b1,
               acbh13.r5b1,acbh15.r5b1,acbh15.l6b1,acbh13.l6b1,
               acbh13.r4b2,acbh15.r4b2,acbh15.l5b2,acbh13.l5b2,
               acbh12.r5b2,acbh14.r5b2,acbh16.l6b2,acbh14.l6b2,acbh12.l6b2;
 
+delete,table=knob_on_dx5v;
 create,table=knob_on_dx5v,
        column=acbv13.r4b1,acbv15.r4b1,acbv15.l5b1,acbv13.l5b1,
               acbv12.r5b1,acbv14.r5b1,acbv16.l6b1,acbv14.l6b1,
               acbv14.r4b2,acbv16.r4b2,acbv14.l5b2,acbv12.l5b2,
               acbv13.r5b2,acbv15.r5b2,acbv15.l6b2,acbv13.l6b2;
 
+delete,table=knob_on_dsep5v;
 create,table=knob_on_dsep5v,
        column=acbv13.r4b1,acbv15.r4b1,acbv15.l5b1,acbv13.l5b1,
               acbv12.r5b1,acbv14.r5b1,acbv16.l6b1,acbv14.l6b1,
