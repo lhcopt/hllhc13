@@ -458,5 +458,42 @@ MS.10R5.B2,   APER_TOL:={ 0.000840,    0.000580,     0.000650 };
 MS.10L1.B2,   APER_TOL:={ 0.000840,    0.000670,     0.000410 };
 
 
+mbh_hsag=l.MBH/ab.a78*2*(1/cos(ab.a78/4)-1)/2; !half sagitta
+g_MBH=0.017150;
+r_MBH:=0.022-MBH_hsag;
+r_tol_MBH=0.0009;
+h_tol_MBH=0.0008;
+v_tol_MBH=0.0005;
+
+aperture_mbh(mbm,mbn,irn,ira,irb,): macro={
+mbh.ambnrirn.b1,APERTYPE=RECTELLIPSE,APERTURE:={r_MBH,g_MBH,r_MBH,r_MBH},APER_TOL:={r_tol_MBH,h_tol_MBH,v_tol_MBH};
+mbh.bmbnrirn.b1,APERTYPE=RECTELLIPSE,APERTURE:={r_MBH,g_MBH,r_MBH,r_MBH},APER_TOL:={r_tol_MBH,h_tol_MBH,v_tol_MBH};
+mbh.ambnlirn.b2,APERTYPE=RECTELLIPSE,APERTURE:={r_MBH,g_MBH,r_MBH,r_MBH},APER_TOL:={r_tol_MBH,h_tol_MBH,v_tol_MBH};
+mbh.bmbnlirn.b2,APERTYPE=RECTELLIPSE,APERTURE:={r_MBH,g_MBH,r_MBH,r_MBH},APER_TOL:={r_tol_MBH,h_tol_MBH,v_tol_MBH};
+mbh.ambnrirn.b2,APERTYPE=RECTELLIPSE,APERTURE:={r_MBH,g_MBH,r_MBH,r_MBH},APER_TOL:={r_tol_MBH,h_tol_MBH,v_tol_MBH};
+mbh.bmbnrirn.b2,APERTYPE=RECTELLIPSE,APERTURE:={r_MBH,g_MBH,r_MBH,r_MBH},APER_TOL:={r_tol_MBH,h_tol_MBH,v_tol_MBH};
+mbh.ambnlirn.b1,APERTYPE=RECTELLIPSE,APERTURE:={r_MBH,g_MBH,r_MBH,r_MBH},APER_TOL:={r_tol_MBH,h_tol_MBH,v_tol_MBH};
+mbh.bmbnlirn.b1,APERTYPE=RECTELLIPSE,APERTURE:={r_MBH,g_MBH,r_MBH,r_MBH},APER_TOL:={r_tol_MBH,h_tol_MBH,v_tol_MBH};
+value,r_MBH;
+};
+
+
+if (mbh_ir1q8 >0){ exec,aperture_mbh(b,8 ,1,8,2); };
+if (mbh_ir1q9 >0){ exec,aperture_mbh(b,9 ,1,8,2); };
+if (mbh_ir1q10>0){ exec,aperture_mbh(b,10,1,8,2); };
+
+if (mbh_ir2q8 >0){ exec,aperture_mbh(a,8 ,2,1,3); };
+if (mbh_ir2q10>0){ exec,aperture_mbh(a,10,2,1,3); };
+
+if (mbh_ir5q8 >0){ exec,aperture_mbh(b,8 ,5,4,6); };
+if (mbh_ir5q9 >0){ exec,aperture_mbh(b,9 ,5,4,6); };
+if (mbh_ir5q10>0){ exec,aperture_mbh(b,10,5,4,6); };
+
+if (mbh_ir7q8 >0){ exec,aperture_mbh(b,8 ,7,6,8); };
+if (mbh_ir7q10>0){ exec,aperture_mbh(b,10,7,6,8); };
+
+
+
+
 
 return;
