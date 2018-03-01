@@ -1727,7 +1727,7 @@ mbh.bmbnlirn.b1:mbh, angle:= abh.airairn, k0= kbh.airairn,  polarity=+1;
 !tolerances from DS MB Q13-Q7
 mbh_hsag=l.MBH/ab.a78*2*(1/cos(ab.a78/4)-1)/2; !half sagitta
 g_MBH=0.017150;
-r_MBH=0.022-MBH_hsag;
+r_MBH:=0.022-MBH_hsag;
 r_tol_MBH=0.0009;
 h_tol_MBH=0.0008;
 v_tol_MBH=0.0005;
@@ -1735,14 +1735,14 @@ v_tol_MBH=0.0005;
 
 value,mbh_hsag,g_mbh,r_mbh;
 
-mbh.ambnrirn.b1,APERTYPE=RECTELLIPSE,APERTURE={r_MBH,g_MBH,r_MBH,r_MBH},APER_TOL={r_tol_MBH,h_tol_MBH,v_tol_MBH};
-mbh.bmbnrirn.b1,APERTYPE=RECTELLIPSE,APERTURE={r_MBH,g_MBH,r_MBH,r_MBH},APER_TOL={r_tol_MBH,h_tol_MBH,v_tol_MBH};
-mbh.ambnlirn.b2,APERTYPE=RECTELLIPSE,APERTURE={r_MBH,g_MBH,r_MBH,r_MBH},APER_TOL={r_tol_MBH,h_tol_MBH,v_tol_MBH};
-mbh.bmbnlirn.b2,APERTYPE=RECTELLIPSE,APERTURE={r_MBH,g_MBH,r_MBH,r_MBH},APER_TOL={r_tol_MBH,h_tol_MBH,v_tol_MBH};
-mbh.ambnrirn.b2,APERTYPE=RECTELLIPSE,APERTURE={r_MBH,g_MBH,r_MBH,r_MBH},APER_TOL={r_tol_MBH,h_tol_MBH,v_tol_MBH};
-mbh.bmbnrirn.b2,APERTYPE=RECTELLIPSE,APERTURE={r_MBH,g_MBH,r_MBH,r_MBH},APER_TOL={r_tol_MBH,h_tol_MBH,v_tol_MBH};
-mbh.ambnlirn.b1,APERTYPE=RECTELLIPSE,APERTURE={r_MBH,g_MBH,r_MBH,r_MBH},APER_TOL={r_tol_MBH,h_tol_MBH,v_tol_MBH};
-mbh.bmbnlirn.b1,APERTYPE=RECTELLIPSE,APERTURE={r_MBH,g_MBH,r_MBH,r_MBH},APER_TOL={r_tol_MBH,h_tol_MBH,v_tol_MBH};
+mbh.ambnrirn.b1,APERTYPE=RECTELLIPSE,APERTURE:={r_MBH,g_MBH,r_MBH,r_MBH},APER_TOL={r_tol_MBH,h_tol_MBH,v_tol_MBH};
+mbh.bmbnrirn.b1,APERTYPE=RECTELLIPSE,APERTURE:={r_MBH,g_MBH,r_MBH,r_MBH},APER_TOL={r_tol_MBH,h_tol_MBH,v_tol_MBH};
+mbh.ambnlirn.b2,APERTYPE=RECTELLIPSE,APERTURE:={r_MBH,g_MBH,r_MBH,r_MBH},APER_TOL={r_tol_MBH,h_tol_MBH,v_tol_MBH};
+mbh.bmbnlirn.b2,APERTYPE=RECTELLIPSE,APERTURE:={r_MBH,g_MBH,r_MBH,r_MBH},APER_TOL={r_tol_MBH,h_tol_MBH,v_tol_MBH};
+mbh.ambnrirn.b2,APERTYPE=RECTELLIPSE,APERTURE:={r_MBH,g_MBH,r_MBH,r_MBH},APER_TOL={r_tol_MBH,h_tol_MBH,v_tol_MBH};
+mbh.bmbnrirn.b2,APERTYPE=RECTELLIPSE,APERTURE:={r_MBH,g_MBH,r_MBH,r_MBH},APER_TOL={r_tol_MBH,h_tol_MBH,v_tol_MBH};
+mbh.ambnlirn.b1,APERTYPE=RECTELLIPSE,APERTURE:={r_MBH,g_MBH,r_MBH,r_MBH},APER_TOL={r_tol_MBH,h_tol_MBH,v_tol_MBH};
+mbh.bmbnlirn.b1,APERTYPE=RECTELLIPSE,APERTURE:={r_MBH,g_MBH,r_MBH,r_MBH},APER_TOL={r_tol_MBH,h_tol_MBH,v_tol_MBH};
 
 
 
@@ -1867,3 +1867,26 @@ LAGRF400.B1=0.5;
 LAGRF400.B2=0.;
 
 endedit;
+
+
+ELENS.5L4.B1: marker;
+ELENS.5L4.B2: marker;
+ELENS.5R4.B1: marker;
+ELENS.5R4.B2: marker;
+
+seqedit,sequence=lhcb1;
+remove,element=ELENS.5L4.B1;
+remove,element=ELENS.5R4.B1;
+install,element=ELENS.5L4.B1,  at=-40,from=ip4;
+install,element=ELENS.5R4.B1,  at= 40,from=ip4;
+endedit;
+
+seqedit,sequence=lhcb2;
+remove,element=ELENS.5L4.B2;
+remove,element=ELENS.5R4.B2;
+install,element=ELENS.5L4.B2,  at=-40*bv_aux,from=ip4;
+install,element=ELENS.5R4.B2,  at= 40*bv_aux,from=ip4;
+endedit;
+
+
+
