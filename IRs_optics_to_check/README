@@ -1,0 +1,12 @@
+
+The folder contains the plot of the IRs that require optics adjustment
+to obtain smoother Quad strength variations during the squeeze for 
+various optics scenarios.
+
+All IRs have been checked for the following optics: 
+"squeeze2", "squeeze2_lhcb","squeeze2_nomqw","squeeze_noms10","squeeze2old", "squeeze_flathv2"
+
+Quad strength discontinuity observed mainly in IR2, but also small bumps in IR6 for
+"squeeze2","squeeze2old" and "squeeze2_nomqw".
+
+
