@@ -1,0 +1,103 @@
+option, warn,info;
+system,"rm -rf temp"; system,"mkdir temp";
+system,"ln -fns /afs/cern.ch/eng/lhc/optics/HLLHCV1.3 slhc";
+system,"ln -fns /afs/cern.ch/eng/lhc/optics/runIII lhc";
+
+Option, -echo,-warn,-info;
+call,file="lhc/lhc.seq";
+call,file="slhc/toolkit/macro.madx";
+call,file="slhc/toolkit/optics_log.madx";
+Option, -echo,warn,-info,no_fatal_stop;
+
+
+exec,mk_beam(7000);
+seqedit,sequence=lhcb1; flatten; cycle,start=s.ds.l3.b1; endedit;
+seqedit,sequence=lhcb2; flatten; cycle,start=s.ds.l3.b2; endedit;
+
+call,file="slhc/hllhc_sequence.madx";
+call,file="slhc/opt_inj.madx";
+exec,check_ip(b1); exec,check_ip(b2);
+
+exec,make_opticstbl_ir1hl(ir1sq);
+exec,make_opticstbl_ir2(ir2sq);
+exec,make_opticstbl_ir3(ir3sq);
+exec,make_opticstbl_ir4(ir4sq);
+exec,make_opticstbl_ir5hl(ir5sq);
+exec,make_opticstbl_ir6(ir6sq);
+exec,make_opticstbl_ir7(ir7sq);
+exec,make_opticstbl_ir8(ir8sq);
+exec,make_opticstbl_arc(arcsq);
+
+mkoptics(bbb5,bbb8,bbb2): macro{
+call,file="slhc/squeeze2/opt_squeeze_bbb5_bbb8.madx";
+fill,table=ir1sq;
+fill,table=ir2sq;
+fill,table=ir3sq;
+fill,table=ir4sq;
+fill,table=ir5sq;
+fill,table=ir6sq;
+fill,table=ir7sq;
+fill,table=ir8sq;
+fill,table=arcsq;
+}
+
+exec,mkoptics(6000,10000);
+exec,mkoptics(6500,10000);
+exec,mkoptics(7000,10000);
+exec,mkoptics(7500,10000);
+exec,mkoptics(8000,10000);
+exec,mkoptics(8500,10000);
+exec,mkoptics(9000,10000);
+exec,mkoptics(9500,10000);
+exec,mkoptics(10000,10000);
+exec,mkoptics(10500,10500);
+exec,mkoptics(11000,11000);
+exec,mkoptics(11500,11500);
+exec,mkoptics(12000,12000);
+exec,mkoptics(12500,12500);
+exec,mkoptics(13000,13000);
+exec,mkoptics(13500,13500);
+exec,mkoptics(14000,14000);
+exec,mkoptics(14500,14500);
+exec,mkoptics(15000,15000);
+exec,mkoptics(15500,15500);
+exec,mkoptics(16000,16000);
+exec,mkoptics(16500,16500);
+exec,mkoptics(17000,17000);
+exec,mkoptics(17500,17500);
+exec,mkoptics(18000,18000);
+exec,mkoptics(18500,18500);
+exec,mkoptics(19000,19000);
+exec,mkoptics(19500,19500);
+exec,mkoptics(20000,20000);
+exec,mkoptics(20500,20500);
+exec,mkoptics(21000,21000);
+exec,mkoptics(21500,21500);
+exec,mkoptics(22000,22000);
+exec,mkoptics(22500,22500);
+exec,mkoptics(23000,23000);
+exec,mkoptics(23500,23500);
+exec,mkoptics(24000,24000);
+exec,mkoptics(24500,24500);
+exec,mkoptics(25000,25000);
+exec,mkoptics(25500,25500);
+exec,mkoptics(26000,26000);
+exec,mkoptics(26500,26500);
+exec,mkoptics(27000,27000);
+exec,mkoptics(27500,27500);
+exec,mkoptics(28000,28000);
+exec,mkoptics(28500,28500);
+exec,mkoptics(29000,29000);
+exec,mkoptics(29500,29500);
+exec,mkoptics(30000,30000);
+
+write,table=ir1sq,file=ir1sq.tfs;
+write,table=ir2sq,file=ir2sq.tfs;
+write,table=ir3sq,file=ir3sq.tfs;
+write,table=ir4sq,file=ir4sq.tfs;
+write,table=ir5sq,file=ir5sq.tfs;
+write,table=ir6sq,file=ir6sq.tfs;
+write,table=ir7sq,file=ir7sq.tfs;
+write,table=ir8sq,file=ir8sq.tfs;
+write,table=arcsq,file=arcssq.tfs;
+
