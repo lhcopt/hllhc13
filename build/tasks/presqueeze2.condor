@@ -1,0 +1,12 @@
+        executable              = madx_wrapper.sh
+        arguments               = job_mkpresqueeze2.madx
+        output                  = std.$(ClusterId).$(ProcId).out
+        error                   = std.$(ClusterId).$(ProcId).err
+        log                     = condor.$(ClusterId).$(ProcId).log
+        initial_dir             = $(dirname)
+        transfer_input_files    = job_mkpresqueeze2.madx
+        transfer_output_files   = result.tgz
+        +MaxRuntime = 1800
+        queue dirname in presqueeze2/6000_10000_0, presqueeze2/5800_9500_7, presqueeze2/5600_9000_14, presqueeze2/5400_8500_21, presqueeze2/5200_8000_28, presqueeze2/5000_7500_35, presqueeze2/4800_7000_42, presqueeze2/4600_6500_49, presqueeze2/4400_6000_56, presqueeze2/4200_5500_63, presqueeze2/4000_5000_70, presqueeze2/3800_4500_77, presqueeze2/3600_4000_84, presqueeze2/3400_3500_91, presqueeze2/3200_3000_98, presqueeze2/3000_3000_100, presqueeze2/2800_3000_100, presqueeze2/2600_3000_100, presqueeze2/2400_3000_100, presqueeze2/2200_3000_100, presqueeze2/2000_3000_100, presqueeze2/1800_3000_100, presqueeze2/1600_3000_100, presqueeze2/1400_3000_100, presqueeze2/1200_3000_100, presqueeze2/1000_3000_100, presqueeze2/990_3000_100, presqueeze2/980_3000_100, presqueeze2/970_3000_100, presqueeze2/960_3000_100, presqueeze2/950_3000_100, presqueeze2/940_3000_100, presqueeze2/930_3000_100, presqueeze2/920_3000_100, presqueeze2/910_3000_100, presqueeze2/900_3000_100, presqueeze2/890_3000_100, presqueeze2/880_3000_100, presqueeze2/870_3000_100, presqueeze2/860_3000_100, presqueeze2/850_3000_100, presqueeze2/840_3000_100, presqueeze2/830_3000_100, presqueeze2/820_3000_100, presqueeze2/810_3000_100, presqueeze2/800_3000_100, presqueeze2/790_3000_100, presqueeze2/780_3000_100, presqueeze2/770_3000_100, presqueeze2/760_3000_100, presqueeze2/750_3000_100, presqueeze2/740_3000_100, presqueeze2/730_3000_100, presqueeze2/720_3000_100, presqueeze2/710_3000_100, presqueeze2/700_3000_100, presqueeze2/690_3000_100, presqueeze2/680_3000_100, presqueeze2/670_3000_100, presqueeze2/660_3000_100, presqueeze2/650_3000_100, presqueeze2/640_3000_100, presqueeze2/630_3000_100, presqueeze2/620_3000_100, presqueeze2/610_3000_100, presqueeze2/600_3000_100, presqueeze2/590_3000_100, presqueeze2/580_3000_100, presqueeze2/570_3000_100, presqueeze2/560_3000_100, presqueeze2/550_3000_100, presqueeze2/540_3000_100, presqueeze2/530_3000_100, presqueeze2/520_3000_100, presqueeze2/510_3000_100, presqueeze2/500_3000_100
+        ##queue dirname matching (presqueeze2/*)
+        

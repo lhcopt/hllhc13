@@ -1,0 +1,20 @@
+Example:
+
+# prepapare job directory
+python job_mksqueeze2_thin.madx
+
+# submit jobs
+condor_submit -spool squeeze2_thin.condor
+
+# check job state
+condor_q -nobatch <condor_job>
+
+# get data back when jobs are finished
+tr_data <condor_job>
+
+# unzip data
+ex_data squeeze2_thin
+
+optics files are in
+
+squeeze2_thin/150/opt_150_150_150_150_thin.madx

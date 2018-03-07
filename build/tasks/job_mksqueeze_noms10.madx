@@ -1,0 +1,56 @@
+option, warn,info;
+system,"rm -rf temp"; system,"mkdir temp";
+system,"ln -fns /afs/cern.ch/eng/lhc/optics/HLLHCV1.3 slhc";
+system,"ln -fns /afs/cern.ch/eng/lhc/optics/runIII lhc";
+
+Option, -echo,-warn,-info;
+call,file="lhc/lhc.seq";
+call,file="slhc/toolkit/macro.madx";
+call,file="slhc/toolkit/optics_log.madx";
+Option, -echo,warn,-info,no_fatal_stop;
+
+
+exec,mk_beam(7000);
+seqedit,sequence=lhcb1; flatten; cycle,start=s.ds.l3.b1; endedit;
+seqedit,sequence=lhcb2; flatten; cycle,start=s.ds.l3.b2; endedit;
+
+call,file="slhc/hllhc_sequence.madx";
+exec, DISABLE_SEXT(MS.10);
+
+call,file="slhc/opt_500_500_500_500.madx";
+exec,check_ip(b1); exec,check_ip(b2);
+
+make_opt(bbb): macro={
+if(is_thin==0){
+if (bbb<=500){call,file="slhc/squeeze/opt_bbb_bbb_bbb_bbb.madx";};
+if (bbb>500) {call,file="slhc/squeeze/opt_squeeze_bbb_3000.madx";};
+};
+if(is_thin==1){
+if (bbb<=500){call,file="slhc/squeeze/opt_bbb_bbb_bbb_bbb_thin.madx";};
+if (bbb>500) {call,file="slhc/squeeze/opt_squeeze_bbb_3000_thin.madx";};
+};
+call,file="slhc/toolkit/rematch_w.madx";
+call,file="slhc/toolkit/rematch_disp.madx";
+call,file="slhc/toolkit/rematch_crabs.madx";
+call,file="slhc/toolkit/mk_arc_trims.madx";
+on_cutms.10f=1;
+on_cutms.10d=1;
+if (is_thin==0){
+   if (bbb<=500){exec,save_optics_hllhc(opt_bbb_bbb_bbb_bbb.madx);};
+   if (bbb>500) {exec,save_optics_hllhc(opt_squeeze_bbb_3000.madx);};
+};
+if (is_thin==1){
+   if (bbb<=500){exec,save_optics_hllhc(opt_bbb_bbb_bbb_bbb_thin.madx);};
+   if (bbb>500) {exec,save_optics_hllhc(opt_squeeze_bbb_3000_thin.madx);};
+};
+};
+
+!return;
+
+exec,make_opt(%BBB);
+exec,myslice;
+exec,make_opt(%BBB);
+
+system,"tar cvfz result.tgz *.madx *.tfs";
+
+stop;

@@ -1,0 +1,12 @@
+        executable              = madx_wrapper.sh
+        arguments               = job_mkvdm.madx
+        output                  = std.$(ClusterId).$(ProcId).out
+        error                   = std.$(ClusterId).$(ProcId).err
+        log                     = condor.$(ClusterId).$(ProcId).log
+        initial_dir             = $(dirname)
+        transfer_input_files    = job_mkvdm.madx
+        transfer_output_files   = result.tgz
+        +MaxRuntime = 1800
+        queue dirname in vdm/6000_10000, vdm/6500_10000, vdm/7000_10000, vdm/7500_10000, vdm/8000_10000, vdm/8500_10000, vdm/9000_10000, vdm/9500_10000, vdm/10000_10000, vdm/10500_10500, vdm/11000_11000, vdm/11500_11500, vdm/12000_12000, vdm/12500_12500, vdm/13000_13000, vdm/13500_13500, vdm/14000_14000, vdm/14500_14500, vdm/15000_15000, vdm/15500_15500, vdm/16000_16000, vdm/16500_16500, vdm/17000_17000, vdm/17500_17500, vdm/18000_18000, vdm/18500_18500, vdm/19000_19000, vdm/19500_19500, vdm/20000_20000, vdm/20500_20500, vdm/21000_21000, vdm/21500_21500, vdm/22000_22000, vdm/22500_22500, vdm/23000_23000, vdm/23500_23500, vdm/24000_24000, vdm/24500_24500, vdm/25000_25000, vdm/25500_25500, vdm/26000_26000, vdm/26500_26500, vdm/27000_27000, vdm/27500_27500, vdm/28000_28000, vdm/28500_28500, vdm/29000_29000, vdm/29500_29500, vdm/30000_30000
+        ##queue dirname matching (vdm/*)
+        

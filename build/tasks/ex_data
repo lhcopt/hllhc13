@@ -1,0 +1,5 @@
+for fn in $1/*/result.tgz
+do
+echo $fn
+tar xvfz $fn -C `dirname $fn`
+done

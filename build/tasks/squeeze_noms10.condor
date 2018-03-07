@@ -1,0 +1,12 @@
+        executable              = madx_wrapper.sh
+        arguments               = job_mksqueeze_noms10.madx
+        output                  = std.$(ClusterId).$(ProcId).out
+        error                   = std.$(ClusterId).$(ProcId).err
+        log                     = condor.$(ClusterId).$(ProcId).log
+        initial_dir             = $(dirname)
+        transfer_input_files    = job_mksqueeze_noms10.madx
+        
+        +MaxRuntime = 1200
+        queue dirname in squeeze_noms10/170, squeeze_noms10/320, squeeze_noms10/360, squeeze_noms10/370, squeeze_noms10/480
+        ##queue dirname matching (squeeze_noms10/*)
+        

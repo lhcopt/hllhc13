@@ -1,0 +1,12 @@
+        executable              = madx_wrapper.sh
+        arguments               = job_mksqueeze2_thin.madx
+        output                  = std.$(ClusterId).$(ProcId).out
+        error                   = std.$(ClusterId).$(ProcId).err
+        log                     = condor.$(ClusterId).$(ProcId).log
+        initial_dir             = $(dirname)
+        transfer_input_files    = job_mksqueeze2_thin.madx
+        transfer_output_files   = result.tgz
+        +MaxRuntime = 2400
+        queue dirname in squeeze2_thin_a/500, squeeze2_thin_a/490, squeeze2_thin_a/480, squeeze2_thin_a/470, squeeze2_thin_a/460, squeeze2_thin_a/450, squeeze2_thin_a/440, squeeze2_thin_a/430, squeeze2_thin_a/420, squeeze2_thin_a/410, squeeze2_thin_a/400, squeeze2_thin_a/390, squeeze2_thin_a/380, squeeze2_thin_a/370, squeeze2_thin_a/360, squeeze2_thin_a/350, squeeze2_thin_a/340, squeeze2_thin_a/330, squeeze2_thin_a/320, squeeze2_thin_a/310, squeeze2_thin_a/300, squeeze2_thin_a/290, squeeze2_thin_a/280, squeeze2_thin_a/270, squeeze2_thin_a/260, squeeze2_thin_a/250, squeeze2_thin_a/240, squeeze2_thin_a/230, squeeze2_thin_a/220, squeeze2_thin_a/210, squeeze2_thin_a/200, squeeze2_thin_a/190, squeeze2_thin_a/180, squeeze2_thin_a/170, squeeze2_thin_a/160, squeeze2_thin_a/150
+        ##queue dirname matching (squeeze2_thin_a/*)
+        
