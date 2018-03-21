@@ -1584,6 +1584,9 @@ value,posTCL.5C,posTCL.5Q,posTCL.6C,posTCL.6Q;
 
 TCLX.4R1.B1: TCL; TCLX.4R5.B1: TCL;
 TCLX.4L1.B2: TCL; TCLX.4L5.B2: TCL;
+VTCLX.4R1.B2: marker; VTCLX.4R5.B2: marker;
+VTCLX.4L1.B1: marker; VTCLX.4L5.B1: marker;
+
 TCL.5R1.B1: TCL; TCL.5R5.B1: TCL;
 TCL.5L1.B2: TCL; TCL.5L5.B2: TCL;
 TCL.6R1.B1: TCL; TCL.6R5.B1: TCL;
@@ -1604,6 +1607,13 @@ TCTXH.4L1.B1: TCTH; TCTXH.4L5.B1: TCTH;
 TCTPV.4L1.B1: TCTV; TCTPV.4L5.B1: TCTV;
 TCTXH.4R1.B2: TCTH; TCTXH.4R5.B2: TCTH;
 TCTPV.4R1.B2: TCTV; TCTPV.4R5.B2: TCTV;
+VTCTXH.4L1.B2: marker; VTCTXH.4L5.B2: marker;
+VTCTPV.4L1.B2: marker; VTCTPV.4L5.B2: marker;
+VTCTXH.4R1.B1: marker; VTCTXH.4R5.B1: marker;
+VTCTPV.4R1.B1: marker; VTCTPV.4R5.B1: marker;
+
+
+
 
 TCTH.6L1.B1: TCTH; TCTH.6L5.B1: TCTH;
 TCTV.6L1.B1: TCTV; TCTV.6L5.B1: TCTV;
@@ -1631,16 +1641,22 @@ seqedit,sequence=lhcb1;
 !! ... TCTH
 install,element=TCTXH.4L1.B1, at= -posTCTXH,   from= IP1.L1;
 install,element=TCTXH.4L5.B1, at= -posTCTXH,   from= IP5;
+install,element=VTCTXH.4R1.B1, at= posTCTXH,   from= IP1;
+install,element=VTCTXH.4R5.B1, at= posTCTXH,   from= IP5;
 install,element=TCTH.6L1.B1, at= -posTCTH.6Q,   from= IP1.L1;
 install,element=TCTH.6L5.B1, at= -posTCTH.6Q,   from= IP5;
 !! ... TCTV
 install,element=TCTPV.4L1.B1, at= -posTCTV, from=IP1.L1;
 install,element=TCTPV.4L5.B1, at= -posTCTV, from=IP5;
+install,element=VTCTPV.4R1.B1, at= posTCTV, from=IP1;
+install,element=VTCTPV.4R5.B1, at= posTCTV, from=IP5;
 install,element=TCTV.6L1.B1, at= -posTCTV.6Q,   from= IP1.L1;
 install,element=TCTV.6L5.B1, at= -posTCTV.6Q,   from= IP5;
 ! ... TCL
 install,element=TCLX.4R1.B1,  at= posTCLX, from=IP1;
 install,element=TCLX.4R5.B1,  at= posTCLX, from=IP5;
+install,element=VTCLX.4L1.B1,  at= -posTCLX, from=IP1.L1;
+install,element=VTCLX.4L5.B1,  at= -posTCLX, from=IP5;
 install,element=TCL.5R1.B1,  at= posTCL.5C, from=IP1;
 install,element=TCL.5R5.B1,  at= posTCL.5C, from=IP5;
 install,element=TCL.6R1.B1,  at= posTCL.6C, from=IP1;
@@ -1653,6 +1669,8 @@ endedit;
 
 seqedit,sequence=lhcb2;
 ! ... TCTH
+install,element=VTCTXH.4L1.B2, at= -posTCTXH*bv_aux,   from= IP1.L1;
+install,element=VTCTXH.4L5.B2, at= -posTCTXH*bv_aux,   from= IP5;
 install,element=TCTXH.4R1.B2, at=  posTCTXH*bv_aux,   from= IP1;
 install,element=TCTXH.4R5.B2, at=  posTCTXH*bv_aux,   from= IP5;
 install,element=TCTH.6R1.B2, at=  posTCTH.6Q*bv_aux,   from= IP1;
@@ -1660,11 +1678,15 @@ install,element=TCTH.6R5.B2, at=  posTCTH.6Q*bv_aux,   from= IP5;
 ! ... TCTV
 install,element=TCTPV.4R1.B2, at= posTCTV*bv_aux, from=IP1;
 install,element=TCTPV.4R5.B2, at= posTCTV*bv_aux, from=IP5;
+install,element=VTCTPV.4L1.B2, at= -posTCTV*bv_aux, from=IP1.L1;
+install,element=VTCTPV.4L5.B2, at= -posTCTV*bv_aux, from=IP5;
 install,element=TCTV.6R1.B2, at= posTCTV.6Q*bv_aux, from=IP1;
 install,element=TCTV.6R5.B2, at= posTCTV.6Q*bv_aux, from=IP5;
 ! ... TCL
 install,element=TCLX.4L1.B2,  at= -posTCLX*bv_aux, from=IP1.L1;
 install,element=TCLX.4L5.B2,  at= -posTCLX*bv_aux, from=IP5;
+install,element=VTCLX.4R1.B2,  at= posTCLX*bv_aux, from=IP1;
+install,element=VTCLX.4R5.B2,  at= posTCLX*bv_aux, from=IP5;
 install,element=TCL.5L1.B2,  at= -posTCL.5C*bv_aux, from=IP1.L1;
 install,element=TCL.5L5.B2,  at= -posTCL.5C*bv_aux, from=IP5;
 install,element=TCL.6L1.B2,  at= -posTCL.6Q*bv_aux, from=IP1.L1;
@@ -1874,12 +1896,14 @@ ELENS.5L4.B2: marker;
 ELENS.5R4.B1: marker;
 ELENS.5R4.B2: marker;
 
-seqedit,sequence=lhcb1;
-remove,element=ELENS.5L4.B1;
-remove,element=ELENS.5R4.B1;
-install,element=ELENS.5L4.B1,  at=-40,from=ip4;
-install,element=ELENS.5R4.B1,  at= 40,from=ip4;
-endedit;
+if(bv_aux ==1){
+  seqedit,sequence=lhcb1;
+  remove,element=ELENS.5L4.B1;
+  remove,element=ELENS.5R4.B1;
+  install,element=ELENS.5L4.B1,  at=-40,from=ip4;
+  install,element=ELENS.5R4.B1,  at= 40,from=ip4;
+  endedit;
+};
 
 seqedit,sequence=lhcb2;
 remove,element=ELENS.5L4.B2;
@@ -1889,4 +1913,27 @@ install,element=ELENS.5R4.B2,  at= 40*bv_aux,from=ip4;
 endedit;
 
 
+
+! TCLD in point 2
+! https://indico.cern.ch/event/680374/  9/12/2017
+! https://indico.cern.ch/event/680374/contributions/2787337/attachments/1570745/2477819/ICL_Meeting_-_11TTCLD_-_CCTCLD_v.3.pptx
+
+posTCLD.2=425.717;
+
+
+TCLD.11R2.B1, TCLD;
+TCLD.11L2.B2, TCLD;
+
+
+if(bv_aux ==1){
+  seqedit,sequence=lhcb1;
+  remove,element=TCLD.11R2.B1;
+  install,element=TCLD.11R2.B1,  at=posTCLD.2,from=ip2;
+  endedit;
+};
+
+seqedit,sequence=lhcb2;
+remove,element=TCLD.11L2.B2;
+install,element=TCLD.11L2.B2,  at=-posTCLD.2*bv_aux,from=ip2;
+endedit;
 
