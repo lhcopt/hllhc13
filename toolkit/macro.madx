@@ -66,50 +66,95 @@
 !     squeezestep(betax,betay,dire)
 
 select(NIR,sec1,sec2,BIM): macro = {
+  use,sequence=lhcBIM,range=s.cell.sec1.BIM/e.cell.sec1.BIM;
+  savebeta,label=baux,place=s.cell.sec1.BIM;
+  twiss;
 
-use,sequence=lhcBIM,range=s.cell.sec1.BIM/e.cell.sec1.BIM;
-savebeta,label=baux,place=s.cell.sec1.BIM;
-twiss;
+  use,sequence=lhcBIM,range=e.cell.sec1.BIM/s.ds.lNIR.BIM;
+  savebeta,label=birNIRBIM,place=s.ds.lNIR.BIM;
+  twiss,beta0=baux;
+  birNIRBIM->mux=0;birNIRBIM->muy=0;
 
-use,sequence=lhcBIM,range=e.cell.sec1.BIM/s.ds.lNIR.BIM;
-savebeta,label=birNIRBIM,place=s.ds.lNIR.BIM;
-twiss,beta0=baux;
-birNIRBIM->mux=0;birNIRBIM->muy=0;
+  use,sequence=lhcBIM,range=s.cell.sec2.BIM/e.cell.sec2.BIM;
+  savebeta,label=baux,place=s.cell.sec2.BIM;
+  twiss;
+  betxaux=baux->betx;betyaux=baux->bety;
+  alfxaux=baux->alfx;alfyaux=baux->alfy;
+  dxaux=baux->dx;dpxaux=baux->dpx;
 
-use,sequence=lhcBIM,range=s.cell.sec2.BIM/e.cell.sec2.BIM;
-savebeta,label=baux,place=s.cell.sec2.BIM;
-twiss;
-betxaux=baux->betx;betyaux=baux->bety;
-alfxaux=baux->alfx;alfyaux=baux->alfy;
-dxaux=baux->dx;dpxaux=baux->dpx;
+  use,sequence=lhcBIM,range=e.ds.rNIR.BIM/s.cell.sec2.BIM;
+  savebeta,label=eirNIRBIM,place=e.ds.rNIR.BIM;
+  twiss,rmatrix,betx=1,bety=1;
+  r11=table(twiss,s.cell.sec2.BIM,Re11);r12=table(twiss,s.cell.sec2.BIM,Re12);
+  r21=table(twiss,s.cell.sec2.BIM,Re21);r22=table(twiss,s.cell.sec2.BIM,Re22);
+  r33=table(twiss,s.cell.sec2.BIM,Re33);r34=table(twiss,s.cell.sec2.BIM,Re34);
+  r43=table(twiss,s.cell.sec2.BIM,Re43);r44=table(twiss,s.cell.sec2.BIM,Re44);
+  r16=table(twiss,s.cell.sec2.BIM,Re16);r26=table(twiss,s.cell.sec2.BIM,Re26);
+  eirNIRBIM->betx=r22^2*betxaux+2.*r22*r12*alfxaux+r12^2*(1.+alfxaux^2)/betxaux;
+  eirNIRBIM->alfx=r22*r21*betxaux+(r11*r22+r12*r21)*alfxaux+r12*r11*(1.+alfxaux^2)/betxaux;
+  eirNIRBIM->bety=r44^2*betyaux+2.*r44*r34*alfyaux+r34^2*(1.+alfyaux^2)/betyaux;
+  eirNIRBIM->alfy=r44*r43*betyaux+(r33*r44+r34*r43)*alfyaux+r34*r33*(1.+alfyaux^2)/betyaux;
+  eirNIRBIM->dx=r22*(dxaux-r16)-r12*(dpxaux-r26);
+  eirNIRBIM->dpx=-r21*(dxaux-r16)+r11*(dpxaux-r26);
 
-use,sequence=lhcBIM,range=e.ds.rNIR.BIM/s.cell.sec2.BIM;
-savebeta,label=eirNIRBIM,place=e.ds.rNIR.BIM;
-twiss,rmatrix,betx=1,bety=1;
-r11=table(twiss,s.cell.sec2.BIM,Re11);r12=table(twiss,s.cell.sec2.BIM,Re12);
-r21=table(twiss,s.cell.sec2.BIM,Re21);r22=table(twiss,s.cell.sec2.BIM,Re22);
-r33=table(twiss,s.cell.sec2.BIM,Re33);r34=table(twiss,s.cell.sec2.BIM,Re34);
-r43=table(twiss,s.cell.sec2.BIM,Re43);r44=table(twiss,s.cell.sec2.BIM,Re44);
-r16=table(twiss,s.cell.sec2.BIM,Re16);r26=table(twiss,s.cell.sec2.BIM,Re26);
-eirNIRBIM->betx=r22^2*betxaux+2.*r22*r12*alfxaux+r12^2*(1.+alfxaux^2)/betxaux;
-eirNIRBIM->alfx=r22*r21*betxaux+(r11*r22+r12*r21)*alfxaux+r12*r11*(1.+alfxaux^2)/betxaux;
-eirNIRBIM->bety=r44^2*betyaux+2.*r44*r34*alfyaux+r34^2*(1.+alfyaux^2)/betyaux;
-eirNIRBIM->alfy=r44*r43*betyaux+(r33*r44+r34*r43)*alfyaux+r34*r33*(1.+alfyaux^2)/betyaux;
-eirNIRBIM->dx=r22*(dxaux-r16)-r12*(dpxaux-r26);
-eirNIRBIM->dpx=-r21*(dxaux-r16)+r11*(dpxaux-r26);
+  !use,sequence=lhcBIM,range=e.ds.rNIR.BIM/s.cell.sec2.BIM;
+  !savebeta,label=baux,place=s.cell.sec2.BIM;
+  !twiss,beta0=eirNIRBIM;
+  !use,sequence=lhcBIM,range=s.cell.sec2.BIM/e.cell.sec2.BIM;
+  !savebeta,label=baux1,place=s.cell.sec2.BIM;
+  !twiss;
+  !value,baux->betx-baux1->betx,baux->bety-baux1->bety;
+  !value,baux->alfx-baux1->alfx,baux->alfy-baux1->alfy;
+  !value,baux->dx-baux1->dx,baux->dpx-baux1->dpx;
 
-!use,sequence=lhcBIM,range=e.ds.rNIR.BIM/s.cell.sec2.BIM;
-!savebeta,label=baux,place=s.cell.sec2.BIM;
-!twiss,beta0=eirNIRBIM;
-!use,sequence=lhcBIM,range=s.cell.sec2.BIM/e.cell.sec2.BIM;
-!savebeta,label=baux1,place=s.cell.sec2.BIM;
-!twiss;
-!value,baux->betx-baux1->betx,baux->bety-baux1->bety;
-!value,baux->alfx-baux1->alfx,baux->alfy-baux1->alfy;
-!value,baux->dx-baux1->dx,baux->dpx-baux1->dpx;
+  !show,birNIRBIM;
+  !show,eirNIRBIM;
+};
 
-!show,birNIRBIM;
-!show,eirNIRBIM;
+select_b4(NIR,sec1,sec2): macro = {
+  use,sequence=lhcb2,range=e.cell.sec2.b2/s.cell.sec2.b2;
+  savebeta,label=baux,place=e.cell.sec2.b2;
+  twiss;
+
+  use,sequence=lhcb2,range=s.cell.sec2.b2/e.ds.rNIR.b2;
+  savebeta,label=birNIRb4,place=e.ds.rNIR.b2;
+  twiss,beta0=baux;
+  birNIRb4->mux=0;birNIRb4->muy=0;
+
+  use,sequence=lhcb2,range=e.cell.sec1.b2/s.cell.sec1.b2;
+  savebeta,label=baux,place=e.cell.sec1.b2;
+  twiss;
+  betxaux=baux->betx;betyaux=baux->bety;
+  alfxaux=baux->alfx;alfyaux=baux->alfy;
+  dxaux=baux->dx;dpxaux=baux->dpx;
+
+  use,sequence=lhcb2,range=s.ds.lNIR.b2/e.cell.sec1.b2;
+  savebeta,label=eirNIRb4,place=s.ds.lNIR.b2;
+  twiss,rmatrix,betx=1,bety=1;
+  r11=table(twiss,e.cell.sec1.b2,Re11);r12=table(twiss,e.cell.sec1.b2,Re12);
+  r21=table(twiss,e.cell.sec1.b2,Re21);r22=table(twiss,e.cell.sec1.b2,Re22);
+  r33=table(twiss,e.cell.sec1.b2,Re33);r34=table(twiss,e.cell.sec1.b2,Re34);
+  r43=table(twiss,e.cell.sec1.b2,Re43);r44=table(twiss,e.cell.sec1.b2,Re44);
+  r16=table(twiss,e.cell.sec1.b2,Re16);r26=table(twiss,e.cell.sec1.b2,Re26);
+  eirNIRb4->betx=r22^2*betxaux+2.*r22*r12*alfxaux+r12^2*(1.+alfxaux^2)/betxaux;
+  eirNIRb4->alfx=r22*r21*betxaux+(r11*r22+r12*r21)*alfxaux+r12*r11*(1.+alfxaux^2)/betxaux;
+  eirNIRb4->bety=r44^2*betyaux+2.*r44*r34*alfyaux+r34^2*(1.+alfyaux^2)/betyaux;
+  eirNIRb4->alfy=r44*r43*betyaux+(r33*r44+r34*r43)*alfyaux+r34*r33*(1.+alfyaux^2)/betyaux;
+  eirNIRb4->dx=r22*(dxaux-r16)-r12*(dpxaux-r26);
+  eirNIRb4->dpx=-r21*(dxaux-r16)+r11*(dpxaux-r26);
+
+  !use,sequence=lhcb2,range=s.ds.lNIR.b2/e.cell.sec1.b2;
+  !savebeta,label=baux,place=e.cell.sec1.b2;
+  !twiss,beta0=eirNIRb4;
+  !use,sequence=lhcb2,range=e.cell.sec1.b2/s.cell.sec1.b2;
+  !savebeta,label=baux1,place=e.cell.sec1.b2;
+  !twiss;
+  !value,baux->betx-baux1->betx,baux->bety-baux1->bety;
+  !value,baux->alfx-baux1->alfx,baux->alfy-baux1->alfy;
+  !value,baux->dx-baux1->dx,baux->dpx-baux1->dpx;
+
+  !show,birNIRb4;
+  !show,eirNIRb4;
 
 };
 
@@ -572,46 +617,91 @@ option,-info,-warn;
 
 selectIRAUX(NIR0,NIR1,NIR2,NIR3,NIR4,BIM,scbx,scby,betx0,bety0): macro = {
 
-!LeftIRauxR & RightIRauxL
+  !LeftIRauxR & RightIRauxL
 
-use,sequence=lhcBIM,range=IPNIR2/IPNIR2;
-savebeta,label=baux,place=IPNIR2;
-twiss,betx=betx0,bety=bety0;
+  use,sequence=lhcBIM,range=IPNIR2/IPNIR2;
+  savebeta,label=baux,place=IPNIR2;
+  twiss,betx=betx0,bety=bety0;
 
-exec track_twiss(IPNIR2,s.ds.lNIR3.BIM,BIM,baux,birNIR3BIM);
-mux0r=birNIR3BIM->mux;muy0r=birNIR3BIM->muy;
-exec backtrack_twiss(e.ds.rNIR1.BIM,IPNIR2,BIM,eirNIR1BIM,baux);
-mux0l=eirNIR1BIM->mux;muy0l=eirNIR1BIM->muy;
+  exec track_twiss(IPNIR2,s.ds.lNIR3.BIM,BIM,baux,birNIR3BIM);
+  mux0r=birNIR3BIM->mux;muy0r=birNIR3BIM->muy;
+  exec backtrack_twiss(e.ds.rNIR1.BIM,IPNIR2,BIM,eirNIR1BIM,baux);
+  mux0l=eirNIR1BIM->mux;muy0l=eirNIR1BIM->muy;
 
-use,sequence=lhcBIM,range=IPNIR2/IPNIR2;
-savebeta,label=baux,place=IPNIR2;
-twiss,betx=scbx*betx0,bety=scby*bety0;
-exec track_twiss(IPNIR2,s.ds.lNIR3.BIM,BIM,baux,birNIR3BIM);
-mux1r=birNIR3BIM->mux;muy1r=birNIR3BIM->muy;
-birNIR3BIM->mux=mux0r-mux1r;birNIR3BIM->muy=muy0r-muy1r;
-exec backtrack_twiss(e.ds.rNIR1.BIM,IPNIR2,BIM,eirNIR1BIM,baux);
-mux1l=eirNIR1BIM->mux;muy1l=eirNIR1BIM->muy;
-eirNIR1BIM->mux=mux0l-mux1l;eirNIR1BIM->muy=muy0l-muy1l;
+  use,sequence=lhcBIM,range=IPNIR2/IPNIR2;
+  savebeta,label=baux,place=IPNIR2;
+  twiss,betx=scbx*betx0,bety=scby*bety0;
+  exec track_twiss(IPNIR2,s.ds.lNIR3.BIM,BIM,baux,birNIR3BIM);
+  mux1r=birNIR3BIM->mux;muy1r=birNIR3BIM->muy;
+  birNIR3BIM->mux=mux0r-mux1r;birNIR3BIM->muy=muy0r-muy1r;
+  exec backtrack_twiss(e.ds.rNIR1.BIM,IPNIR2,BIM,eirNIR1BIM,baux);
+  mux1l=eirNIR1BIM->mux;muy1l=eirNIR1BIM->muy;
+  eirNIR1BIM->mux=mux0l-mux1l;eirNIR1BIM->muy=muy0l-muy1l;
 
-!LeftIRlowbeta & RightIRlowbeta
-exec track_twiss(IPNIR2,e.ds.rNIR2.BIM,BIM,baux,eirNIR2BIM);
-exec backtrack_twiss(s.ds.lNIR2.BIM,IPNIR2,BIM,birNIR2BIM,baux);
+  !LeftIRlowbeta & RightIRlowbeta
+  exec track_twiss(IPNIR2,e.ds.rNIR2.BIM,BIM,baux,eirNIR2BIM);
+  exec backtrack_twiss(s.ds.lNIR2.BIM,IPNIR2,BIM,birNIR2BIM,baux);
 
-!LeftIRauxL
+  !LeftIRauxL
 
-use,sequence=lhcBIM,range=s.cell.NIR0NIR1.BIM/e.cell.NIR0NIR1.BIM;
-savebeta,label=baux,place=s.cell.NIR0NIR1.BIM;
-twiss;
-exec track_twiss(e.cell.NIR0NIR1.BIM,s.ds.lNIR1.BIM,BIM,baux,birNIR1BIM);
-birNIR1BIM->mux=0;birNIR1BIM->muy=0;
+  use,sequence=lhcBIM,range=s.cell.NIR0NIR1.BIM/e.cell.NIR0NIR1.BIM;
+  savebeta,label=baux,place=s.cell.NIR0NIR1.BIM;
+  twiss;
+  exec track_twiss(e.cell.NIR0NIR1.BIM,s.ds.lNIR1.BIM,BIM,baux,birNIR1BIM);
+  birNIR1BIM->mux=0;birNIR1BIM->muy=0;
 
-!RightIRauxR
-use,sequence=lhcBIM,range=s.cell.NIR3NIR4.BIM/e.cell.NIR3NIR4.BIM;
-savebeta,label=baux,place=s.cell.NIR3NIR4.BIM;
-twiss;
-exec backtrack_twiss(e.ds.rNIR3.BIM,s.cell.NIR3NIR4.BIM,BIM,eirNIR3BIM,baux);
-eirNIR3BIM->mux=birNIR3BIM->mux;birNIR3BIM->mux=0;
-eirNIR3BIM->muy=birNIR3BIM->muy;birNIR3BIM->muy=0;
+  !RightIRauxR
+  use,sequence=lhcBIM,range=s.cell.NIR3NIR4.BIM/e.cell.NIR3NIR4.BIM;
+  savebeta,label=baux,place=s.cell.NIR3NIR4.BIM;
+  twiss;
+  exec backtrack_twiss(e.ds.rNIR3.BIM,s.cell.NIR3NIR4.BIM,BIM,eirNIR3BIM,baux);
+  eirNIR3BIM->mux=birNIR3BIM->mux;birNIR3BIM->mux=0;
+  eirNIR3BIM->muy=birNIR3BIM->muy;birNIR3BIM->muy=0;
+
+};
+
+selectIRAUX_b4(NIR0,NIR1,NIR2,NIR3,NIR4,scbx,scby,betx0,bety0): macro = {
+
+  !LeftIRauxR & RightIRauxL
+
+  use,sequence=lhcb2,range=IPNIR2/IPNIR2;
+  savebeta,label=baux,place=IPNIR2;
+  twiss,betx=betx0,bety=bety0;
+
+  exec track_twiss(IPNIR2,e.ds.rNIR1.b2,b2,baux,birNIR1b4);
+  mux0r=birNIR1b4->mux;muy0r=birNIR1b4->muy;
+  exec backtrack_twiss(s.ds.lNIR3.b2,IPNIR2,b2,eirNIR3b4,baux);
+  mux0l=eirNIR3b4->mux;muy0l=eirNIR3b4->muy;
+
+  use,sequence=lhcb2,range=IPNIR2/IPNIR2;
+  savebeta,label=baux,place=IPNIR2;
+  twiss,betx=scbx*betx0,bety=scby*bety0;
+  exec track_twiss(IPNIR2,e.ds.rNIR1.b2,b2,baux,birNIR1b4);
+  mux1r=birNIR1b4->mux;muy1r=birNIR1b4->muy;
+  birNIR1b4->mux=mux0r-mux1r;birNIR1b4->muy=muy0r-muy1r;
+  exec backtrack_twiss(s.ds.lNIR3.b2,IPNIR2,b2,eirNIR3b4,baux);
+  mux1l=eirNIR3b4->mux;muy1l=eirNIR3b4->muy;
+  eirNIR3b4->mux=mux0l-mux1l;eirNIR3b4->muy=muy0l-muy1l;
+
+  !LeftIRlowbeta & RightIRlowbeta
+  exec track_twiss(IPNIR2,s.ds.lNIR2.b2,b2,baux,eirNIR2b4);
+  exec backtrack_twiss(e.ds.rNIR2.b2,IPNIR2,b2,birNIR2b4,baux);
+
+  !RightIRauxR
+
+  use,sequence=lhcb2,range=e.cell.NIR3NIR4.b2/s.cell.NIR3NIR4.b2;
+  savebeta,label=baux,place=e.cell.NIR3NIR4.b2;
+  twiss;
+  exec track_twiss(s.cell.NIR3NIR4.b2,e.ds.rNIR3.b2,b2,baux,birNIR3b4);
+  birNIR3b4->mux=0;birNIR3b4->muy=0;
+
+  !LeftIRauxL
+  use,sequence=lhcb2,range=e.cell.NIR0NIR1.b2/s.cell.NIR0NIR1.b2;
+  savebeta,label=baux,place=e.cell.NIR0NIR1.b2;
+  twiss;
+  exec backtrack_twiss(s.ds.lNIR1.b2,e.cell.NIR0NIR1.b2,b2,eirNIR1b4,baux);
+  eirNIR1b4->mux=birNIR1b4->mux;birNIR1b4->mux=0;
+  eirNIR1b4->muy=birNIR1b4->muy;birNIR1b4->muy=0;
 
 };
 
@@ -726,23 +816,34 @@ system, "rm offset.ip*b*.tfs";
 
 
 cellphase(NIR1,NIR2,SEC,BIM): macro = {
+  use,sequence=lhcBIM,range=s.cell.SEC.BIM/e.cell.SEC.BIM;
+  savebeta,label=baux,place=s.cell.SEC.BIM;
+  twiss;
+  muxcellSECBIM=table(summ,q1);muycellSECBIM=table(summ,q2);
+};
 
-use,sequence=lhcBIM,range=s.cell.SEC.BIM/e.cell.SEC.BIM;
-savebeta,label=baux,place=s.cell.SEC.BIM;
-twiss;
-muxcellSECBIM=table(summ,q1);muycellSECBIM=table(summ,q2);
-
+cellphase_b4(NIR1,NIR2,SEC): macro = {
+  use,sequence=lhcb2,range=e.cell.SEC.b2/s.cell.SEC.b2;
+  savebeta,label=baux,place=e.cell.SEC.b2;
+  twiss;
+  muxcellSECb4=table(summ,q1);
+  muycellSECb4=table(summ,q2);
 };
 
 phasearc(NIR1,NIR2,SEC,BIM): macro = {
+  exec cellphase(NIR1,NIR2,SEC,BIM);
+  exec backtrack_twiss(e.ds.rNIR1.BIM,s.cell.SEC.BIM,BIM,eirNIR1auxBIM,baux);
+  eirNIR1auxBIM->mux=0;eirNIR1auxBIM->muy=0;
+  exec track_twiss(e.ds.rNIR1.BIM,s.ds.lNIR2.BIM,BIM,eirNIR1auxBIM,sirNIR2auxBIM);
+  muxSECBIM=sirNIR2auxBIM->mux;muySECBIM=sirNIR2auxBIM->muy;
+};
 
-exec cellphase(NIR1,NIR2,SEC,BIM);
-
-exec backtrack_twiss(e.ds.rNIR1.BIM,s.cell.SEC.BIM,BIM,eirNIR1auxBIM,baux);
-eirNIR1auxBIM->mux=0;eirNIR1auxBIM->muy=0;
-exec track_twiss(e.ds.rNIR1.BIM,s.ds.lNIR2.BIM,BIM,eirNIR1auxBIM,sirNIR2auxBIM);
-muxSECBIM=sirNIR2auxBIM->mux;muySECBIM=sirNIR2auxBIM->muy;
-
+phasearc_b4(NIR1,NIR2,SEC): macro = {
+  exec cellphase_b4(NIR1,NIR2,SEC);
+  exec backtrack_twiss(s.ds.lNIR2.b2,e.cell.SEC.b2,b2,eirNIR2auxb4,baux);
+  eirNIR2auxb4->mux=0;eirNIR2auxb4->muy=0;
+  exec track_twiss(s.ds.lNIR2.b2,e.ds.rNIR1.b2,b2,eirNIR2auxb4,sirNIR1auxb4);
+  muxSECb4=sirNIR1auxb4->mux;muySECb4=sirNIR1auxb4->muy;
 };
 
 globalphasearcweak(BIM): macro = {
