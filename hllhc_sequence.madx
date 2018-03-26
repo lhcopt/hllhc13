@@ -315,10 +315,14 @@ install_ir15_b1_b2_alt(ENAME,SPOS1,SPOS2): macro={
 };
 
 newel_ir15_b12(ENAME,PARE): macro={
-        ENAMEL1.B1: PARE; ENAMEL1.B2: PARE;
-        ENAMER1.B1: PARE; ENAMER1.B2: PARE;
-        ENAMEL5.B1: PARE; ENAMEL5.B2: PARE;
-        ENAMER5.B1: PARE; ENAMER5.B2: PARE;
+        ENAMEL1.B1: PARE, mech_sep=-0.194;
+        ENAMER1.B1: PARE, mech_sep= 0.194;
+        ENAMEL5.B1: PARE, mech_sep=-0.194;
+        ENAMER5.B1: PARE, mech_sep= 0.194;
+        ENAMEL1.B2: PARE, mech_sep= 0.194*bv_aux;
+        ENAMER1.B2: PARE, mech_sep=-0.194*bv_aux;
+        ENAMEL5.B2: PARE, mech_sep= 0.194*bv_aux;
+        ENAMER5.B2: PARE, mech_sep=-0.194*bv_aux;
 };
 
 
@@ -790,50 +794,51 @@ posD2  := 157.9+deltaposD2; ! minimize distance D1-D2, maximum field 35 Tm
 !11 to fit three cavitities with 1.5 meter
 
 
-posBPMWQ  := posD2-l.MBRD/2-0.983-0.702-0.285/2;!BPMWQ.4R5.B1
 posMCBRDA  := posD2 + l.MBRD/2 + l.MCBRD/2 + 0.365;
 posMCBRDB  := posMCBRDA + l.MCBRD          + 0.365;
 
+posBPMWQ  := posD2-l.MBRD/2-0.983-0.702-0.285/2;!BPMWQ.4R5.B1
+sepBPMWQ  := round((posBPMWQ-posD1)/(posD2-posD1)*194)/1e3;
 
 
-MBRD.4L1.B1: MBRD, angle:=-ad2.l1, K0:=-kd2.l1, polarity=-1;
-MBRD.4R1.B1: MBRD, angle:= ad2.r1, K0:= kd2.r1, polarity=+1;
-MBRD.4L5.B1: MBRD, angle:=-ad2.l5, K0:=-kd2.l5, polarity=-1;
-MBRD.4R5.B1: MBRD, angle:= ad2.r5, K0:= kd2.r5, polarity=+1;
+MBRD.4L1.B1: MBRD, angle:=-ad2.l1, K0:=-kd2.l1, polarity=-1, mech_sep=-0.1880;
+MBRD.4R1.B1: MBRD, angle:= ad2.r1, K0:= kd2.r1, polarity=+1, mech_sep= 0.1880;
+MBRD.4L5.B1: MBRD, angle:=-ad2.l5, K0:=-kd2.l5, polarity=-1, mech_sep=-0.1880;
+MBRD.4R5.B1: MBRD, angle:= ad2.r5, K0:= kd2.r5, polarity=+1, mech_sep= 0.1880;
 
-MBRD.4L1.B2: MBRD, angle:=-ad2.l1, K0:=-kd2.l1, polarity=+1*bv_aux;
-MBRD.4R1.B2: MBRD, angle:= ad2.r1, K0:= kd2.r1, polarity=-1*bv_aux;
-MBRD.4L5.B2: MBRD, angle:=-ad2.l5, K0:=-kd2.l5, polarity=+1*bv_aux;
-MBRD.4R5.B2: MBRD, angle:= ad2.r5, K0:= kd2.r5, polarity=-1*bv_aux;
+MBRD.4L1.B2: MBRD, angle:=-ad2.l1, K0:=-kd2.l1, polarity=+1*bv_aux, mech_sep= 0.1880*bv_aux;
+MBRD.4R1.B2: MBRD, angle:= ad2.r1, K0:= kd2.r1, polarity=-1*bv_aux, mech_sep=-0.1880*bv_aux;
+MBRD.4L5.B2: MBRD, angle:=-ad2.l5, K0:=-kd2.l5, polarity=+1*bv_aux, mech_sep= 0.1880*bv_aux;
+MBRD.4R5.B2: MBRD, angle:= ad2.r5, K0:= kd2.r5, polarity=-1*bv_aux, mech_sep=-0.1880*bv_aux;
 
-MCBRDH.4L1.B1: MCBRDH, kick:= acbrdh4.l1b1;
-MCBRDH.4R1.B1: MCBRDH, kick:= acbrdh4.r1b1;
-MCBRDH.4L5.B1: MCBRDH, kick:= acbrdh4.l5b1;
-MCBRDH.4R5.B1: MCBRDH, kick:= acbrdh4.r5b1;
-MCBRDH.4L1.B2: MCBRDH, kick:=-acbrdh4.l1b2;
-MCBRDH.4R1.B2: MCBRDH, kick:=-acbrdh4.r1b2;
-MCBRDH.4L5.B2: MCBRDH, kick:=-acbrdh4.l5b2;
-MCBRDH.4R5.B2: MCBRDH, kick:=-acbrdh4.r5b2;
-MCBRDV.4L1.B1: MCBRDV, kick:= acbrdv4.l1b1*bv_aux;
-MCBRDV.4R1.B1: MCBRDV, kick:= acbrdv4.r1b1*bv_aux;
-MCBRDV.4L5.B1: MCBRDV, kick:= acbrdv4.l5b1*bv_aux;
-MCBRDV.4R5.B1: MCBRDV, kick:= acbrdv4.r5b1*bv_aux;
-MCBRDV.4L1.B2: MCBRDV, kick:=-acbrdv4.l1b2*bv_aux;
-MCBRDV.4R1.B2: MCBRDV, kick:=-acbrdv4.r1b2*bv_aux;
-MCBRDV.4L5.B2: MCBRDV, kick:=-acbrdv4.l5b2*bv_aux;
-MCBRDV.4R5.B2: MCBRDV, kick:=-acbrdv4.r5b2*bv_aux;
-
-
+MCBRDH.4L1.B1: MCBRDH, kick:= acbrdh4.l1b1, mech_sep=-0.1880;
+MCBRDH.4R1.B1: MCBRDH, kick:= acbrdh4.r1b1, mech_sep= 0.1880;
+MCBRDH.4L5.B1: MCBRDH, kick:= acbrdh4.l5b1, mech_sep=-0.1880;
+MCBRDH.4R5.B1: MCBRDH, kick:= acbrdh4.r5b1, mech_sep= 0.1880;
+MCBRDH.4L1.B2: MCBRDH, kick:=-acbrdh4.l1b2, mech_sep= 0.1880*bv_aux;
+MCBRDH.4R1.B2: MCBRDH, kick:=-acbrdh4.r1b2, mech_sep=-0.1880*bv_aux;
+MCBRDH.4L5.B2: MCBRDH, kick:=-acbrdh4.l5b2, mech_sep= 0.1880*bv_aux;
+MCBRDH.4R5.B2: MCBRDH, kick:=-acbrdh4.r5b2, mech_sep=-0.1880*bv_aux;
+MCBRDV.4L1.B1: MCBRDV, kick:= acbrdv4.l1b1*bv_aux, mech_sep=-0.1880;
+MCBRDV.4R1.B1: MCBRDV, kick:= acbrdv4.r1b1*bv_aux, mech_sep= 0.1880;
+MCBRDV.4L5.B1: MCBRDV, kick:= acbrdv4.l5b1*bv_aux, mech_sep=-0.1880;
+MCBRDV.4R5.B1: MCBRDV, kick:= acbrdv4.r5b1*bv_aux, mech_sep= 0.1880;
+MCBRDV.4L1.B2: MCBRDV, kick:=-acbrdv4.l1b2*bv_aux, mech_sep= 0.1880*bv_aux;
+MCBRDV.4R1.B2: MCBRDV, kick:=-acbrdv4.r1b2*bv_aux, mech_sep=-0.1880*bv_aux;
+MCBRDV.4L5.B2: MCBRDV, kick:=-acbrdv4.l5b2*bv_aux, mech_sep= 0.1880*bv_aux;
+MCBRDV.4R5.B2: MCBRDV, kick:=-acbrdv4.r5b2*bv_aux, mech_sep=-0.1880*bv_aux;
 
 
-BPMWQ.4L1.B1: BPMWQ;
-BPMWQ.4R1.B1: BPMWQ;
-BPMWQ.4L5.B1: BPMWQ;
-BPMWQ.4R5.B1: BPMWQ;
-BPMWQ.4L1.B2: BPMWQ;
-BPMWQ.4R1.B2: BPMWQ;
-BPMWQ.4L5.B2: BPMWQ;
-BPMWQ.4R5.B2: BPMWQ;
+
+
+BPMWQ.4L1.B1: BPMWQ, mech_sep=-sepBPMWQ;
+BPMWQ.4R1.B1: BPMWQ, mech_sep= sepBPMWQ;
+BPMWQ.4L5.B1: BPMWQ, mech_sep=-sepBPMWQ;
+BPMWQ.4R5.B1: BPMWQ, mech_sep= sepBPMWQ;
+BPMWQ.4L1.B2: BPMWQ, mech_sep= sepBPMWQ*bv_aux;
+BPMWQ.4R1.B2: BPMWQ, mech_sep=-sepBPMWQ*bv_aux;
+BPMWQ.4L5.B2: BPMWQ, mech_sep= sepBPMWQ*bv_aux;
+BPMWQ.4R5.B2: BPMWQ, mech_sep=-sepBPMWQ*bv_aux;
 
 
 ! separation recombination powering, 0.194 m separation between apertures
@@ -851,6 +856,7 @@ kd2.l5 :=ad2.l5/l.MBRD;
 kd2.r5 :=ad2.r5/l.MBRD;
 
 value, posD1,posD2,posD2-posD1,posMCBRDA,posMCBRDB;
+value, posBPMWQ,sepBPMWQ;
 value, ad1.lr1,l.MBXF,ad1.lr1/l.MBXF*brho,ad1.lr1*brho;
 value, ad2.l1,l.MBRD,ad2.l1/l.MBRD*brho,ad2.l1*brho;
 
@@ -891,39 +897,39 @@ posMCBY.D4 :=posMCBY.C4      - l.MCBYH   - 0.337;
 value,posQ4,posMCBY.A4,posMCBY.B4,posMCBY.C4,posMCBY.D4;
 
 
-MCBYV.A4L1.B1:MCBYV, KICK:=  acbyv4.l1b1, polarity=+1;
-MCBYH.A4L1.B1:MCBYH, KICK:=  acbyh4.l1b1, polarity=+1;
-MCBYV.A4R1.B1:MCBYV, KICK:=  acbyv4.r1b1, polarity=+1;
-MCBYH.A4R1.B1:MCBYH, KICK:=  acbyh4.r1b1, polarity=+1;
-MCBYV.A4L5.B1:MCBYV, KICK:=  acbyv4.l5b1, polarity=+1;
-MCBYH.A4L5.B1:MCBYH, KICK:=  acbyh4.l5b1, polarity=+1;
-MCBYV.A4R5.B1:MCBYV, KICK:=  acbyv4.r5b1, polarity=+1;
-MCBYH.A4R5.B1:MCBYH, KICK:=  acbyh4.r5b1, polarity=+1;
-MCBYV.B4L1.B1:MCBYV, KICK:=  acbyvs4.l1b1, polarity=+1;
-MCBYH.B4L1.B1:MCBYH, KICK:=  acbyhs4.l1b1, polarity=+1;
-MCBYV.B4R1.B1:MCBYV, KICK:=  acbyvs4.r1b1, polarity=+1;
-MCBYH.B4R1.B1:MCBYH, KICK:=  acbyhs4.r1b1, polarity=+1;
-MCBYV.B4L5.B1:MCBYV, KICK:=  acbyvs4.l5b1, polarity=+1;
-MCBYH.B4L5.B1:MCBYH, KICK:=  acbyhs4.l5b1, polarity=+1;
-MCBYV.B4R5.B1:MCBYV, KICK:=  acbyvs4.r5b1, polarity=+1;
-MCBYH.B4R5.B1:MCBYH, KICK:=  acbyhs4.r5b1, polarity=+1;
+MCBYV.A4L1.B1:MCBYV, KICK:=  acbyv4.l1b1, polarity=+1,mech_sep=-0.194;
+MCBYH.A4L1.B1:MCBYH, KICK:=  acbyh4.l1b1, polarity=+1,mech_sep=-0.194;
+MCBYV.A4R1.B1:MCBYV, KICK:=  acbyv4.r1b1, polarity=+1,mech_sep= 0.194;
+MCBYH.A4R1.B1:MCBYH, KICK:=  acbyh4.r1b1, polarity=+1,mech_sep= 0.194;
+MCBYV.A4L5.B1:MCBYV, KICK:=  acbyv4.l5b1, polarity=+1,mech_sep=-0.194;
+MCBYH.A4L5.B1:MCBYH, KICK:=  acbyh4.l5b1, polarity=+1,mech_sep=-0.194;
+MCBYV.A4R5.B1:MCBYV, KICK:=  acbyv4.r5b1, polarity=+1,mech_sep= 0.194;
+MCBYH.A4R5.B1:MCBYH, KICK:=  acbyh4.r5b1, polarity=+1,mech_sep= 0.194;
+MCBYV.B4L1.B1:MCBYV, KICK:=  acbyvs4.l1b1, polarity=+1,mech_sep=-0.194;
+MCBYH.B4L1.B1:MCBYH, KICK:=  acbyhs4.l1b1, polarity=+1,mech_sep=-0.194;
+MCBYV.B4R1.B1:MCBYV, KICK:=  acbyvs4.r1b1, polarity=+1,mech_sep= 0.194;
+MCBYH.B4R1.B1:MCBYH, KICK:=  acbyhs4.r1b1, polarity=+1,mech_sep= 0.194;
+MCBYV.B4L5.B1:MCBYV, KICK:=  acbyvs4.l5b1, polarity=+1,mech_sep=-0.194;
+MCBYH.B4L5.B1:MCBYH, KICK:=  acbyhs4.l5b1, polarity=+1,mech_sep=-0.194;
+MCBYV.B4R5.B1:MCBYV, KICK:=  acbyvs4.r5b1, polarity=+1,mech_sep= 0.194;
+MCBYH.B4R5.B1:MCBYH, KICK:=  acbyhs4.r5b1, polarity=+1,mech_sep= 0.194;
 
-MCBYV.A4L1.B2:MCBYV, KICK:= -acbyv4.l1b2*bv_aux, polarity=+1;
-MCBYH.A4L1.B2:MCBYH, KICK:= -acbyh4.l1b2, polarity=+1;
-MCBYV.A4R1.B2:MCBYV, KICK:= -acbyv4.r1b2*bv_aux, polarity=+1;
-MCBYH.A4R1.B2:MCBYH, KICK:= -acbyh4.r1b2, polarity=+1;
-MCBYV.A4L5.B2:MCBYV, KICK:= -acbyv4.l5b2*bv_aux, polarity=+1;
-MCBYH.A4L5.B2:MCBYH, KICK:= -acbyh4.l5b2, polarity=+1;
-MCBYV.A4R5.B2:MCBYV, KICK:= -acbyv4.r5b2*bv_aux, polarity=+1;
-MCBYH.A4R5.B2:MCBYH, KICK:= -acbyh4.r5b2, polarity=+1;
-MCBYV.B4L1.B2:MCBYV, KICK:= -acbyvs4.l1b2*bv_aux, polarity=+1;
-MCBYH.B4L1.B2:MCBYH, KICK:= -acbyhs4.l1b2, polarity=+1;
-MCBYV.B4R1.B2:MCBYV, KICK:= -acbyvs4.r1b2*bv_aux, polarity=+1;
-MCBYH.B4R1.B2:MCBYH, KICK:= -acbyhs4.r1b2, polarity=+1;
-MCBYV.B4L5.B2:MCBYV, KICK:= -acbyvs4.l5b2*bv_aux, polarity=+1;
-MCBYH.B4L5.B2:MCBYH, KICK:= -acbyhs4.l5b2, polarity=+1;
-MCBYV.B4R5.B2:MCBYV, KICK:= -acbyvs4.r5b2*bv_aux, polarity=+1;
-MCBYH.B4R5.B2:MCBYH, KICK:= -acbyhs4.r5b2, polarity=+1;
+MCBYV.A4L1.B2:MCBYV, KICK:= -acbyv4.l1b2*bv_aux,  polarity=+1, mech_sep= 0.194*bv_aux;
+MCBYH.A4L1.B2:MCBYH, KICK:= -acbyh4.l1b2,         polarity=+1, mech_sep= 0.194*bv_aux;
+MCBYV.A4R1.B2:MCBYV, KICK:= -acbyv4.r1b2*bv_aux,  polarity=+1, mech_sep=-0.194*bv_aux;
+MCBYH.A4R1.B2:MCBYH, KICK:= -acbyh4.r1b2,         polarity=+1, mech_sep=-0.194*bv_aux;
+MCBYV.A4L5.B2:MCBYV, KICK:= -acbyv4.l5b2*bv_aux,  polarity=+1, mech_sep= 0.194*bv_aux;
+MCBYH.A4L5.B2:MCBYH, KICK:= -acbyh4.l5b2,         polarity=+1, mech_sep= 0.194*bv_aux;
+MCBYV.A4R5.B2:MCBYV, KICK:= -acbyv4.r5b2*bv_aux,  polarity=+1, mech_sep=-0.194*bv_aux;
+MCBYH.A4R5.B2:MCBYH, KICK:= -acbyh4.r5b2,         polarity=+1, mech_sep=-0.194*bv_aux;
+MCBYV.B4L1.B2:MCBYV, KICK:= -acbyvs4.l1b2*bv_aux, polarity=+1, mech_sep= 0.194*bv_aux;
+MCBYH.B4L1.B2:MCBYH, KICK:= -acbyhs4.l1b2,        polarity=+1, mech_sep= 0.194*bv_aux;
+MCBYV.B4R1.B2:MCBYV, KICK:= -acbyvs4.r1b2*bv_aux, polarity=+1, mech_sep=-0.194*bv_aux;
+MCBYH.B4R1.B2:MCBYH, KICK:= -acbyhs4.r1b2,        polarity=+1, mech_sep=-0.194*bv_aux;
+MCBYV.B4L5.B2:MCBYV, KICK:= -acbyvs4.l5b2*bv_aux, polarity=+1, mech_sep= 0.194*bv_aux;
+MCBYH.B4L5.B2:MCBYH, KICK:= -acbyhs4.l5b2,        polarity=+1, mech_sep= 0.194*bv_aux;
+MCBYV.B4R5.B2:MCBYV, KICK:= -acbyvs4.r5b2*bv_aux, polarity=+1, mech_sep=-0.194*bv_aux;
+MCBYH.B4R5.B2:MCBYH, KICK:= -acbyhs4.r5b2,        polarity=+1, mech_sep=-0.194*bv_aux;
 
 exec,newel_ir15_b12(BPMYA.4,BPMYA);
 
@@ -946,14 +952,14 @@ exec,install_ir15_b1_b2_alt(MCBYV.B4,posMCBY.B4,posMCBY.A4);
 l.BPMQB= 0.0;! l.BPMQB = 0
 BPMQB: MONITOR,    L := l.BPMQB  ; ! large ap. for Q5 maybe from old q4 ones
 
-MQY.5R1.B1:MQY,K1 :=  kq5.r1b1, polarity=+1;
-MQY.5L5.B1:MQY,K1 :=  kq5.l5b1, polarity=-1;
-MQY.5R5.B1:MQY,K1 :=  kq5.r5b1, polarity=+1;
-MQY.5L1.B1:MQY,K1 :=  kq5.l1b1, polarity=-1;
-MQY.5R1.B2:MQY,K1 := -kq5.r1b2*bv_aux, polarity=-1;
-MQY.5L5.B2:MQY,K1 := -kq5.l5b2*bv_aux, polarity=+1;
-MQY.5R5.B2:MQY,K1 := -kq5.r5b2*bv_aux, polarity=-1;
-MQY.5L1.B2:MQY,K1 := -kq5.l1b2*bv_aux, polarity=+1;
+MQY.5L1.B1:MQY,K1 :=  kq5.l1b1,        polarity=-1, mech_sep=-0.194       ;
+MQY.5L5.B1:MQY,K1 :=  kq5.l5b1,        polarity=-1, mech_sep=-0.194       ;
+MQY.5R1.B1:MQY,K1 :=  kq5.r1b1,        polarity=+1, mech_sep= 0.194       ;
+MQY.5R5.B1:MQY,K1 :=  kq5.r5b1,        polarity=+1, mech_sep= 0.194       ;
+MQY.5L1.B2:MQY,K1 := -kq5.l1b2*bv_aux, polarity=+1, mech_sep= 0.194*bv_aux;
+MQY.5L5.B2:MQY,K1 := -kq5.l5b2*bv_aux, polarity=+1, mech_sep= 0.194*bv_aux;
+MQY.5R1.B2:MQY,K1 := -kq5.r1b2*bv_aux, polarity=-1, mech_sep=-0.194*bv_aux;
+MQY.5R5.B2:MQY,K1 := -kq5.r5b2*bv_aux, polarity=-1, mech_sep=-0.194*bv_aux;
 
 !MCBYH.5R1.B1: MCBYH, KICK :=  acbch5.r1b1, polarity=+1;
 !MCBYV.5L5.B1: MCBYV, KICK :=  acbcv5.l5b1*bv_aux, polarity=+1;
@@ -965,31 +971,34 @@ MQY.5L1.B2:MQY,K1 := -kq5.l1b2*bv_aux, polarity=+1;
 !MCBYH.5L1.B2: MCBYH, KICK := -acbch5.l1b2, polarity=+1;
 
 ! MQY B - A for all MQY the B corrector is closest to the MQY
-MCBYV.A5R1.B2:MCBYV, KICK:= acbyvs5.r1b2*bv_aux, polarity=+1;
-MCBYH.5R1.B2 :MCBYH, KICK:= acbyhs5.r1b2, polarity=+1;
-MCBYV.B5R1.B2:MCBYV, KICK:= acbyv5.r1b2*bv_aux, polarity=+1;
-MCBYH.B5L5.B2:MCBYH, KICK:= acbyh5.l5b2, polarity=+1;
-MCBYV.5L5.B2 :MCBYV, KICK:= acbyvs5.l5b2*bv_aux, polarity=+1;
-MCBYH.A5L5.B2:MCBYH, KICK:= acbyhs5.l5b2, polarity=+1;
-MCBYV.A5R5.B2:MCBYV, KICK:= acbyvs5.r5b2*bv_aux, polarity=+1;
-MCBYH.5R5.B2 :MCBYH, KICK:= acbyhs5.r5b2, polarity=+1;
-MCBYV.B5R5.B2:MCBYV, KICK:= acbyv5.r5b2*bv_aux, polarity=+1;
-MCBYH.B5L1.B2:MCBYH, KICK:= acbyh5.l1b2, polarity=+1;
-MCBYV.5L1.B2 :MCBYV, KICK:= acbyvs5.l1b2*bv_aux, polarity=+1;
-MCBYH.A5L1.B2:MCBYH, KICK:= acbyhs5.l1b2, polarity=+1;
 
-MCBYH.A5R1.B1:MCBYH, KICK:= -acbyhs5.r1b1, polarity=+1;
-MCBYV.5R1.B1 :MCBYV, KICK:= -acbyvs5.r1b1*bv_aux, polarity=+1;
-MCBYH.B5R1.B1:MCBYH, KICK:= -acbyh5.r1b1, polarity=+1;
-MCBYV.B5L5.B1:MCBYV, KICK:= -acbyv5.l5b1*bv_aux, polarity=+1;
-MCBYH.5L5.B1 :MCBYH, KICK:= -acbyhs5.l5b1, polarity=+1;
-MCBYV.A5L5.B1:MCBYV, KICK:= -acbyvs5.l5b1*bv_aux, polarity=+1;
-MCBYH.A5R5.B1:MCBYH, KICK:= -acbyhs5.r5b1, polarity=+1;
-MCBYV.5R5.B1 :MCBYV, KICK:= -acbyvs5.r5b1*bv_aux, polarity=+1;
-MCBYH.B5R5.B1:MCBYH, KICK:= -acbyh5.r5b1, polarity=+1;
-MCBYV.B5L1.B1:MCBYV, KICK:= -acbyv5.l1b1*bv_aux, polarity=+1;
-MCBYH.5L1.B1 :MCBYH, KICK:= -acbyhs5.l1b1, polarity=+1;
-MCBYV.A5L1.B1:MCBYV, KICK:= -acbyvs5.l1b1*bv_aux, polarity=+1;
+MCBYH.5L1.B1 :MCBYH, KICK:= -acbyhs5.l1b1, polarity=+1, mech_sep=-0.194;
+MCBYH.5L5.B1 :MCBYH, KICK:= -acbyhs5.l5b1, polarity=+1, mech_sep=-0.194;
+MCBYH.A5R1.B1:MCBYH, KICK:= -acbyhs5.r1b1, polarity=+1, mech_sep= 0.194;
+MCBYH.A5R5.B1:MCBYH, KICK:= -acbyhs5.r5b1, polarity=+1, mech_sep= 0.194;
+MCBYH.B5R1.B1:MCBYH, KICK:= -acbyh5.r1b1,  polarity=+1, mech_sep= 0.194;
+MCBYH.B5R5.B1:MCBYH, KICK:= -acbyh5.r5b1,  polarity=+1, mech_sep= 0.194;
+MCBYV.5R1.B1 :MCBYV, KICK:= -acbyvs5.r1b1, polarity=+1, mech_sep= 0.194;
+MCBYV.5R5.B1 :MCBYV, KICK:= -acbyvs5.r5b1, polarity=+1, mech_sep= 0.194;
+MCBYV.A5L1.B1:MCBYV, KICK:= -acbyvs5.l1b1, polarity=+1, mech_sep=-0.194;
+MCBYV.A5L5.B1:MCBYV, KICK:= -acbyvs5.l5b1, polarity=+1, mech_sep=-0.194;
+MCBYV.B5L1.B1:MCBYV, KICK:= -acbyv5.l1b1,  polarity=+1, mech_sep=-0.194;
+MCBYV.B5L5.B1:MCBYV, KICK:= -acbyv5.l5b1,  polarity=+1, mech_sep=-0.194;
+
+
+MCBYH.5R1.B2 :MCBYH, KICK:= acbyhs5.r1b2,        polarity=+1, mech_sep=-0.194*bv_aux;
+MCBYH.5R5.B2 :MCBYH, KICK:= acbyhs5.r5b2,        polarity=+1, mech_sep=-0.194*bv_aux;
+MCBYH.A5L1.B2:MCBYH, KICK:= acbyhs5.l1b2,        polarity=+1, mech_sep= 0.194*bv_aux;
+MCBYH.A5L5.B2:MCBYH, KICK:= acbyhs5.l5b2,        polarity=+1, mech_sep= 0.194*bv_aux;
+MCBYH.B5L1.B2:MCBYH, KICK:= acbyh5.l1b2,         polarity=+1, mech_sep= 0.194*bv_aux;
+MCBYH.B5L5.B2:MCBYH, KICK:= acbyh5.l5b2,         polarity=+1, mech_sep= 0.194*bv_aux;
+MCBYV.5L1.B2 :MCBYV, KICK:= acbyvs5.l1b2*bv_aux, polarity=+1, mech_sep= 0.194*bv_aux;
+MCBYV.5L5.B2 :MCBYV, KICK:= acbyvs5.l5b2*bv_aux, polarity=+1, mech_sep= 0.194*bv_aux;
+MCBYV.A5R1.B2:MCBYV, KICK:= acbyvs5.r1b2*bv_aux, polarity=+1, mech_sep=-0.194*bv_aux;
+MCBYV.A5R5.B2:MCBYV, KICK:= acbyvs5.r5b2*bv_aux, polarity=+1, mech_sep=-0.194*bv_aux;
+MCBYV.B5R1.B2:MCBYV, KICK:= acbyv5.r1b2*bv_aux,  polarity=+1, mech_sep=-0.194*bv_aux;
+MCBYV.B5R5.B2:MCBYV, KICK:= acbyv5.r5b2*bv_aux,  polarity=+1, mech_sep=-0.194*bv_aux;
+
 
 
 posQ5  := 196.490 + deltaPosQ5; !new layout (excel file): 207.49
@@ -1000,14 +1009,14 @@ dposMCBY.B5 := (l.MQY + l.MCBYV)/2 + 0.372; !same as nominal note that in IR2-8-
 dposMCBY.5  := dposMCBY.B5 + (l.MCBYH + l.MCBYV)/2 + 0.396; !be better
 dposMCBY.A5 := dposMCBY.5  + (l.MCBYV + l.MCBYH)/2 + 0.396;
 
-BPMYA.5R1.B1:BPMYA;
-BPMYA.5L5.B1:BPMYA;
-BPMYA.5R5.B1:BPMYA;
-BPMYA.5L1.B1:BPMYA;
-BPMYA.5R1.B2:BPMYA;
-BPMYA.5L5.B2:BPMYA;
-BPMYA.5R5.B2:BPMYA;
-BPMYA.5L1.B2:BPMYA;
+BPMYA.5L1.B1:BPMYA, mech_sep=-0.194;
+BPMYA.5L5.B1:BPMYA, mech_sep=-0.194;
+BPMYA.5R1.B1:BPMYA, mech_sep= 0.194;
+BPMYA.5R5.B1:BPMYA, mech_sep= 0.194;
+BPMYA.5L1.B2:BPMYA, mech_sep= 0.194*bv_aux;
+BPMYA.5L5.B2:BPMYA, mech_sep= 0.194*bv_aux;
+BPMYA.5R1.B2:BPMYA, mech_sep=-0.194*bv_aux;
+BPMYA.5R5.B2:BPMYA, mech_sep=-0.194*bv_aux;
 
 
 !exec,newel_ir15_b12(BPMQB.5,BPMQB);
@@ -1130,14 +1139,14 @@ endedit;
 posMSQ10    := l.MQML/2 +0.1605+l.MS/2;
 posMCBQ10   := posMSQ10+l.MS/2 +0.085+l.MCBV/2;
 
-MCBH.10L1.B1: MCBH, KICK := acbh10.l1b1, polarity=+1;
-MCBH.10L5.B1: MCBH, KICK := acbh10.l5b1, polarity=+1;
-MCBV.10R1.B1: MCBV, KICK := acbv10.r1b1*bv_aux, polarity=+1;
-MCBV.10R5.B1: MCBV, KICK := acbv10.r5b1*bv_aux, polarity=+1;
-MCBV.10L1.B2: MCBV, KICK := acbv10.l1b2*bv_aux, polarity=+1;
-MCBV.10L5.B2: MCBV, KICK := acbv10.l5b2*bv_aux, polarity=+1;
-MCBH.10R1.B2: MCBH, KICK := acbh10.r1b2, polarity=+1;
-MCBH.10R5.B2: MCBH, KICK := acbh10.r5b2, polarity=+1;
+MCBH.10L1.B1: MCBH, KICK := acbh10.l1b1,        polarity=+1, mech_sep=-0.194       ;
+MCBH.10L5.B1: MCBH, KICK := acbh10.l5b1,        polarity=+1, mech_sep=-0.194       ;
+MCBV.10R1.B1: MCBV, KICK := acbv10.r1b1*bv_aux, polarity=+1, mech_sep= 0.194       ;
+MCBV.10R5.B1: MCBV, KICK := acbv10.r5b1*bv_aux, polarity=+1, mech_sep= 0.194       ;
+MCBV.10L1.B2: MCBV, KICK := acbv10.l1b2*bv_aux, polarity=+1, mech_sep= 0.194*bv_aux;
+MCBV.10L5.B2: MCBV, KICK := acbv10.l5b2*bv_aux, polarity=+1, mech_sep= 0.194*bv_aux;
+MCBH.10R1.B2: MCBH, KICK := acbh10.r1b2,        polarity=+1, mech_sep=-0.194*bv_aux;
+MCBH.10R5.B2: MCBH, KICK := acbh10.r5b2,        polarity=+1, mech_sep=-0.194*bv_aux;
 
 
 DISABLE_SEXT(MS.10):macro={
@@ -1259,36 +1268,36 @@ sin_crab_r5b2:=sin(-omega_crabsc*z_crab+twopi*phi_crab_r5b2);
 cosi1:=cos(twopi*phi_IR1/360.);sinu1:=sin(twopi*phi_IR1/360.);
 cosi5:=cos(twopi*phi_IR5/360.);sinu5:=sin(twopi*phi_IR5/360.);
 on_crab1=0;on_crab5=0;
-acfca.NNNl1.b1: tkicker, l=0, HKICK:=on_crab1*ahcrab_l1b1/FFF*sin_crab_l1b1*cosi1,VKICK:=on_crab1*avcrab_l1b1/FFF*sin_crab_l1b1*sinu1*bv_aux;
-acfca.NNNl1.b2: tkicker, l=0, HKICK:=on_crab1*ahcrab_l1b2/FFF*sin_crab_l1b2*cosi1,VKICK:=on_crab1*avcrab_l1b2/FFF*sin_crab_l1b2*sinu1*bv_aux;
-acfca.NNNr1.b1: tkicker, l=0, HKICK:=on_crab1*ahcrab_r1b1/FFF*sin_crab_r1b1*cosi1,VKICK:=on_crab1*avcrab_r1b1/FFF*sin_crab_r1b1*sinu1*bv_aux;
-acfca.NNNr1.b2: tkicker, l=0, HKICK:=on_crab1*ahcrab_r1b2/FFF*sin_crab_r1b2*cosi1,VKICK:=on_crab1*avcrab_r1b2/FFF*sin_crab_r1b2*sinu1*bv_aux;
-acfca.NNNl5.b1: tkicker, l=0, HKICK:=on_crab5*ahcrab_l5b1/FFF*sin_crab_l5b1*cosi5,VKICK:=on_crab5*avcrab_l5b1/FFF*sin_crab_l5b1*sinu5*bv_aux;
-acfca.NNNl5.b2: tkicker, l=0, HKICK:=on_crab5*ahcrab_l5b2/FFF*sin_crab_l5b2*cosi5,VKICK:=on_crab5*avcrab_l5b2/FFF*sin_crab_l5b2*sinu5*bv_aux;
-acfca.NNNr5.b1: tkicker, l=0, HKICK:=on_crab5*ahcrab_r5b1/FFF*sin_crab_r5b1*cosi5,VKICK:=on_crab5*avcrab_r5b1/FFF*sin_crab_r5b1*sinu5*bv_aux;
-acfca.NNNr5.b2: tkicker, l=0, HKICK:=on_crab5*ahcrab_r5b2/FFF*sin_crab_r5b2*cosi5,VKICK:=on_crab5*avcrab_r5b2/FFF*sin_crab_r5b2*sinu5*bv_aux;
+acfca.NNNl1.b1: tkicker, l=0, HKICK:=on_crab1*ahcrab_l1b1/FFF*sin_crab_l1b1*cosi1,VKICK:=on_crab1*avcrab_l1b1/FFF*sin_crab_l1b1*sinu1*bv_aux, mech_sep=-0.194;
+acfca.NNNl1.b2: tkicker, l=0, HKICK:=on_crab1*ahcrab_l1b2/FFF*sin_crab_l1b2*cosi1,VKICK:=on_crab1*avcrab_l1b2/FFF*sin_crab_l1b2*sinu1*bv_aux, mech_sep= 0.194*bv_aux;
+acfca.NNNr1.b1: tkicker, l=0, HKICK:=on_crab1*ahcrab_r1b1/FFF*sin_crab_r1b1*cosi1,VKICK:=on_crab1*avcrab_r1b1/FFF*sin_crab_r1b1*sinu1*bv_aux, mech_sep= 0.194;
+acfca.NNNr1.b2: tkicker, l=0, HKICK:=on_crab1*ahcrab_r1b2/FFF*sin_crab_r1b2*cosi1,VKICK:=on_crab1*avcrab_r1b2/FFF*sin_crab_r1b2*sinu1*bv_aux, mech_sep=-0.194*bv_aux;
+acfca.NNNl5.b1: tkicker, l=0, HKICK:=on_crab5*ahcrab_l5b1/FFF*sin_crab_l5b1*cosi5,VKICK:=on_crab5*avcrab_l5b1/FFF*sin_crab_l5b1*sinu5*bv_aux, mech_sep=-0.194;
+acfca.NNNl5.b2: tkicker, l=0, HKICK:=on_crab5*ahcrab_l5b2/FFF*sin_crab_l5b2*cosi5,VKICK:=on_crab5*avcrab_l5b2/FFF*sin_crab_l5b2*sinu5*bv_aux, mech_sep= 0.194*bv_aux;
+acfca.NNNr5.b1: tkicker, l=0, HKICK:=on_crab5*ahcrab_r5b1/FFF*sin_crab_r5b1*cosi5,VKICK:=on_crab5*avcrab_r5b1/FFF*sin_crab_r5b1*sinu5*bv_aux, mech_sep= 0.194;
+acfca.NNNr5.b2: tkicker, l=0, HKICK:=on_crab5*ahcrab_r5b2/FFF*sin_crab_r5b2*cosi5,VKICK:=on_crab5*avcrab_r5b2/FFF*sin_crab_r5b2*sinu5*bv_aux, mech_sep=-0.194*bv_aux;
 };
 
 crab_make_marker(NNN): macro {
-acfca.NNNl1.b1: marker;
-acfca.NNNl1.b2: marker;
-acfca.NNNr1.b1: marker;
-acfca.NNNr1.b2: marker;
-acfca.NNNl5.b1: marker;
-acfca.NNNl5.b2: marker;
-acfca.NNNr5.b1: marker;
-acfca.NNNr5.b2: marker;
+acfca.NNNl1.b1: marker, mech_sep=-0.194;
+acfca.NNNl1.b2: marker, mech_sep= 0.194*bv_aux;
+acfca.NNNr1.b1: marker, mech_sep= 0.194;
+acfca.NNNr1.b2: marker, mech_sep=-0.194*bv_aux;
+acfca.NNNl5.b1: marker, mech_sep=-0.194;
+acfca.NNNl5.b2: marker, mech_sep= 0.194*bv_aux;
+acfca.NNNr5.b1: marker, mech_sep= 0.194;
+acfca.NNNr5.b2: marker, mech_sep=-0.194*bv_aux;
 };
 
 crab_make_vac_marker(NNN): macro={
-vacfca.NNNl1.b1: marker;
-vacfca.NNNl1.b2: marker;
-vacfca.NNNr1.b1: marker;
-vacfca.NNNr1.b2: marker;
-vacfca.NNNl5.b1: marker;
-vacfca.NNNl5.b2: marker;
-vacfca.NNNr5.b1: marker;
-vacfca.NNNr5.b2: marker;
+vacfca.NNNl1.b1: marker, mech_sep=-0.194;
+vacfca.NNNl1.b2: marker, mech_sep= 0.194*bv_aux;
+vacfca.NNNr1.b1: marker, mech_sep= 0.194;
+vacfca.NNNr1.b2: marker, mech_sep=-0.194*bv_aux;
+vacfca.NNNl5.b1: marker, mech_sep=-0.194;
+vacfca.NNNl5.b2: marker, mech_sep= 0.194*bv_aux;
+vacfca.NNNr5.b1: marker, mech_sep= 0.194;
+vacfca.NNNr5.b2: marker, mech_sep=-0.194*bv_aux;
 };
 
 
@@ -1562,7 +1571,17 @@ posTCTXH  := posTCLX-1.757;
 posTCTV   := posTCTXH-2.001;
 posTAXN   := posTCTV-1.482-l.TAXN/2;
 
+
+sepTCLX   := round((posTCLX -posD1)/(posD2-posD1)*194)/1e3;
+sepTCTXH  := round((posTCTXH-posD1)/(posD2-posD1)*194)/1e3;
+sepTCTV   := round((posTCTV -posD1)/(posD2-posD1)*194)/1e3;
+sepTAXN   := round((posTAXN -posD1)/(posD2-posD1)*194)/1e3;
+sepTAXNA  := round((posTAXN -posD1- L.TAXN/2)/(posD2-posD1)*194)/1e3;
+sepTAXNB  := round((posTAXN -posD1+ L.TAXN/2)/(posD2-posD1)*194)/1e3;
+
 value,posTAXN,posTCTV,posTCTXH,posTCLX;
+value,sepTAXN, sepTAXNA, sepTAXNB, sepTCTV, sepTCTXH, sepTCLX;
+
 
 !Q5/Q6 region
 !IP side
@@ -1581,16 +1600,29 @@ posTCTH.6Q := posQ5 + l.mqy/2+1.435+1.915+2.000;!10.765 - 4.235; !left
 value,posTCL.5C,posTCL.5Q,posTCL.6C,posTCL.6Q;
 
 
+TCLX.4R1.B1: TCL, mech_sep= 0.194;
+TCLX.4L1.B2: TCL, mech_sep= 0.194*bv_aux;
+TCLX.4R5.B1: TCL, mech_sep= 0.194;
+TCLX.4L5.B2: TCL, mech_sep= 0.194*bv_aux;
 
-TCLX.4R1.B1: TCL; TCLX.4R5.B1: TCL;
-TCLX.4L1.B2: TCL; TCLX.4L5.B2: TCL;
-VTCLX.4R1.B2: marker; VTCLX.4R5.B2: marker;
-VTCLX.4L1.B1: marker; VTCLX.4L5.B1: marker;
+VTCLX.4R1.B2: marker, mech_sep=-0.194;
+VTCLX.4L1.B1: marker, mech_sep=-0.194*bv_aux;
+VTCLX.4R5.B2: marker, mech_sep=-0.194;
+VTCLX.4L5.B1: marker, mech_sep=-0.194*bv_aux;
 
-TCL.5R1.B1: TCL; TCL.5R5.B1: TCL;
-TCL.5L1.B2: TCL; TCL.5L5.B2: TCL;
-TCL.6R1.B1: TCL; TCL.6R5.B1: TCL;
-TCL.6L1.B2: TCL; TCL.6L5.B2: TCL;
+
+TCL.5R1.B1: TCL, mech_sep= 0.194;
+TCL.5L1.B2: TCL, mech_sep= 0.194*bv_aux;
+TCL.5R5.B1: TCL, mech_sep= 0.194;
+TCL.5L5.B2: TCL, mech_sep= 0.194*bv_aux;
+
+TCL.6R1.B1: TCL, mech_sep= 0.194;
+TCL.6L1.B2: TCL, mech_sep= 0.194*bv_aux;
+TCL.6R5.B1: TCL, mech_sep= 0.194;
+TCL.6L5.B2: TCL, mech_sep= 0.194*bv_aux;
+
+
+
 
 TAXN: RCOLLIMATOR, l:=l.TAXN;
 
@@ -1599,35 +1631,68 @@ TAXN.4R5: TAXN;
 TAXN.4L1: TAXN;
 TAXN.4L5: TAXN;
 
+VTAXN.A4L1.B1: marker, mech_sep=-sepTAXNA;
+VTAXN.A4L1.B2: marker, mech_sep= sepTAXNA*bv_aux;
+VTAXN.A4L5.B1: marker, mech_sep=-sepTAXNA;
+VTAXN.A4L5.B2: marker, mech_sep= sepTAXNA*bv_aux;
+VTAXN.A4R1.B1: marker, mech_sep= sepTAXNA;
+VTAXN.A4R1.B2: marker, mech_sep=-sepTAXNA*bv_aux;
+VTAXN.A4R5.B1: marker, mech_sep= sepTAXNA;
+VTAXN.A4R5.B2: marker, mech_sep=-sepTAXNA*bv_aux;
+VTAXN.B4L1.B1: marker, mech_sep=-sepTAXNB;
+VTAXN.B4L1.B2: marker, mech_sep= sepTAXNB*bv_aux;
+VTAXN.B4L5.B1: marker, mech_sep=-sepTAXNB;
+VTAXN.B4L5.B2: marker, mech_sep= sepTAXNB*bv_aux;
+VTAXN.B4R1.B1: marker, mech_sep= sepTAXNB;
+VTAXN.B4R1.B2: marker, mech_sep=-sepTAXNB*bv_aux;
+VTAXN.B4R5.B1: marker, mech_sep= sepTAXNB;
+VTAXN.B4R5.B2: marker, mech_sep=-sepTAXNB*bv_aux;
+
+
 l.TCTV=1; l.TCTH=1;
 
 TCTV: RCOLLIMATOR, l:=l.TCTV;
 TCTH: RCOLLIMATOR, l:=l.TCTH;
-TCTXH.4L1.B1: TCTH; TCTXH.4L5.B1: TCTH;
-TCTPV.4L1.B1: TCTV; TCTPV.4L5.B1: TCTV;
-TCTXH.4R1.B2: TCTH; TCTXH.4R5.B2: TCTH;
-TCTPV.4R1.B2: TCTV; TCTPV.4R5.B2: TCTV;
-VTCTXH.4L1.B2: marker; VTCTXH.4L5.B2: marker;
-VTCTPV.4L1.B2: marker; VTCTPV.4L5.B2: marker;
-VTCTXH.4R1.B1: marker; VTCTXH.4R5.B1: marker;
-VTCTPV.4R1.B1: marker; VTCTPV.4R5.B1: marker;
+TCTPV.4L1.B1: TCTV, mech_sep=-sepTCTPV;
+TCTPV.4L5.B1: TCTV, mech_sep=-sepTCTPV;
+TCTPV.4R1.B2: TCTV, mech_sep=-sepTCTPV*bv_aux;
+TCTPV.4R5.B2: TCTV, mech_sep=-sepTCTPV*bv_aux;
+TCTXH.4L1.B1: TCTH, mech_sep=-sepTCTXH;
+TCTXH.4L5.B1: TCTH, mech_sep=-sepTCTXH;
+TCTXH.4R1.B2: TCTH, mech_sep=-sepTCTXH*bv_aux;
+TCTXH.4R5.B2: TCTH, mech_sep=-sepTCTXH*bv_aux;
 
+VTCTPV.4L1.B2: marker, mech_sep= sepTCTPV*bv_aux;
+VTCTPV.4L5.B2: marker, mech_sep= sepTCTPV*bv_aux;
+VTCTPV.4R1.B1: marker, mech_sep= sepTCTPV;
+VTCTPV.4R5.B1: marker, mech_sep= sepTCTPV;
+VTCTXH.4L1.B2: marker, mech_sep= sepTCTXH*bv_aux;
+VTCTXH.4L5.B2: marker, mech_sep= sepTCTXH*bv_aux;
+VTCTXH.4R1.B1: marker, mech_sep= sepTCTXH;
+VTCTXH.4R5.B1: marker, mech_sep= sepTCTXH;
 
+TCTH.6L1.B1: TCTH, mech_sep=-0.194;
+TCTV.6L1.B1: TCTV, mech_sep=-0.194;
+TCTH.6R1.B2: TCTH, mech_sep=-0.194*bv_aux;
+TCTV.6R1.B2: TCTV, mech_sep=-0.194*bv_aux;
+TCTH.6L5.B1: TCTH, mech_sep=-0.194;
+TCTV.6L5.B1: TCTV, mech_sep=-0.194;
+TCTH.6R5.B2: TCTH, mech_sep=-0.194*bv_aux;
+TCTV.6R5.B2: TCTV, mech_sep=-0.194*bv_aux;
 
-
-TCTH.6L1.B1: TCTH; TCTH.6L5.B1: TCTH;
-TCTV.6L1.B1: TCTV; TCTV.6L5.B1: TCTV;
-TCTH.6R1.B2: TCTH; TCTH.6R5.B2: TCTH;
-TCTV.6R1.B2: TCTV; TCTV.6R5.B2: TCTV;
 
 l.BPTXaux=0.285;
 posBPTX=posTCLMB.4C-1.5/2-0.301-l.BPTXaux/2;
 
 
-APWL.5R5.B1: APWL; APWL.5R5.B2: APWL;
-APWL.5L5.B1: APWL; APWL.5L5.B2: APWL;
-APWL.5R1.B1: APWL; APWL.5R1.B2: APWL;
-APWL.5L1.B1: APWL; APWL.5L1.B2: APWL;
+APWL.5L1.B1: APWL, mech_sep=-0.194;
+APWL.5L1.B2: APWL, mech_sep= 0.194*bv_aux;
+APWL.5L5.B1: APWL, mech_sep=-0.194;
+APWL.5L5.B2: APWL, mech_sep= 0.194*bv_aux;
+APWL.5R1.B1: APWL, mech_sep= 0.194;
+APWL.5R1.B2: APWL, mech_sep=-0.194*bv_aux;
+APWL.5R5.B1: APWL, mech_sep= 0.194;
+APWL.5R5.B2: APWL, mech_sep=-0.194*bv_aux;
 
 L.APWLaux=0.6;
 posAPWL1=posTCLMB.4C-1.5/2-0.301-0.285-1.002-L.APWLaux/2;
