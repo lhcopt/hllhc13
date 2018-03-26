@@ -1918,22 +1918,25 @@ endedit;
 ! https://indico.cern.ch/event/680374/  9/12/2017
 ! https://indico.cern.ch/event/680374/contributions/2787337/attachments/1570745/2477819/ICL_Meeting_-_11TTCLD_-_CCTCLD_v.3.pptx
 
-posTCLD.2=425.717;
+posTCLD.2=425.71735;
+value,posTCLD.2;
 
 
-TCLD.11R2.B1, TCLD;
-TCLD.11L2.B2, TCLD;
+TCLD.11R2.B1: TCLD;
+TCLD.11L2.B2: TCLD;
 
 
 if(bv_aux ==1){
   seqedit,sequence=lhcb1;
   remove,element=TCLD.11R2.B1;
+  remove,element=LECL.11R2.B1;
   install,element=TCLD.11R2.B1,  at=posTCLD.2,from=ip2;
   endedit;
 };
 
 seqedit,sequence=lhcb2;
 remove,element=TCLD.11L2.B2;
+remove,element=LEBR.11L2.B2;
 install,element=TCLD.11L2.B2,  at=-posTCLD.2*bv_aux,from=ip2;
 endedit;
 
