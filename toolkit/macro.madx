@@ -319,9 +319,10 @@ if(FULL==1)
 twiss,file=temp/twiss_irnirbim.tfs;
 };
 
-system, "cp lhc/aperture/offset.ip*b*.tfs  temp";
-if (l.MQXFB>0) { system, "cp slhc/aperture/offset.ip*b*.tfs temp"; };
-if (l.MQX>0) { system, "cp slhc/aperture/offset.ip*b*.tfs temp"; };
+system, "cp lhc/aperture/offset.ip*b*.tfs  temp/";
+if (l.MQXFB>0) { system, "cp slhc/aperture/offset.ip*b*.tfs temp/"; };
+if (l.MQX>0) { system, "cp slhc/aperture/offset.ip*b*.tfs temp/"; };
+if (local_offset==1) { system, "cp aperture/offset.ip*b*.tfs temp/"; };
 
 
 select,flag=aperture,clear;
