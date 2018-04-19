@@ -21,7 +21,11 @@ exec,selectIR15(1,81,12,b2);
 
 on_holdselect=1; jac_calls=   15;jac_tol=1e-20; jac_bisec=3;
 
-grad=132.6; scl=0.05; sch=0.99;sc79=0.999;bmaxds=500;imb=1.60;
+if (sc79==0){sc79=0.999;};
+if (sch==0) {sch =0.99; };
+if (imb==0) {imb=1.60;};
+if (scl==0) {scl=0.05;};
+grad=132.6; bmaxds=500;
 betxip5b1=betx0_IP5; betyip5b1=bety0_IP5;
 betxip5b2=betx0_IP5; betyip5b2=bety0_IP5;
 betxip1b1=betx0_IP1; betyip1b1=bety0_IP1;

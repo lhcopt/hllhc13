@@ -267,8 +267,9 @@ if (match_on_triplet==5) {! only beta in q3 and cc region constrained
 !vary,name=KQX1.L5    ,LOWER=-1.000*qtlim1,UPPER=-0.00*qtlim1;
 vary,name=KQX2.L5    ,LOWER=-1.000*qtlim1,UPPER=-0.00*qtlim1;
 vary,name=KQX3.L5    ,LOWER=-1.000*qtlim1,UPPER=-0.00*qtlim1;
-if(betx_acf>0){constraint,sequence=lhcb2,range=ACFCA.CR5.B2,betx=betx_acf;};
-if(bety_acf>0){constraint,sequence=lhcb2,range=ACFCA.CR5.B2,bety=bety_acf;};
+if(betx_acf>0){constraint,sequence=lhcb2,range=ACFCA.BR5.B2,betx=betx_acf;};
+if(bety_acf>0){constraint,sequence=lhcb2,range=ACFCA.BR5.B2,bety=bety_acf;};
+if(bety_d2>0){constraint,sequence=lhcb2,range=MBRD.4R5.B2,bety=bety_d2;};
 };
 
 vary,name=KQ7.L5B1   ,UPPER=-scl*qtlim3,LOWER=-sc79*qtlim3;
@@ -323,8 +324,8 @@ exec,get_betmax(MQXFB.B2L5,y);
 exec,get_betmax(MQXFB.A2L5,x);
 exec,get_betmax(MQXFA.A3L5,y);
 
-betx_acf_ref=table(twiss,ACFCA.CR5.B2,betx);
-bety_acf_ref=table(twiss,ACFCA.CR5.B2,bety);
+betx_acf_ref=table(twiss,ACFCA.BR5.B2,betx);
+bety_acf_ref=table(twiss,ACFCA.BR5.B2,bety);
 betx_mcby_ref=table(twiss,MCBYYH.4R5.B2,betx);
 bety_mcby_ref=table(twiss,MCBYYH.4R5.B2,bety);
 bety_q3_ref=table(twiss,MQXFA.B3R5,bety);

@@ -307,7 +307,7 @@ select,flag=twiss,
        column=name,s,l,angle,k1l,k2l,hkick,vkick,kick,
               betx,bety,dx,dy,x,y,px,py,
               apertype,aper_1,aper_2,aper_3,aper_4,
-              aptol_1,aptol_2,aptol_3,
+              aptol_1,aptol_2,aptol_3,mech_sep,
        range=s.ds.lnir.bim/e.ds.rnir.bim;
 if(FULL==0)
 {use,sequence=lhcbim,range=s.ds.lnir.bim/e.ds.rnir.bim;
@@ -4649,10 +4649,18 @@ exec,round(muxip7b1,4); exec,round(muyip7b1,4);
 exec,round(muxip7b2,4); exec,round(muyip7b2,4);
 exec,round(muxip8b1,4); exec,round(muyip8b1,4);
 exec,round(muxip8b2,4); exec,round(muyip8b2,4);
+exec,round(betxip1b1,3); exec,round(betyip1b1,3);
+exec,round(betxip1b2,3); exec,round(betyip1b2,3);
+exec,round(betxip5b1,3); exec,round(betyip5b1,3);
+exec,round(betxip5b2,3); exec,round(betyip5b2,3);
 exec,round(betxip2b1,3); exec,round(betyip2b1,3);
 exec,round(betxip2b2,3); exec,round(betyip2b2,3);
 exec,round(betxip8b1,3); exec,round(betyip8b1,3);
 exec,round(betxip8b2,3); exec,round(betyip8b2,3);
+alfxip1b1=0;alfyip1b1=0;
+alfxip1b2=0;alfyip1b2=0;
+alfxip5b1=0;alfyip5b1=0;
+alfxip5b2=0;alfyip5b2=0;
 alfxip2b1=0;alfyip2b1=0;
 alfxip2b2=0;alfyip2b2=0;
 alfxip8b1=0;alfyip8b1=0;
@@ -4661,6 +4669,10 @@ exec,round(dxip2b1,3); exec,round(dpxip2b1,3);
 exec,round(dxip2b2,3); exec,round(dpxip2b2,3);
 exec,round(dxip8b1,3); exec,round(dpxip8b1,3);
 exec,round(dxip8b2,3); exec,round(dpxip8b2,3);
+exec,round(dxip1b1,3); exec,round(dpxip1b1,3);
+exec,round(dxip1b2,3); exec,round(dpxip1b2,3);
+exec,round(dxip5b1,3); exec,round(dpxip5b1,3);
+exec,round(dxip5b2,3); exec,round(dpxip5b2,3);
 };
 
 check_phasearc(BIM): macro={
