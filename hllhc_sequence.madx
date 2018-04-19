@@ -42,6 +42,9 @@ deltaposD2  =        -15.3870000000 ;!max. field D2 35 Tm -> move D2 as close as
 deltaposQ4  =         10.047   ;
 deltaposQ5  =         11.0000000000 ;
 deltaposQ6  =          0.0000000000 ;
+deltaposCrab=                     0 ;
+deltaposMCBRD=                    0 ;
+deltaposTAXN =                    0 ;
 on_cutMS.10f =          0            ;
 on_cutMS.14f =          0            ;
 on_cutMS.10d =          0            ;
@@ -51,6 +54,8 @@ l.MCBXFB    =          1.2          ;
 l.MCBXFA    =          2.2          ;
 l.MBRD      =          7.78         ;
 l.MCBRD     =          1.89         ;
+crabs_2     = 0                     ;
+cut_mcbrd   = 0                     ;
 };
 
 !value, l.MQXL,l.MQX,dq1q2a,dq2aq2b,dq2bq3;
@@ -794,10 +799,10 @@ posD2  := 157.9+deltaposD2; ! minimize distance D1-D2, maximum field 35 Tm
 !11 to fit three cavitities with 1.5 meter
 
 
-posMCBRDA  := posD2 + l.MBRD/2 + l.MCBRD/2 + 0.365;
-posMCBRDB  := posMCBRDA + l.MCBRD          + 0.365;
+posMCBRDA  := posD2 + l.MBRD/2 + l.MCBRD/2 + 0.365 + deltaposMCBRD;
+posMCBRDB  := posMCBRDA + l.MCBRD          + 0.365 ;
 
-posBPMWQ  := posD2-l.MBRD/2-0.983-0.702-0.285/2;!BPMWQ.4R5.B1
+posBPMWQ  := posD2-l.MBRD/2-0.983-0.702-0.285/2 + deltaposTAXN;!BPMWQ.4R5.B1
 sepBPMWQ  := round((posBPMWQ-posD1)/(posD2-posD1)*194)/1e3;
 
 
@@ -873,8 +878,10 @@ exec,install_ir15_b12(BPMWQ.4, posBPMWQ);
 ! orientation:
 ! b1: h v - IP - h v
 ! b2: v h - IP - v h
+if (cut_mcbrd==0){
 exec,install_ir15_b1_b2_alt(MCBRDV.4,posMCBRDA,posMCBRDB);
 exec,install_ir15_b1_b2_alt(MCBRDH.4,posMCBRDB,posMCBRDA);
+};
 
 !===============================================
 ! Q4
@@ -1460,18 +1467,26 @@ endedit;
 
 exec,crab_make_tkicker(A,2);
 exec,crab_make_tkicker(B,2);
+if (crabs_2==0){
 exec,crab_make_marker(C);
 exec,crab_make_marker(D);
+};
 
 exec,crab_make_vac_marker(A);
 exec,crab_make_vac_marker(B);
+if (crabs_2==0){
 exec,crab_make_vac_marker(C);
 exec,crab_make_vac_marker(D);
+};
+
 
 exec,crab_remove(A);
 exec,crab_remove(B);
+if (crabs_2==0){
 exec,crab_remove(C);
 exec,crab_remove(D);
+};
+
 
 
 !  B1-> { 4.4 C 1.3 C 5.3 C 1.3 C 1   }
@@ -1484,7 +1499,7 @@ exec,crab_remove(D);
 !posCRABC1 = posCRAB+6.600;posCRABC2=posCRAB+10.00;
 !posCRABD1 = posCRAB+7.650;posCRABD2=posCRAB+11.05;
 
-posCRAB   = 153.942 ; ! mechanical start
+posCRAB   = 153.942+deltaposCrab ; ! mechanical start 153.942 !posD2+11.429
 posCRABA1 = posCRAB+0.875;posCRABA2=posCRAB + 4.695;
 posCRABB1 = posCRAB+1.925 ;posCRABB2=posCRAB+ 5.745;
 posCRABC1 = posCRAB+8.315 ;posCRABC2=posCRAB+12.135;
@@ -1496,9 +1511,10 @@ value, posCRABA2,posCRABB2,posCRABC2,posCRABD2;
 !staggered
 exec,crab_install(A,posCRABA1,posCRABA2);
 exec,crab_install(B,posCRABB1,posCRABB2);
+if (crabs_2==0){
 exec,crab_install(C,posCRABC1,posCRABC2);
 exec,crab_install(D,posCRABD1,posCRABD2);
-
+};
 
 !===============================================
 ! Masks
@@ -1566,20 +1582,30 @@ if (L.TAXN==0) {L.TAXN=3.332;};
 !D2 region, posBPMWQ = BPM right in front of D2
 
 
-posTCLX   := posD2-l.MBRD/2-0.983-1.933;
-posTCTXH  := posTCLX-1.757;
-posTCTV   := posTCTXH-2.001;
-posTAXN   := posTCTV-1.482-l.TAXN/2;
+posTCLX   := posD2-l.MBRD/2-0.983-1.933 + deltaposTAXN;
+posTCTXH  := posTCLX-1.757 ;
+posTCTPV   := posTCTXH-2.001 ;
+posTAXN   := posTCTPV-1.482-l.TAXN/2 ;
+
+posTAXNA  := posTAXN - L.TAXN/2;
+posTAXNB  := posTAXN + L.TAXN/2;
+posTCLXA  := posTCLX - L.TCLX/2;
+posTCLXB  := posTCLX + L.TCLX/2;
+posTCTXHA  := posTCTXH - L.TCTXH/2;
+posTCTXHB  := posTCTXH + L.TCTXH/2;
+posTCTPVA  := posTCTPV - L.TCTPV/2;
+posTCTPVB  := posTCTPV + L.TCTPV/2;
+
 
 
 sepTCLX   := round((posTCLX -posD1)/(posD2-posD1)*194)/1e3;
 sepTCTXH  := round((posTCTXH-posD1)/(posD2-posD1)*194)/1e3;
-sepTCTV   := round((posTCTV -posD1)/(posD2-posD1)*194)/1e3;
+sepTCTV   := round((posTCTPV -posD1)/(posD2-posD1)*194)/1e3;
 sepTAXN   := round((posTAXN -posD1)/(posD2-posD1)*194)/1e3;
 sepTAXNA  := round((posTAXN -posD1- L.TAXN/2)/(posD2-posD1)*194)/1e3;
 sepTAXNB  := round((posTAXN -posD1+ L.TAXN/2)/(posD2-posD1)*194)/1e3;
 
-value,posTAXN,posTCTV,posTCTXH,posTCLX;
+value,posTAXN,posTCTPV,posTCTXH,posTCLX;
 value,sepTAXN, sepTAXNA, sepTAXNB, sepTCTV, sepTCTXH, sepTCLX;
 
 
@@ -1590,9 +1616,9 @@ posTCL.5Q := posQ5 -  6.300 ;
 posTCL.6C := posQ6 - l.mqml/2-0.192-l.mcbch-0.926-1.405-2.010  ; !was 1.760
 posTCL.6Q := posQ6 - l.mqml/2-1.411-1.405-2.010;! 6.976 ;
 
-posTCTV.6Q := posQ5 + l.mqy/2+1.435+1.915; !8.7655 - 4.235; !left !was 1.664
+posTCTPV.6Q := posQ5 + l.mqy/2+1.435+1.915; !8.7655 - 4.235; !left !was 1.664
 posTCTH.6Q := posQ5 + l.mqy/2+1.435+1.915+2.000;!10.765 - 4.235; !left
-!posTCTV.6C := posQ5 +  8.158 ; !right
+!posTCTPV.6C := posQ5 +  8.158 ; !right
 !posTCTH.6C := posQ5 + 10.158 ; !right
 
 
@@ -1600,21 +1626,37 @@ posTCTH.6Q := posQ5 + l.mqy/2+1.435+1.915+2.000;!10.765 - 4.235; !left
 value,posTCL.5C,posTCL.5Q,posTCL.6C,posTCL.6Q;
 
 
-TCLX.4R1.B1: TCL, mech_sep= 0.194;
-TCLX.4L1.B2: TCL, mech_sep= 0.194*bv_aux;
-TCLX.4R5.B1: TCL, mech_sep= 0.194;
-TCLX.4L5.B2: TCL, mech_sep= 0.194*bv_aux;
+L.TCTH=1;
+L.TCTV=1;
 
-VTCLX.4R1.B2: marker, mech_sep=-0.194;
-VTCLX.4L1.B1: marker, mech_sep=-0.194*bv_aux;
-VTCLX.4R5.B2: marker, mech_sep=-0.194;
-VTCLX.4L5.B1: marker, mech_sep=-0.194*bv_aux;
+TCTH: rcollimator, L:=L.TCTH;
+TCTV: rcollimator, L:=L.TCTV;
+
+L.TCLX=1;
+TCLX: rcollimator, L:=L.TCLX;
+
+TCLX.4R1.B1: TCLX, mech_sep= sepTCLX;
+TCLX.4L1.B2: TCLX, mech_sep= sepTCLX*bv_aux;
+TCLX.4R5.B1: TCLX, mech_sep= sepTCLX;
+TCLX.4L5.B2: TCLX, mech_sep= sepTCLX*bv_aux;
+
+VTCLX.4R1.A.B2: marker, mech_sep=-sepTCLX;
+VTCLX.4L1.A.B1: marker, mech_sep=-sepTCLX*bv_aux;
+VTCLX.4R5.A.B2: marker, mech_sep=-sepTCLX;
+VTCLX.4L5.A.B1: marker, mech_sep=-sepTCLX*bv_aux;
+
+VTCLX.4R1.B.B2: marker, mech_sep=-sepTCLX;
+VTCLX.4L1.B.B1: marker, mech_sep=-sepTCLX*bv_aux;
+VTCLX.4R5.B.B2: marker, mech_sep=-sepTCLX;
+VTCLX.4L5.B.B1: marker, mech_sep=-sepTCLX*bv_aux;
 
 
 TCL.5R1.B1: TCL, mech_sep= 0.194;
 TCL.5L1.B2: TCL, mech_sep= 0.194*bv_aux;
 TCL.5R5.B1: TCL, mech_sep= 0.194;
 TCL.5L5.B2: TCL, mech_sep= 0.194*bv_aux;
+
+
 
 TCL.6R1.B1: TCL, mech_sep= 0.194;
 TCL.6L1.B2: TCL, mech_sep= 0.194*bv_aux;
@@ -1631,45 +1673,55 @@ TAXN.4R5: TAXN;
 TAXN.4L1: TAXN;
 TAXN.4L5: TAXN;
 
-VTAXN.A4L1.B1: marker, mech_sep=-sepTAXNA;
-VTAXN.A4L1.B2: marker, mech_sep= sepTAXNA*bv_aux;
-VTAXN.A4L5.B1: marker, mech_sep=-sepTAXNA;
-VTAXN.A4L5.B2: marker, mech_sep= sepTAXNA*bv_aux;
-VTAXN.A4R1.B1: marker, mech_sep= sepTAXNA;
-VTAXN.A4R1.B2: marker, mech_sep=-sepTAXNA*bv_aux;
-VTAXN.A4R5.B1: marker, mech_sep= sepTAXNA;
-VTAXN.A4R5.B2: marker, mech_sep=-sepTAXNA*bv_aux;
-VTAXN.B4L1.B1: marker, mech_sep=-sepTAXNB;
-VTAXN.B4L1.B2: marker, mech_sep= sepTAXNB*bv_aux;
-VTAXN.B4L5.B1: marker, mech_sep=-sepTAXNB;
-VTAXN.B4L5.B2: marker, mech_sep= sepTAXNB*bv_aux;
-VTAXN.B4R1.B1: marker, mech_sep= sepTAXNB;
-VTAXN.B4R1.B2: marker, mech_sep=-sepTAXNB*bv_aux;
-VTAXN.B4R5.B1: marker, mech_sep= sepTAXNB;
-VTAXN.B4R5.B2: marker, mech_sep=-sepTAXNB*bv_aux;
+VTAXNA.4L1.B1: marker, mech_sep=-sepTAXNA;
+VTAXNA.4L1.B2: marker, mech_sep= sepTAXNA*bv_aux;
+VTAXNA.4L5.B1: marker, mech_sep=-sepTAXNA;
+VTAXNA.4L5.B2: marker, mech_sep= sepTAXNA*bv_aux;
+VTAXNA.4R1.B1: marker, mech_sep= sepTAXNA;
+VTAXNA.4R1.B2: marker, mech_sep=-sepTAXNA*bv_aux;
+VTAXNA.4R5.B1: marker, mech_sep= sepTAXNA;
+VTAXNA.4R5.B2: marker, mech_sep=-sepTAXNA*bv_aux;
+VTAXNB.4L1.B1: marker, mech_sep=-sepTAXNB;
+VTAXNB.4L1.B2: marker, mech_sep= sepTAXNB*bv_aux;
+VTAXNB.4L5.B1: marker, mech_sep=-sepTAXNB;
+VTAXNB.4L5.B2: marker, mech_sep= sepTAXNB*bv_aux;
+VTAXNB.4R1.B1: marker, mech_sep= sepTAXNB;
+VTAXNB.4R1.B2: marker, mech_sep=-sepTAXNB*bv_aux;
+VTAXNB.4R5.B1: marker, mech_sep= sepTAXNB;
+VTAXNB.4R5.B2: marker, mech_sep=-sepTAXNB*bv_aux;
 
 
-l.TCTV=1; l.TCTH=1;
+l.TCTPV=1; l.TCTHX=1;
 
-TCTV: RCOLLIMATOR, l:=l.TCTV;
-TCTH: RCOLLIMATOR, l:=l.TCTH;
-TCTPV.4L1.B1: TCTV, mech_sep=-sepTCTPV;
-TCTPV.4L5.B1: TCTV, mech_sep=-sepTCTPV;
-TCTPV.4R1.B2: TCTV, mech_sep=-sepTCTPV*bv_aux;
-TCTPV.4R5.B2: TCTV, mech_sep=-sepTCTPV*bv_aux;
-TCTXH.4L1.B1: TCTH, mech_sep=-sepTCTXH;
-TCTXH.4L5.B1: TCTH, mech_sep=-sepTCTXH;
-TCTXH.4R1.B2: TCTH, mech_sep=-sepTCTXH*bv_aux;
-TCTXH.4R5.B2: TCTH, mech_sep=-sepTCTXH*bv_aux;
+TCTPV: RCOLLIMATOR, l:=l.TCTPV;
+TCTHX: RCOLLIMATOR, l:=l.TCTHX;
+TCTPV.4L1.B1: TCTPV, mech_sep=-sepTCTPV;
+TCTPV.4L5.B1: TCTPV, mech_sep=-sepTCTPV;
+TCTPV.4R1.B2: TCTPV, mech_sep=-sepTCTPV*bv_aux;
+TCTPV.4R5.B2: TCTPV, mech_sep=-sepTCTPV*bv_aux;
+TCTXH.4L1.B1: TCTHX, mech_sep=-sepTCTXH;
+TCTXH.4L5.B1: TCTHX, mech_sep=-sepTCTXH;
+TCTXH.4R1.B2: TCTHX, mech_sep=-sepTCTXH*bv_aux;
+TCTXH.4R5.B2: TCTHX, mech_sep=-sepTCTXH*bv_aux;
 
-VTCTPV.4L1.B2: marker, mech_sep= sepTCTPV*bv_aux;
-VTCTPV.4L5.B2: marker, mech_sep= sepTCTPV*bv_aux;
-VTCTPV.4R1.B1: marker, mech_sep= sepTCTPV;
-VTCTPV.4R5.B1: marker, mech_sep= sepTCTPV;
-VTCTXH.4L1.B2: marker, mech_sep= sepTCTXH*bv_aux;
-VTCTXH.4L5.B2: marker, mech_sep= sepTCTXH*bv_aux;
-VTCTXH.4R1.B1: marker, mech_sep= sepTCTXH;
-VTCTXH.4R5.B1: marker, mech_sep= sepTCTXH;
+VTCTPV.4L1.A.B2: marker, mech_sep= sepTCTPV*bv_aux;
+VTCTPV.4L5.A.B2: marker, mech_sep= sepTCTPV*bv_aux;
+VTCTPV.4R1.A.B1: marker, mech_sep= sepTCTPV;
+VTCTPV.4R5.A.B1: marker, mech_sep= sepTCTPV;
+VTCTXH.4L1.A.B2: marker, mech_sep= sepTCTXH*bv_aux;
+VTCTXH.4L5.A.B2: marker, mech_sep= sepTCTXH*bv_aux;
+VTCTXH.4R1.A.B1: marker, mech_sep= sepTCTXH;
+VTCTXH.4R5.A.B1: marker, mech_sep= sepTCTXH;
+
+VTCTPV.4L1.B.B2: marker, mech_sep= sepTCTPV*bv_aux;
+VTCTPV.4L5.B.B2: marker, mech_sep= sepTCTPV*bv_aux;
+VTCTPV.4R1.B.B1: marker, mech_sep= sepTCTPV;
+VTCTPV.4R5.B.B1: marker, mech_sep= sepTCTPV;
+VTCTXH.4L1.B.B2: marker, mech_sep= sepTCTXH*bv_aux;
+VTCTXH.4L5.B.B2: marker, mech_sep= sepTCTXH*bv_aux;
+VTCTXH.4R1.B.B1: marker, mech_sep= sepTCTXH;
+VTCTXH.4R5.B.B1: marker, mech_sep= sepTCTXH;
+
 
 TCTH.6L1.B1: TCTH, mech_sep=-0.194;
 TCTV.6L1.B1: TCTV, mech_sep=-0.194;
@@ -1700,28 +1752,36 @@ posAPWL2=posAPWL1-L.APWLaux ;
 
 exec,install_ir15_b1_b2(APWL.5,posAPWL1,posAPWL2);
 exec,install_ir15_cmn(TAXN.4,posTAXN);
+exec,install_ir15_b1_b2(VTAXNA.4,posTAXNA,posTAXNA);
+exec,install_ir15_b1_b2(VTAXNB.4,posTAXNB,posTAXNB);
 
 if(bv_aux == 1){
 seqedit,sequence=lhcb1;
 !! ... TCTH
 install,element=TCTXH.4L1.B1, at= -posTCTXH,   from= IP1.L1;
 install,element=TCTXH.4L5.B1, at= -posTCTXH,   from= IP5;
-install,element=VTCTXH.4R1.B1, at= posTCTXH,   from= IP1;
-install,element=VTCTXH.4R5.B1, at= posTCTXH,   from= IP5;
+install,element=VTCTXH.4R1.A.B1, at= posTCTXHA,   from= IP1;
+install,element=VTCTXH.4R5.A.B1, at= posTCTXHA,   from= IP5;
+install,element=VTCTXH.4R1.B.B1, at= posTCTXHB,   from= IP1;
+install,element=VTCTXH.4R5.B.B1, at= posTCTXHB,   from= IP5;
 install,element=TCTH.6L1.B1, at= -posTCTH.6Q,   from= IP1.L1;
 install,element=TCTH.6L5.B1, at= -posTCTH.6Q,   from= IP5;
 !! ... TCTV
-install,element=TCTPV.4L1.B1, at= -posTCTV, from=IP1.L1;
-install,element=TCTPV.4L5.B1, at= -posTCTV, from=IP5;
-install,element=VTCTPV.4R1.B1, at= posTCTV, from=IP1;
-install,element=VTCTPV.4R5.B1, at= posTCTV, from=IP5;
-install,element=TCTV.6L1.B1, at= -posTCTV.6Q,   from= IP1.L1;
-install,element=TCTV.6L5.B1, at= -posTCTV.6Q,   from= IP5;
+install,element=TCTPV.4L1.B1, at= -posTCTPV, from=IP1.L1;
+install,element=TCTPV.4L5.B1, at= -posTCTPV, from=IP5;
+install,element=VTCTPV.4R1.A.B1, at= posTCTPVA, from=IP1;
+install,element=VTCTPV.4R5.A.B1, at= posTCTPVA, from=IP5;
+install,element=VTCTPV.4R1.B.B1, at= posTCTPVB, from=IP1;
+install,element=VTCTPV.4R5.B.B1, at= posTCTPVB, from=IP5;
+install,element=TCTV.6L1.B1, at= -posTCTPV.6Q,   from= IP1.L1;
+install,element=TCTV.6L5.B1, at= -posTCTPV.6Q,   from= IP5;
 ! ... TCL
 install,element=TCLX.4R1.B1,  at= posTCLX, from=IP1;
 install,element=TCLX.4R5.B1,  at= posTCLX, from=IP5;
-install,element=VTCLX.4L1.B1,  at= -posTCLX, from=IP1.L1;
-install,element=VTCLX.4L5.B1,  at= -posTCLX, from=IP5;
+install,element=VTCLX.4L1.A.B1,  at= -posTCLXA, from=IP1.L1;
+install,element=VTCLX.4L5.A.B1,  at= -posTCLXA, from=IP5;
+install,element=VTCLX.4L1.B.B1,  at= -posTCLXB, from=IP1.L1;
+install,element=VTCLX.4L5.B.B1,  at= -posTCLXB, from=IP5;
 install,element=TCL.5R1.B1,  at= posTCL.5C, from=IP1;
 install,element=TCL.5R5.B1,  at= posTCL.5C, from=IP5;
 install,element=TCL.6R1.B1,  at= posTCL.6C, from=IP1;
@@ -1734,24 +1794,30 @@ endedit;
 
 seqedit,sequence=lhcb2;
 ! ... TCTH
-install,element=VTCTXH.4L1.B2, at= -posTCTXH*bv_aux,   from= IP1.L1;
-install,element=VTCTXH.4L5.B2, at= -posTCTXH*bv_aux,   from= IP5;
+install,element=VTCTXH.4L1.A.B2, at= -posTCTXHA*bv_aux,   from= IP1.L1;
+install,element=VTCTXH.4L5.A.B2, at= -posTCTXHA*bv_aux,   from= IP5;
+install,element=VTCTXH.4L1.B.B2, at= -posTCTXHB*bv_aux,   from= IP1.L1;
+install,element=VTCTXH.4L5.B.B2, at= -posTCTXHB*bv_aux,   from= IP5;
 install,element=TCTXH.4R1.B2, at=  posTCTXH*bv_aux,   from= IP1;
 install,element=TCTXH.4R5.B2, at=  posTCTXH*bv_aux,   from= IP5;
 install,element=TCTH.6R1.B2, at=  posTCTH.6Q*bv_aux,   from= IP1;
 install,element=TCTH.6R5.B2, at=  posTCTH.6Q*bv_aux,   from= IP5;
 ! ... TCTV
-install,element=TCTPV.4R1.B2, at= posTCTV*bv_aux, from=IP1;
-install,element=TCTPV.4R5.B2, at= posTCTV*bv_aux, from=IP5;
-install,element=VTCTPV.4L1.B2, at= -posTCTV*bv_aux, from=IP1.L1;
-install,element=VTCTPV.4L5.B2, at= -posTCTV*bv_aux, from=IP5;
-install,element=TCTV.6R1.B2, at= posTCTV.6Q*bv_aux, from=IP1;
-install,element=TCTV.6R5.B2, at= posTCTV.6Q*bv_aux, from=IP5;
+install,element=TCTPV.4R1.B2, at= posTCTPV*bv_aux, from=IP1;
+install,element=TCTPV.4R5.B2, at= posTCTPV*bv_aux, from=IP5;
+install,element=VTCTPV.4L1.A.B2, at= -posTCTPVA*bv_aux, from=IP1.L1;
+install,element=VTCTPV.4L5.A.B2, at= -posTCTPVA*bv_aux, from=IP5;
+install,element=VTCTPV.4L1.B.B2, at= -posTCTPVB*bv_aux, from=IP1.L1;
+install,element=VTCTPV.4L5.B.B2, at= -posTCTPVB*bv_aux, from=IP5;
+install,element=TCTV.6R1.B2, at= posTCTPV.6Q*bv_aux, from=IP1;
+install,element=TCTV.6R5.B2, at= posTCTPV.6Q*bv_aux, from=IP5;
 ! ... TCL
 install,element=TCLX.4L1.B2,  at= -posTCLX*bv_aux, from=IP1.L1;
 install,element=TCLX.4L5.B2,  at= -posTCLX*bv_aux, from=IP5;
-install,element=VTCLX.4R1.B2,  at= posTCLX*bv_aux, from=IP1;
-install,element=VTCLX.4R5.B2,  at= posTCLX*bv_aux, from=IP5;
+install,element=VTCLX.4R1.A.B2,  at= posTCLXA*bv_aux, from=IP1;
+install,element=VTCLX.4R5.A.B2,  at= posTCLXA*bv_aux, from=IP5;
+install,element=VTCLX.4R1.B.B2,  at= posTCLXB*bv_aux, from=IP1;
+install,element=VTCLX.4R5.B.B2,  at= posTCLXB*bv_aux, from=IP5;
 install,element=TCL.5L1.B2,  at= -posTCL.5C*bv_aux, from=IP1.L1;
 install,element=TCL.5L5.B2,  at= -posTCL.5C*bv_aux, from=IP5;
 install,element=TCL.6L1.B2,  at= -posTCL.6Q*bv_aux, from=IP1.L1;
