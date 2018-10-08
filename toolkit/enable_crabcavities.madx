@@ -8,8 +8,8 @@ exec,crab_make_cc(B,2);
 exec,crab_make_marker(C);
 exec,crab_make_marker(D);
 
-exec,crab_install(A,posCRABA1,posCRABA2);
-exec,crab_install(B,posCRABB1,posCRABB2);
+exec,crab_installhv(A,posCRABA1,posCRABA2);
+exec,crab_installhv(B,posCRABB1,posCRABB2);
 exec,crab_install(C,posCRABC1,posCRABC2);
 exec,crab_install(D,posCRABD1,posCRABD2);
 

@@ -1,0 +1,24 @@
+option, warn,info;
+system,"ln -fns /afs/cern.ch/eng/lhc/optics/runIII lhc";
+system,"ln -fns /afs/cern.ch/eng/lhc/optics/HLLHCV1.3  slhc";
+
+
+option, -echo, -warn,info;
+call,file="slhc/toolkit/macro.madx";
+call,file="lhc/lhcb4.seq";
+
+mylhcbeam=4; ! For Beam 4
+exec,mk_beam(7000);
+
+call,file="slhc/hllhc_sequence.madx";
+
+seqedit,sequence=lhcb1;flatten;cycle,start=IP3;endedit;
+seqedit,sequence=lhcb2;flatten;cycle,start=IP3;endedit;
+
+call,file="slhc/opt_150_150_150_150.madx";
+exec,check_ip(b2);
+
+on_x1=295;on_x5=295;on_x2=200;on_x8=-200;
+on_lhcb=1; on_alice=1;
+
+exec,check_ip(b2);

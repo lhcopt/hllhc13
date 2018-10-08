@@ -1,0 +1,83 @@
+option, warn,info;
+system,"rm -rf temp"; system,"mkdir temp";
+system,"ln -fns /afs/cern.ch/eng/lhc/optics/HLLHCV1.3 slhc";
+system,"ln -fns /afs/cern.ch/eng/lhc/optics/runIII lhc";
+
+Option, -echo,-warn,-info;
+call,file="lhc/lhc.seq";
+call,file="slhc/toolkit/macro.madx";
+call,file="slhc/toolkit/optics_log.madx";
+Option, -echo,warn,-info,no_fatal_stop;
+
+
+make_all(sq1): macro={
+exec,make_opticstbl_ir2(ir2sq1);
+exec,make_opticstbl_ir3(ir3sq1);
+exec,make_opticstbl_ir4(ir4sq1);
+exec,make_opticstbl_ir6(ir6sq1);
+exec,make_opticstbl_ir7(ir7sq1);
+exec,make_opticstbl_ir8(ir8sq1);
+exec,make_opticstbl_arc(arcsq1);
+};
+
+fill_all(sq1): macro={
+scxir5=betx_ip5/betx0_ip5; scyir5=bety_ip5/bety0_ip5;
+scxir1=betx_ip1/betx0_ip1; scyir1=bety_ip1/bety0_ip1;
+fill,table=ir2sq1;
+fill,table=ir3sq1;
+fill,table=ir4sq1;
+fill,table=ir6sq1;
+fill,table=ir7sq1;
+fill,table=ir8sq1;
+fill,table=arcsq1;
+};
+
+setvar_all(sq1): macro={
+setvars_lin,table=ir2sq1,row1=1,row2=2,param=ttt;
+setvars_lin,table=ir3sq1,row1=1,row2=2,param=ttt;
+setvars_lin,table=ir4sq1,row1=1,row2=2,param=ttt;
+setvars_lin,table=ir6sq1,row1=1,row2=2,param=ttt;
+setvars_lin,table=ir7sq1,row1=1,row2=2,param=ttt;
+setvars_lin,table=ir8sq1,row1=1,row2=2,param=ttt;
+setvars_lin,table=arcsq1,row1=1,row2=2,param=ttt;
+};
+
+exec,mk_beam(7000);
+seqedit,sequence=lhcb1; flatten; cycle,start=s.ds.l3.b1; endedit;
+seqedit,sequence=lhcb2; flatten; cycle,start=s.ds.l3.b2; endedit;
+
+call,file="slhc/hllhc_sequence.madx";
+call,file="slhc/squeeze2/opt_500_500_500_500.madx";
+exec,check_ip(b1); exec,check_ip(b2);
+call,file="lhc/ir7/ir7_nomqw_edit.madx";
+
+exec,make_all(sq1);
+call,file="slhc/squeeze2/opt_500_500_500_500.madx";
+call,file="/afs/cern.ch/user/r/rbruce/public/ir7_optics_mqw/HL-LHCv1.3/injection/ir7_new.str";
+exec,fill_all(sq1);
+call,file="slhc/squeeze2/opt_150_150_150_150.madx";
+call,file="/afs/cern.ch/user/r/rbruce/public/ir7_optics_mqw/HL-LHCv1.3/injection/ir7_new.str";
+exec,fill_all(sq1);
+
+make_opt(bbb): macro={
+call,file="slhc/squeeze2/opt_bbb_bbb_bbb_bbb.madx";
+call,file="/afs/cern.ch/user/r/rbruce/public/ir7_optics_mqw/HL-LHCv1.3/injection/ir7_new.str";
+exec,select(7,67,78,b1);
+exec,select(7,67,78,b2);
+call,file="slhc/toolkit/rematch_ir7b1.madx";
+call,file="slhc/toolkit/rematch_ir7b2.madx";
+exec,save_optics_hllhc(opt_bbb_bbb_bbb_bbb.madx);
+};
+
+!return;
+exec,setvar_all(sq1);
+ttt=(500-%BBB)/(500-150);
+bbb=round(scxir5*betx0_ip5*100)*10;
+
+value,bbb;
+
+exec,make_opt($bbb);
+
+system,"tar cvfz result.tgz *.madx *.tfs";
+
+stop;

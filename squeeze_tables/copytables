@@ -1,0 +1,13 @@
+irs="ir1 ir2 ir3 ir4 ir5 ir6 ir7 ir8 arcs"
+
+
+for opt in presqueeze2 squeeze2 vdm squeeze_flatvh
+do
+#(cd ${opt}; madx job.madx >job.out&)
+for ir in $irs
+do
+  cp ${opt}/${ir}sq.tfs ~/work/hllhc/HLLHCV1.3/$ir/${ir}_${opt}.tfs
+done
+done
+
+

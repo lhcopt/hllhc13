@@ -33,8 +33,33 @@ make_opticstbl_ir5hl(ir5hl):macro={
 !    iii=0;while(iii<rrr){fill,table=ir5hl;iii=iii+1;};
 };
 
-make_opticstbl_ir8(ir8):macro={
-    create,table=ir8,column=nnn,
+make_opticstbl_ir1hl(ir1hl):macro={
+!make_opticstbl_ir5hl(ir5hl,rrr):macro={
+    create,table=ir1hl,column=nnn,
+    kqx1.r1,kqx2a.r1,kqx2b.r1,kqx3.r1,
+    kqx1.l1,kqx2a.l1,kqx2b.l1,kqx3.l1,
+    kq4.l1b1,kq5.l1b1,kq6.l1b1,kq7.l1b1,kq8.l1b1,kq9.l1b1,kq10.l1b1,
+    kqtl11.l1b1,kqt12.l1b1,kqt13.l1b1,
+    kq4.r1b1,kq5.r1b1,kq6.r1b1,kq7.r1b1,kq8.r1b1,kq9.r1b1,kq10.r1b1,
+    kqtl11.r1b1,kqt12.r1b1,kqt13.r1b1,
+    kq4.l1b2,kq5.l1b2,kq6.l1b2,kq7.l1b2,kq8.l1b2,kq9.l1b2,kq10.l1b2,
+    kqtl11.l1b2,kqt12.l1b2,kqt13.l1b2,
+    kq4.r1b2,kq5.r1b2,kq6.r1b2,kq7.r1b2,kq8.r1b2,kq9.r1b2,kq10.r1b2,
+    kqtl11.r1b2,kqt12.r1b2,kqt13.r1b2,
+    betxip1b1,betyip1b1,alfxip1b1,alfyip1b1,dxip1b1,dpxip1b1,
+    betxip1b2,betyip1b2,alfxip1b2,alfyip1b2,dxip1b2,dpxip1b2,
+    muxip1b1,muyip1b1, muxip1b2,muyip1b2,
+    muxip1b1_l,muyip1b1_l,muxip1b1_r,muyip1b1_r,
+    muxip1b2_l,muyip1b2_l,muxip1b2_r,muyip1b2_r,
+    tarir1b1,tarir1b2,
+    grad,scl,sch,bmaxds,sc79,betx_acf,bety_acf,
+    ir1q4sym,ir1q5sym,imb,
+    timestamp;
+!    iii=0;while(iii<rrr){fill,table=ir5hl;iii=iii+1;};
+};
+
+make_opticstbl_ir8(irr):macro={
+    create,table=irr,column=nnn,
     kqx.r8,ktqx1.r8,ktqx2.r8,
     kqx.l8,ktqx1.l8,ktqx2.l8,
     kq4.l8b1,kq5.l8b1,kq6.l8b1,kq7.l8b1,kq8.l8b1,kq9.l8b1,kq10.l8b1,
@@ -54,8 +79,8 @@ make_opticstbl_ir8(ir8):macro={
     tarir8b1,tarir8b2, timestamp;
 };
 
-make_opticstbl_ir2(ir2):macro={
-    create,table=ir2,column=nnn,
+make_opticstbl_ir2(irr):macro={
+    create,table=irr,column=nnn,
     kqx.r2,ktqx1.r2,ktqx2.r2,
     kqx.l2,ktqx1.l2,ktqx2.l2,
     kq4.l2b1,kq5.l2b1,kq6.l2b1,kq7.l2b1,kq8.l2b1,kq9.l2b1,kq10.l2b1,
@@ -77,8 +102,8 @@ make_opticstbl_ir2(ir2):macro={
 };
 
 
-make_opticstbl_ir4(ir4):macro={
-    create,table=ir4,column=nnn,
+make_opticstbl_ir4(irr):macro={
+    create,table=irr,column=nnn,
     kq5.l4b1,kq6.l4b1,kq7.l4b1,kq8.l4b1,kq9.l4b1,kq10.l4b1,
     kqtl11.l4b1,kqt12.l4b1,kqt13.l4b1,
     kq5.r4b1,kq6.r4b1,kq7.r4b1,kq8.r4b1,kq9.r4b1,kq10.r4b1,
@@ -97,8 +122,8 @@ make_opticstbl_ir4(ir4):macro={
     timestamp;
 };
 
-make_opticstbl_ir6(ir6):macro={
-    create,table=ir6,column=nnn,
+make_opticstbl_ir6(irr):macro={
+    create,table=irr,column=nnn,
     kq4.l6b1,kq5.l6b1,kq8.l6b1,kq9.l6b1,kq10.l6b1,
     kqtl11.l6b1,kqt12.l6b1,kqt13.l6b1,
     kq4.r6b1,kq5.r6b1,kq8.r6b1,kq9.r6b1,kq10.r6b1,
@@ -113,6 +138,27 @@ make_opticstbl_ir6(ir6):macro={
     muxip6b1_l,muyip6b1_l,muxip6b1_r,muyip6b1_r,
     muxip6b2_l,muyip6b2_l,muxip6b2_r,muyip6b2_r,
     scxir5, scyir5,
+    refbxdumpb1, refbydumpb1, refbdumpb1,
+    refbxdumpb2, refbydumpb2, refbdumpb2,
+    refdmuxkickb1,refdmuxkickb1_tcsg,
+    refdmuxkickb2,refdmuxkickb2_tcsg,
+    refdmuxkickb1_tcdqa,refdmuxkickb1_tcdqb,refdmuxkickb1_tcdqc,
+    refdmuxkickb2_tcdqa,refdmuxkickb2_tcdqb,refdmuxkickb2_tcdqc,
+    refdmuxkickb1_eds, refdmuxkickb1_bds, refdmuxkickb1_bdsa,
+    refdmuxkickb2_eds, refdmuxkickb2_bds, refdmuxkickb2_bdsa,
+    refdxtcdqb1, refbetxtcdqb1, refbetytcdqb1,
+    refdxtcdqb2, refbetxtcdqb2, refbetytcdqb2,
+    reftcdqmingapb1, reftcdqgapb1,
+    reftcdqmingapb2, reftcdqgapb2,
+    refbetxtcdsb1,refbetytcdsb1,refbetxtcsgb1,refbetytcsgb1,
+    refbetxtcdsb2,refbetytcdsb2,refbetxtcsgb2,refbetytcsgb2,
+    refbetxmkdb1,refbetymkdb1,
+    refbetxmkdb2,refbetymkdb2,
+    refdxq5l6b1, refdxq4r6b1,
+    refdxq5l6b2, refdxq4r6b2,
+    dtct1b1  , dtct5b1  , dtct1b2  , dtct5b2  ,
+    ddtct1b1 , ddtct1b1a, ddtct5b1 , ddtct5b1a,
+    ddtct1b2 , ddtct1b2a, ddtct5b2 , ddtct5b2a,
     tarir6b1,tarir6b2,
     timestamp;
 };
@@ -142,16 +188,21 @@ make_opticstbl_arc(arc):macro={
     ksf2.a12b1, ksf2.a12b2, ksf2.a23b1, ksf2.a23b2, ksf2.a34b1, ksf2.a34b2,
     ksf2.a45b1, ksf2.a45b2, ksf2.a56b1, ksf2.a56b2, ksf2.a67b1, ksf2.a67b2,
     ksf2.a78b1, ksf2.a78b2, ksf2.a81b1, ksf2.a81b2,
+    qxb1,qyb1,qxb2,qyb2,qpxb1,qpyb1,qpxb2,qpyb2,
+    mux12b1,muy12b1,mux12b2,muy12b2,mux23b1,muy23b1,mux23b2,muy23b2,
+    mux34b1,muy34b1,mux34b2,muy34b2,mux45b1,muy45b1,mux45b2,muy45b2,
+    mux56b1,muy56b1,mux56b2,muy56b2,mux67b1,muy67b1,mux67b2,muy67b2,
+    mux78b1,muy78b1,mux78b2,muy78b2,mux81b1,muy81b1,mux81b2,muy81b2,
     timestamp;
 };
 
 
 
-make_opticstbl_ir3(ir3):macro={
-    create,table=ir3,column=nnn,
+make_opticstbl_ir3(irr):macro={
+    create,table=irr,column=nnn,
     kq4.lr3,kqt4.l3,kqt4.r3,kq5.lr3,kqt5.l3,kqt5.r3,
     kq6.l3b1,kq6.r3b1,kqtl7.l3b1,kqtl7.r3b1,kqtl8.l3b1,kqtl8.r3b1,
-    kqtl9.l3b1,kqtl9.r3b1,kqtl10.l3b1,kqtl10.r3b1,kqtl11.l3b1,kqtl11.r3b1
+    kqtl9.l3b1,kqtl9.r3b1,kqtl10.l3b1,kqtl10.r3b1,kqtl11.l3b1,kqtl11.r3b1,
     kq6.l3b2,kq6.r3b2,kqtl7.l3b2,kqtl7.r3b2,kqtl8.l3b2,kqtl8.r3b2,
     kqtl9.l3b2,kqtl9.r3b2,kqtl10.l3b2,kqtl10.r3b2,kqtl11.l3b2,kqtl11.r3b2,
     betxip3b1,betyip3b1,alfxip3b1,alfyip3b1,dxip3b1,dpxip3b1,
@@ -163,11 +214,11 @@ make_opticstbl_ir3(ir3):macro={
     timestamp;
 };
 
-make_opticstbl_ir7(ir7):macro={
-    create,table=ir7,column=nnn,
+make_opticstbl_ir7(irr):macro={
+    create,table=irr,column=nnn,
     kq4.lr7,kqt4.l7,kqt4.r7,kq5.lr7,kqt5.l7,kqt5.r7,
     kq6.l7b1,kq6.r7b1,kqtl7.l7b1,kqtl7.r7b1,kqtl8.l7b1,kqtl8.r7b1,
-    kqtl9.l7b1,kqtl9.r7b1,kqtl10.l7b1,kqtl10.r7b1,kqtl11.l7b1,kqtl11.r7b1
+    kqtl9.l7b1,kqtl9.r7b1,kqtl10.l7b1,kqtl10.r7b1,kqtl11.l7b1,kqtl11.r7b1,
     kq6.l7b2,kq6.r7b2,kqtl7.l7b2,kqtl7.r7b2,kqtl8.l7b2,kqtl8.r7b2,
     kqtl9.l7b2,kqtl9.r7b2,kqtl10.l7b2,kqtl10.r7b2,kqtl11.l7b2,kqtl11.r7b2,
     betxip7b1,betyip7b1,alfxip7b1,alfyip7b1,dxip7b1,dpxip7b1,

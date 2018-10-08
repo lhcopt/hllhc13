@@ -1,0 +1,11 @@
+        executable              = madx_wrapper.sh
+        arguments               = job_mksqueeze_thin.madx
+        output                  = std.$(ClusterId).$(ProcId).out
+        error                   = std.$(ClusterId).$(ProcId).err
+        log                     = condor.$(ClusterId).$(ProcId).log
+        initial_dir             = $(dirname)
+        transfer_input_files    = job_mksqueeze_thin.madx
+        transfer_output_files   = result.tgz
+        +MaxRuntime = 2400
+        queue dirname matching (squeeze_thin/*)
+        

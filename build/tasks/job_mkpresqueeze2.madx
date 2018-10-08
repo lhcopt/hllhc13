@@ -1,0 +1,132 @@
+system,"touch result.tgz";
+option, warn,info;
+system,"rm -rf temp"; system,"mkdir temp";
+system,"ln -fns /afs/cern.ch/eng/lhc/optics/HLLHCV1.3 slhc";
+system,"ln -fns /afs/cern.ch/eng/lhc/optics/runIII lhc";
+
+Option, -echo,-warn,-info;
+call,file="lhc/lhc.seq";
+call,file="slhc/toolkit/macro.madx";
+call,file="slhc/toolkit/optics_log.madx";
+Option, -echo,warn,-info,no_fatal_stop;
+
+
+exec,mk_beam(7000);
+seqedit,sequence=lhcb1; flatten; cycle,start=s.ds.l3.b1; endedit;
+seqedit,sequence=lhcb2; flatten; cycle,start=s.ds.l3.b2; endedit;
+
+call,file="slhc/hllhc_sequence.madx";
+call,file="slhc/opt_inj.madx";
+exec,check_ip(b1); exec,check_ip(b2);
+
+delete,table=ir2sq1;
+exec,make_opticstbl_ir2(ir2sq1);
+fill,table=ir2sq1;
+call,file="slhc/squeeze2/opt_500_500_500_500.madx";
+fill,table=ir2sq1;
+
+
+readmytable,file="slhc/ir5/ir5sqfv3.tfs",table=ir5sq2;
+readmytable,file="slhc/ir8/ir8sq.tfs",table=ir8sq2;
+
+
+make_opt(bbb5,bbb8) : macro={
+
+call,file="slhc/toolkit/rematch_arcs.madx";
+call,file="slhc/toolkit/rephase_weak.madx";
+
+grad=132.6; scl=0.12; sch=0.90;sc79=0.99;bmaxds=200;imb=1.20;
+apq1011=1200; apq789:=apq1011; apq6:=apq789; apq5:=apq6;apq4:=apq5;
+match_inj_tunes=0;
+match_on_triplet=0;
+on_holdselect=0; jac_calls=   10;jac_tol=1e-20; jac_bisec=3; tar=0;
+call,file="slhc/toolkit/rematch_ir15b12.madx";
+call,file="slhc/toolkit/rematch_ir2b12.madx";
+call,file="slhc/toolkit/rematch_ir8b12.madx";
+call,file="slhc/toolkit/rematch_ir3b1.madx";
+call,file="slhc/toolkit/rematch_ir3b2.madx";
+call,file="slhc/toolkit/rematch_ir4b1.madx";
+call,file="slhc/toolkit/rematch_ir4b2.madx";
+nomatch_dx=1;
+call,file="slhc/toolkit/rematch_ir6b1.madx";
+call,file="slhc/toolkit/rematch_ir6b2.madx";
+nomatch_dx=0;
+call,file="slhc/toolkit/rematch_ir7b1.madx";
+call,file="slhc/toolkit/rematch_ir7b2.madx";
+
+
+value,tarir2b1,tarir3b1,tarir4b1,tarir5b1,tarir6b1,tarir7b1,tarir8b1;
+value,tarir2b2,tarir3b2,tarir4b2,tarir5b2,tarir6b2,tarir7b2,tarir8b2;
+
+tarir=tarir2b1+tarir3b1+tarir4b1+tarir5b1+tarir6b1+tarir7b1+tarir8b1+
+      tarir2b2+tarir3b2+tarir4b2+tarir5b2+tarir6b2+tarir7b2+tarir8b2;
+
+
+call,file="slhc/toolkit/rematch_xing_ir15.madx";
+call,file="slhc/toolkit/rematch_xing_ir28.madx";
+value,tarir,tar_xing_ir15,tar_xing_ir28;
+
+call,file="slhc/toolkit/rematch_w.madx";
+call,file="slhc/toolkit/rematch_disp.madx";
+call,file="slhc/toolkit/rematch_crabs.madx";
+call,file="slhc/toolkit/mk_arc_trims.madx";
+
+value,tarir,tar_xing_ir15,tar_xing_ir28,tar_on_disp;
+
+if (betxip5b1>=2){on_disp=0;};
+
+if (is_thin==0){exec,save_optics_hllhc(opt_squeeze_bbb5_bbb8.madx);};
+if (is_thin==1){exec,save_optics_hllhc(opt_squeeze_bbb5_bbb8_thin.madx);};
+};
+
+set_opt(bbb5,bbb8,kkk2): macro={
+call,file="slhc/opt_500_500_500_500.madx";
+if (MBX.4L2->l==0) {is_thin=1;};
+
+ref5=bbb5/1000;
+betxip5b1=11;iii=61;while(betxip5b1>=ref5 && iii>0){
+setvars,table=ir5sq2,row=iii;iii=iii-1; };
+setvars_lin,table=ir5sq2,row1=iii+2,row2=iii+1,param=ttt5;
+ttt5=0;bb1=betxip5b1; ttt5=1;bb2=betxip5b1;
+ttt5=(bb1-ref5)/(bb1-bb2);!value,ttt5,betxip5b1,ref5;
+exec,copyir5to1;
+
+ref8=bbb8/1000;
+betxip8b1=11;iii=21;while(betxip8b1>=ref8 && iii>0){
+setvars,table=ir8sq2,row=iii;iii=iii-1; };
+setvars_lin,table=ir8sq2,row1=iii+2,row2=iii+1,param=ttt8;
+ttt8=0;bb1=betxip8b1; ttt8=1;bb2=betxip8b1;
+ttt8=(bb1-ref8)/(bb1-bb2);!value,ttt8,betxip8b1,ref8;
+
+!setvars,table=ir5sq2,row=row5;exec,copyir5to1;
+!setvars,table=ir8sq2,row=row8;
+setvars_lin,table=ir2sq1,row1=1,row2=2,param=kkk2/100;
+value,kqx.l2,kqx.r2;
+
+value,betxip5b1,betxip8b1,kqx.l2*23348;
+exec,check_ip(b1); exec,check_ip(b2);
+
+exec,make_opt(bbb5,bbb8);
+};
+
+!return;
+exec,set_opt(%B5,%B8,%B2);
+exec,myslice;
+exec,set_opt(%B5,%B8,%B2);
+
+system,"ls -l";
+!system,"cp opt*.madx presqueeze_lhcb/%B5_%B8_%B2/";
+system,"tar cvfz result.tgz *.madx *.tfs";
+
+!return;
+!exec,set_opt(6000,10000,0);
+!exec,myslice;
+!exec,set_opt(6000,10000,0);
+
+!exec,set_opt(500,3000,100);
+!exec,myslice;
+!exec,set_opt(500,3000,100);
+
+!exec,set_opt(500,3000,100);
+!exec,set_opt(4100,4100,100);
+

@@ -1,0 +1,12 @@
+        executable              = madx_wrapper.sh
+        arguments               = job_mksqueeze_lhcb.madx
+        output                  = std.$(ClusterId).$(ProcId).out
+        error                   = std.$(ClusterId).$(ProcId).err
+        log                     = condor.$(ClusterId).$(ProcId).log
+        initial_dir             = $(dirname)
+        transfer_input_files    = job_mksqueeze_lhcb.madx
+        transfer_output_files   = result.tgz
+        +MaxRuntime = 1800
+        queue dirname in squeeze2_lhcb/1000, squeeze2_lhcb/990, squeeze2_lhcb/980, squeeze2_lhcb/970, squeeze2_lhcb/960, squeeze2_lhcb/950, squeeze2_lhcb/940, squeeze2_lhcb/930, squeeze2_lhcb/920, squeeze2_lhcb/910, squeeze2_lhcb/900, squeeze2_lhcb/890, squeeze2_lhcb/880, squeeze2_lhcb/870, squeeze2_lhcb/860, squeeze2_lhcb/850, squeeze2_lhcb/840, squeeze2_lhcb/830, squeeze2_lhcb/820, squeeze2_lhcb/810, squeeze2_lhcb/800, squeeze2_lhcb/790, squeeze2_lhcb/780, squeeze2_lhcb/770, squeeze2_lhcb/760, squeeze2_lhcb/750, squeeze2_lhcb/740, squeeze2_lhcb/730, squeeze2_lhcb/720, squeeze2_lhcb/710, squeeze2_lhcb/700, squeeze2_lhcb/690, squeeze2_lhcb/680, squeeze2_lhcb/670, squeeze2_lhcb/660, squeeze2_lhcb/650, squeeze2_lhcb/640, squeeze2_lhcb/630, squeeze2_lhcb/620, squeeze2_lhcb/610, squeeze2_lhcb/600, squeeze2_lhcb/590, squeeze2_lhcb/580, squeeze2_lhcb/570, squeeze2_lhcb/560, squeeze2_lhcb/550, squeeze2_lhcb/540, squeeze2_lhcb/530, squeeze2_lhcb/520, squeeze2_lhcb/510, squeeze2_lhcb/500, squeeze2_lhcb/490, squeeze2_lhcb/480, squeeze2_lhcb/470, squeeze2_lhcb/460, squeeze2_lhcb/450, squeeze2_lhcb/440, squeeze2_lhcb/430, squeeze2_lhcb/420, squeeze2_lhcb/410, squeeze2_lhcb/400, squeeze2_lhcb/390, squeeze2_lhcb/380, squeeze2_lhcb/370, squeeze2_lhcb/360, squeeze2_lhcb/350, squeeze2_lhcb/340, squeeze2_lhcb/330, squeeze2_lhcb/320, squeeze2_lhcb/310, squeeze2_lhcb/300, squeeze2_lhcb/290, squeeze2_lhcb/280, squeeze2_lhcb/270, squeeze2_lhcb/260, squeeze2_lhcb/250, squeeze2_lhcb/240, squeeze2_lhcb/230, squeeze2_lhcb/220, squeeze2_lhcb/210, squeeze2_lhcb/200, squeeze2_lhcb/190, squeeze2_lhcb/180, squeeze2_lhcb/170, squeeze2_lhcb/160, squeeze2_lhcb/150
+        ##queue dirname matching (squeeze2_lhcb/*)
+        

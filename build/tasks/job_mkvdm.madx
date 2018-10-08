@@ -1,0 +1,108 @@
+option, warn,info;
+system,"rm -rf temp"; system,"mkdir temp";
+system,"ln -fns /afs/cern.ch/eng/lhc/optics/HLLHCV1.3 slhc";
+system,"ln -fns /afs/cern.ch/eng/lhc/optics/runIII lhc";
+
+Option, -echo,-warn,-info;
+call,file="lhc/lhc.seq";
+call,file="slhc/toolkit/macro.madx";
+call,file="slhc/toolkit/optics_log.madx";
+Option, -echo,warn,-info,no_fatal_stop;
+
+
+exec,mk_beam(7000);
+seqedit,sequence=lhcb1; flatten; cycle,start=s.ds.l3.b1; endedit;
+seqedit,sequence=lhcb2; flatten; cycle,start=s.ds.l3.b2; endedit;
+
+call,file="slhc/hllhc_sequence.madx";
+call,file="slhc/opt_inj.madx";
+exec,check_ip(b1); exec,check_ip(b2);
+
+delete,table=ir2sq1;
+delete,table=ir8sq1;
+exec,make_opticstbl_ir2(ir2sq1);
+exec,make_opticstbl_ir8(ir8sq1);
+fill,table=ir2sq1;
+fill,table=ir8sq1;
+call,file="slhc/opt_vdm30m.madx";
+fill,table=ir2sq1;
+fill,table=ir8sq1;
+
+readmytable,file="slhc/ir5/ir5sqfv3.tfs",table=ir5sq2;
+
+
+set_opt(bbb5,bbb8): macro={
+call,file="slhc/opt_inj.madx";
+if (MBX.4L2->l==0) {is_thin=1;};
+
+ref5=bbb5/1000;
+ref8=bbb8/1000;
+ref2=bbb8/1000;
+
+betxip5b1=6;iii=51;while(betxip5b1<ref5 && iii>98){
+iii=iii+1; setvars,table=ir5sq2,row=iii;};
+setvars_lin,table=ir5sq2,row1=iii,row2=iii+1,param=ttt5;
+
+setvars_lin,table=ir8sq1,row1=1,row2=2,param=ttt8;
+setvars_lin,table=ir2sq1,row1=1,row2=2,param=ttt2;
+
+ttt5=0;bb1=betxip5b1; ttt5=1;bb2=betxip5b1;
+ttt5=(bb1-ref5)/(bb2-bb1);
+ttt2=0;bb1=betxip2b1; ttt2=1;bb2=betxip2b1;
+ttt2=(bb1-ref2)/(bb2-bb1);
+ttt8=0;bb1=betxip8b1; ttt8=1;bb2=betxip8b1;
+ttt8=(bb1-ref5)/(bb2-bb1);
+
+
+value,ttt5,betxip5b1,ref5;
+value,ttt2,betxip2b1,ref2;
+value,ttt8,betxip8b1,ref8;
+
+value,betxip5b1,betxip2b1,betxip8b1;
+
+exec,copyir5to1;
+!exec,check_ip(b1); exec,check_ip(b2);
+
+!exec,make_opt(bbb5,bbb8);
+};
+exec,set_opt(6000,10000);
+exec,set_opt(20000,20000);
+exec,set_opt(20100,20100);
+exec,set_opt(30000,30000);
+
+make_opt(bbb5,bbb8) : macro={
+
+match_optics_only=0;
+call,file="slhc/toolkit/rematch_hllhc.madx";
+
+if (betxip5b1>=2){on_disp=0;};
+if (is_thin==0){exec,save_optics_hllhc(opt_squeeze_bbb5_bbb8.madx);};
+if (is_thin==1){exec,save_optics_hllhc(opt_squeeze_bbb5_bbb8_thin.madx);};
+
+};
+
+
+
+
+return;
+exec,set_opt(%B5,%B8);
+exec,myslice;
+exec,set_opt(%B5,%B8);
+
+
+system,"tar cvfz result.tgz *.madx *.tfs";
+!system,"mkdir /eos/user/r/rdemaria/work/hllhc/hllhc13/build/presqueeze/%B5_%B8_%B2/";
+!system,"cp *.madx *.tfs /eos/user/r/rdemaria/work/hllhc/hllhc13/build/presqueeze/%B5_%B8_%B2/";
+
+!return;
+!exec,set_opt(6000,10000,0);
+!exec,myslice;
+!exec,set_opt(6000,10000,0);
+
+!exec,set_opt(500,3000,100);
+!exec,myslice;
+!exec,set_opt(500,3000,100);
+
+!exec,set_opt(500,3000,100);
+!exec,set_opt(4100,4100,100);
+

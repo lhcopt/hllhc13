@@ -66,50 +66,95 @@
 !     squeezestep(betax,betay,dire)
 
 select(NIR,sec1,sec2,BIM): macro = {
+  use,sequence=lhcBIM,range=s.cell.sec1.BIM/e.cell.sec1.BIM;
+  savebeta,label=baux,place=s.cell.sec1.BIM;
+  twiss;
 
-use,sequence=lhcBIM,range=s.cell.sec1.BIM/e.cell.sec1.BIM;
-savebeta,label=baux,place=s.cell.sec1.BIM;
-twiss;
+  use,sequence=lhcBIM,range=e.cell.sec1.BIM/s.ds.lNIR.BIM;
+  savebeta,label=birNIRBIM,place=s.ds.lNIR.BIM;
+  twiss,beta0=baux;
+  birNIRBIM->mux=0;birNIRBIM->muy=0;
 
-use,sequence=lhcBIM,range=e.cell.sec1.BIM/s.ds.lNIR.BIM;
-savebeta,label=birNIRBIM,place=s.ds.lNIR.BIM;
-twiss,beta0=baux;
-birNIRBIM->mux=0;birNIRBIM->muy=0;
+  use,sequence=lhcBIM,range=s.cell.sec2.BIM/e.cell.sec2.BIM;
+  savebeta,label=baux,place=s.cell.sec2.BIM;
+  twiss;
+  betxaux=baux->betx;betyaux=baux->bety;
+  alfxaux=baux->alfx;alfyaux=baux->alfy;
+  dxaux=baux->dx;dpxaux=baux->dpx;
 
-use,sequence=lhcBIM,range=s.cell.sec2.BIM/e.cell.sec2.BIM;
-savebeta,label=baux,place=s.cell.sec2.BIM;
-twiss;
-betxaux=baux->betx;betyaux=baux->bety;
-alfxaux=baux->alfx;alfyaux=baux->alfy;
-dxaux=baux->dx;dpxaux=baux->dpx;
+  use,sequence=lhcBIM,range=e.ds.rNIR.BIM/s.cell.sec2.BIM;
+  savebeta,label=eirNIRBIM,place=e.ds.rNIR.BIM;
+  twiss,rmatrix,betx=1,bety=1;
+  r11=table(twiss,s.cell.sec2.BIM,Re11);r12=table(twiss,s.cell.sec2.BIM,Re12);
+  r21=table(twiss,s.cell.sec2.BIM,Re21);r22=table(twiss,s.cell.sec2.BIM,Re22);
+  r33=table(twiss,s.cell.sec2.BIM,Re33);r34=table(twiss,s.cell.sec2.BIM,Re34);
+  r43=table(twiss,s.cell.sec2.BIM,Re43);r44=table(twiss,s.cell.sec2.BIM,Re44);
+  r16=table(twiss,s.cell.sec2.BIM,Re16);r26=table(twiss,s.cell.sec2.BIM,Re26);
+  eirNIRBIM->betx=r22^2*betxaux+2.*r22*r12*alfxaux+r12^2*(1.+alfxaux^2)/betxaux;
+  eirNIRBIM->alfx=r22*r21*betxaux+(r11*r22+r12*r21)*alfxaux+r12*r11*(1.+alfxaux^2)/betxaux;
+  eirNIRBIM->bety=r44^2*betyaux+2.*r44*r34*alfyaux+r34^2*(1.+alfyaux^2)/betyaux;
+  eirNIRBIM->alfy=r44*r43*betyaux+(r33*r44+r34*r43)*alfyaux+r34*r33*(1.+alfyaux^2)/betyaux;
+  eirNIRBIM->dx=r22*(dxaux-r16)-r12*(dpxaux-r26);
+  eirNIRBIM->dpx=-r21*(dxaux-r16)+r11*(dpxaux-r26);
 
-use,sequence=lhcBIM,range=e.ds.rNIR.BIM/s.cell.sec2.BIM;
-savebeta,label=eirNIRBIM,place=e.ds.rNIR.BIM;
-twiss,rmatrix,betx=1,bety=1;
-r11=table(twiss,s.cell.sec2.BIM,Re11);r12=table(twiss,s.cell.sec2.BIM,Re12);
-r21=table(twiss,s.cell.sec2.BIM,Re21);r22=table(twiss,s.cell.sec2.BIM,Re22);
-r33=table(twiss,s.cell.sec2.BIM,Re33);r34=table(twiss,s.cell.sec2.BIM,Re34);
-r43=table(twiss,s.cell.sec2.BIM,Re43);r44=table(twiss,s.cell.sec2.BIM,Re44);
-r16=table(twiss,s.cell.sec2.BIM,Re16);r26=table(twiss,s.cell.sec2.BIM,Re26);
-eirNIRBIM->betx=r22^2*betxaux+2.*r22*r12*alfxaux+r12^2*(1.+alfxaux^2)/betxaux;
-eirNIRBIM->alfx=r22*r21*betxaux+(r11*r22+r12*r21)*alfxaux+r12*r11*(1.+alfxaux^2)/betxaux;
-eirNIRBIM->bety=r44^2*betyaux+2.*r44*r34*alfyaux+r34^2*(1.+alfyaux^2)/betyaux;
-eirNIRBIM->alfy=r44*r43*betyaux+(r33*r44+r34*r43)*alfyaux+r34*r33*(1.+alfyaux^2)/betyaux;
-eirNIRBIM->dx=r22*(dxaux-r16)-r12*(dpxaux-r26);
-eirNIRBIM->dpx=-r21*(dxaux-r16)+r11*(dpxaux-r26);
+  !use,sequence=lhcBIM,range=e.ds.rNIR.BIM/s.cell.sec2.BIM;
+  !savebeta,label=baux,place=s.cell.sec2.BIM;
+  !twiss,beta0=eirNIRBIM;
+  !use,sequence=lhcBIM,range=s.cell.sec2.BIM/e.cell.sec2.BIM;
+  !savebeta,label=baux1,place=s.cell.sec2.BIM;
+  !twiss;
+  !value,baux->betx-baux1->betx,baux->bety-baux1->bety;
+  !value,baux->alfx-baux1->alfx,baux->alfy-baux1->alfy;
+  !value,baux->dx-baux1->dx,baux->dpx-baux1->dpx;
 
-!use,sequence=lhcBIM,range=e.ds.rNIR.BIM/s.cell.sec2.BIM;
-!savebeta,label=baux,place=s.cell.sec2.BIM;
-!twiss,beta0=eirNIRBIM;
-!use,sequence=lhcBIM,range=s.cell.sec2.BIM/e.cell.sec2.BIM;
-!savebeta,label=baux1,place=s.cell.sec2.BIM;
-!twiss;
-!value,baux->betx-baux1->betx,baux->bety-baux1->bety;
-!value,baux->alfx-baux1->alfx,baux->alfy-baux1->alfy;
-!value,baux->dx-baux1->dx,baux->dpx-baux1->dpx;
+  !show,birNIRBIM;
+  !show,eirNIRBIM;
+};
 
-!show,birNIRBIM;
-!show,eirNIRBIM;
+select_b4(NIR,sec1,sec2): macro = {
+  use,sequence=lhcb2,range=e.cell.sec2.b2/s.cell.sec2.b2;
+  savebeta,label=baux,place=e.cell.sec2.b2;
+  twiss;
+
+  use,sequence=lhcb2,range=s.cell.sec2.b2/e.ds.rNIR.b2;
+  savebeta,label=birNIRb4,place=e.ds.rNIR.b2;
+  twiss,beta0=baux;
+  birNIRb4->mux=0;birNIRb4->muy=0;
+
+  use,sequence=lhcb2,range=e.cell.sec1.b2/s.cell.sec1.b2;
+  savebeta,label=baux,place=e.cell.sec1.b2;
+  twiss;
+  betxaux=baux->betx;betyaux=baux->bety;
+  alfxaux=baux->alfx;alfyaux=baux->alfy;
+  dxaux=baux->dx;dpxaux=baux->dpx;
+
+  use,sequence=lhcb2,range=s.ds.lNIR.b2/e.cell.sec1.b2;
+  savebeta,label=eirNIRb4,place=s.ds.lNIR.b2;
+  twiss,rmatrix,betx=1,bety=1;
+  r11=table(twiss,e.cell.sec1.b2,Re11);r12=table(twiss,e.cell.sec1.b2,Re12);
+  r21=table(twiss,e.cell.sec1.b2,Re21);r22=table(twiss,e.cell.sec1.b2,Re22);
+  r33=table(twiss,e.cell.sec1.b2,Re33);r34=table(twiss,e.cell.sec1.b2,Re34);
+  r43=table(twiss,e.cell.sec1.b2,Re43);r44=table(twiss,e.cell.sec1.b2,Re44);
+  r16=table(twiss,e.cell.sec1.b2,Re16);r26=table(twiss,e.cell.sec1.b2,Re26);
+  eirNIRb4->betx=r22^2*betxaux+2.*r22*r12*alfxaux+r12^2*(1.+alfxaux^2)/betxaux;
+  eirNIRb4->alfx=r22*r21*betxaux+(r11*r22+r12*r21)*alfxaux+r12*r11*(1.+alfxaux^2)/betxaux;
+  eirNIRb4->bety=r44^2*betyaux+2.*r44*r34*alfyaux+r34^2*(1.+alfyaux^2)/betyaux;
+  eirNIRb4->alfy=r44*r43*betyaux+(r33*r44+r34*r43)*alfyaux+r34*r33*(1.+alfyaux^2)/betyaux;
+  eirNIRb4->dx=r22*(dxaux-r16)-r12*(dpxaux-r26);
+  eirNIRb4->dpx=-r21*(dxaux-r16)+r11*(dpxaux-r26);
+
+  !use,sequence=lhcb2,range=s.ds.lNIR.b2/e.cell.sec1.b2;
+  !savebeta,label=baux,place=e.cell.sec1.b2;
+  !twiss,beta0=eirNIRb4;
+  !use,sequence=lhcb2,range=e.cell.sec1.b2/s.cell.sec1.b2;
+  !savebeta,label=baux1,place=e.cell.sec1.b2;
+  !twiss;
+  !value,baux->betx-baux1->betx,baux->bety-baux1->bety;
+  !value,baux->alfx-baux1->alfx,baux->alfy-baux1->alfy;
+  !value,baux->dx-baux1->dx,baux->dpx-baux1->dpx;
+
+  !show,birNIRb4;
+  !show,eirNIRb4;
 
 };
 
@@ -262,7 +307,8 @@ select,flag=twiss,
        column=name,s,l,angle,k1l,k2l,hkick,vkick,kick,
               betx,bety,dx,dy,x,y,px,py,
               apertype,aper_1,aper_2,aper_3,aper_4,
-              aptol_1,aptol_2,aptol_3,
+              aptol_1,aptol_2,aptol_3,mech_sep,
+              apoff_1,apoff_2,
        range=s.ds.lnir.bim/e.ds.rnir.bim;
 if(FULL==0)
 {use,sequence=lhcbim,range=s.ds.lnir.bim/e.ds.rnir.bim;
@@ -274,15 +320,17 @@ if(FULL==1)
 twiss,file=temp/twiss_irnirbim.tfs;
 };
 
-system, "cp lhc/aperture/offset.ip*b*.tfs  temp";
-if (l.MQXFB>0) { system, "cp slhc/aperture/offset.ip*b*.tfs temp"; };
-if (l.MQX>0) { system, "cp slhc/aperture/offset.ip*b*.tfs temp"; };
+system, "cp lhc/aperture/offset.ip*b*.tfs  temp/";
+if (l.MQXFB>0) { system, "cp slhc/aperture/offset.ip*b*.tfs temp/"; };
+if (l.MQX>0) { system, "cp slhc/aperture/offset.ip*b*.tfs temp/"; };
+if (local_offset==1) { system, "cp aperture/offset.ip*b*.tfs temp/"; };
 
 
 select,flag=aperture,clear;
 select,flag=aperture,
        column=name,s,betx,bety,dx,dy,x,y,n1,px,py,
              apertype,aper_1,aper_2,aper_3,aper_4,
+             apoff_1,apoff_2,
              rtol,xtol,ytol;
 if (version >=50208) {
    aperture,range=s.ds.lnir.bim/e.ds.rnir.bim,
@@ -332,6 +380,7 @@ select,flag=aperture,clear;
 select,flag=aperture,
        column=name,s,betx,bety,dx,dy,x,y,n1,
              apertype,aper_1,aper_2,aper_3,aper_4,
+             apoff_1,apoff_2,
              rtol,xtol,ytol;
 if (version >=50208) {
 aperture,range=e.ds.rNARC1.BIM/s.ds.lNARC2.BIM,
@@ -572,46 +621,91 @@ option,-info,-warn;
 
 selectIRAUX(NIR0,NIR1,NIR2,NIR3,NIR4,BIM,scbx,scby,betx0,bety0): macro = {
 
-!LeftIRauxR & RightIRauxL
+  !LeftIRauxR & RightIRauxL
 
-use,sequence=lhcBIM,range=IPNIR2/IPNIR2;
-savebeta,label=baux,place=IPNIR2;
-twiss,betx=betx0,bety=bety0;
+  use,sequence=lhcBIM,range=IPNIR2/IPNIR2;
+  savebeta,label=baux,place=IPNIR2;
+  twiss,betx=betx0,bety=bety0;
 
-exec track_twiss(IPNIR2,s.ds.lNIR3.BIM,BIM,baux,birNIR3BIM);
-mux0r=birNIR3BIM->mux;muy0r=birNIR3BIM->muy;
-exec backtrack_twiss(e.ds.rNIR1.BIM,IPNIR2,BIM,eirNIR1BIM,baux);
-mux0l=eirNIR1BIM->mux;muy0l=eirNIR1BIM->muy;
+  exec track_twiss(IPNIR2,s.ds.lNIR3.BIM,BIM,baux,birNIR3BIM);
+  mux0r=birNIR3BIM->mux;muy0r=birNIR3BIM->muy;
+  exec backtrack_twiss(e.ds.rNIR1.BIM,IPNIR2,BIM,eirNIR1BIM,baux);
+  mux0l=eirNIR1BIM->mux;muy0l=eirNIR1BIM->muy;
 
-use,sequence=lhcBIM,range=IPNIR2/IPNIR2;
-savebeta,label=baux,place=IPNIR2;
-twiss,betx=scbx*betx0,bety=scby*bety0;
-exec track_twiss(IPNIR2,s.ds.lNIR3.BIM,BIM,baux,birNIR3BIM);
-mux1r=birNIR3BIM->mux;muy1r=birNIR3BIM->muy;
-birNIR3BIM->mux=mux0r-mux1r;birNIR3BIM->muy=muy0r-muy1r;
-exec backtrack_twiss(e.ds.rNIR1.BIM,IPNIR2,BIM,eirNIR1BIM,baux);
-mux1l=eirNIR1BIM->mux;muy1l=eirNIR1BIM->muy;
-eirNIR1BIM->mux=mux0l-mux1l;eirNIR1BIM->muy=muy0l-muy1l;
+  use,sequence=lhcBIM,range=IPNIR2/IPNIR2;
+  savebeta,label=baux,place=IPNIR2;
+  twiss,betx=scbx*betx0,bety=scby*bety0;
+  exec track_twiss(IPNIR2,s.ds.lNIR3.BIM,BIM,baux,birNIR3BIM);
+  mux1r=birNIR3BIM->mux;muy1r=birNIR3BIM->muy;
+  birNIR3BIM->mux=mux0r-mux1r;birNIR3BIM->muy=muy0r-muy1r;
+  exec backtrack_twiss(e.ds.rNIR1.BIM,IPNIR2,BIM,eirNIR1BIM,baux);
+  mux1l=eirNIR1BIM->mux;muy1l=eirNIR1BIM->muy;
+  eirNIR1BIM->mux=mux0l-mux1l;eirNIR1BIM->muy=muy0l-muy1l;
 
-!LeftIRlowbeta & RightIRlowbeta
-exec track_twiss(IPNIR2,e.ds.rNIR2.BIM,BIM,baux,eirNIR2BIM);
-exec backtrack_twiss(s.ds.lNIR2.BIM,IPNIR2,BIM,birNIR2BIM,baux);
+  !LeftIRlowbeta & RightIRlowbeta
+  exec track_twiss(IPNIR2,e.ds.rNIR2.BIM,BIM,baux,eirNIR2BIM);
+  exec backtrack_twiss(s.ds.lNIR2.BIM,IPNIR2,BIM,birNIR2BIM,baux);
 
-!LeftIRauxL
+  !LeftIRauxL
 
-use,sequence=lhcBIM,range=s.cell.NIR0NIR1.BIM/e.cell.NIR0NIR1.BIM;
-savebeta,label=baux,place=s.cell.NIR0NIR1.BIM;
-twiss;
-exec track_twiss(e.cell.NIR0NIR1.BIM,s.ds.lNIR1.BIM,BIM,baux,birNIR1BIM);
-birNIR1BIM->mux=0;birNIR1BIM->muy=0;
+  use,sequence=lhcBIM,range=s.cell.NIR0NIR1.BIM/e.cell.NIR0NIR1.BIM;
+  savebeta,label=baux,place=s.cell.NIR0NIR1.BIM;
+  twiss;
+  exec track_twiss(e.cell.NIR0NIR1.BIM,s.ds.lNIR1.BIM,BIM,baux,birNIR1BIM);
+  birNIR1BIM->mux=0;birNIR1BIM->muy=0;
 
-!RightIRauxR
-use,sequence=lhcBIM,range=s.cell.NIR3NIR4.BIM/e.cell.NIR3NIR4.BIM;
-savebeta,label=baux,place=s.cell.NIR3NIR4.BIM;
-twiss;
-exec backtrack_twiss(e.ds.rNIR3.BIM,s.cell.NIR3NIR4.BIM,BIM,eirNIR3BIM,baux);
-eirNIR3BIM->mux=birNIR3BIM->mux;birNIR3BIM->mux=0;
-eirNIR3BIM->muy=birNIR3BIM->muy;birNIR3BIM->muy=0;
+  !RightIRauxR
+  use,sequence=lhcBIM,range=s.cell.NIR3NIR4.BIM/e.cell.NIR3NIR4.BIM;
+  savebeta,label=baux,place=s.cell.NIR3NIR4.BIM;
+  twiss;
+  exec backtrack_twiss(e.ds.rNIR3.BIM,s.cell.NIR3NIR4.BIM,BIM,eirNIR3BIM,baux);
+  eirNIR3BIM->mux=birNIR3BIM->mux;birNIR3BIM->mux=0;
+  eirNIR3BIM->muy=birNIR3BIM->muy;birNIR3BIM->muy=0;
+
+};
+
+selectIRAUX_b4(NIR0,NIR1,NIR2,NIR3,NIR4,scbx,scby,betx0,bety0): macro = {
+
+  !LeftIRauxR & RightIRauxL
+
+  use,sequence=lhcb2,range=IPNIR2/IPNIR2;
+  savebeta,label=baux,place=IPNIR2;
+  twiss,betx=betx0,bety=bety0;
+
+  exec track_twiss(IPNIR2,e.ds.rNIR1.b2,b2,baux,birNIR1b4);
+  mux0r=birNIR1b4->mux;muy0r=birNIR1b4->muy;
+  exec backtrack_twiss(s.ds.lNIR3.b2,IPNIR2,b2,eirNIR3b4,baux);
+  mux0l=eirNIR3b4->mux;muy0l=eirNIR3b4->muy;
+
+  use,sequence=lhcb2,range=IPNIR2/IPNIR2;
+  savebeta,label=baux,place=IPNIR2;
+  twiss,betx=scbx*betx0,bety=scby*bety0;
+  exec track_twiss(IPNIR2,e.ds.rNIR1.b2,b2,baux,birNIR1b4);
+  mux1r=birNIR1b4->mux;muy1r=birNIR1b4->muy;
+  birNIR1b4->mux=mux0r-mux1r;birNIR1b4->muy=muy0r-muy1r;
+  exec backtrack_twiss(s.ds.lNIR3.b2,IPNIR2,b2,eirNIR3b4,baux);
+  mux1l=eirNIR3b4->mux;muy1l=eirNIR3b4->muy;
+  eirNIR3b4->mux=mux0l-mux1l;eirNIR3b4->muy=muy0l-muy1l;
+
+  !LeftIRlowbeta & RightIRlowbeta
+  exec track_twiss(IPNIR2,s.ds.lNIR2.b2,b2,baux,eirNIR2b4);
+  exec backtrack_twiss(e.ds.rNIR2.b2,IPNIR2,b2,birNIR2b4,baux);
+
+  !RightIRauxR
+
+  use,sequence=lhcb2,range=e.cell.NIR3NIR4.b2/s.cell.NIR3NIR4.b2;
+  savebeta,label=baux,place=e.cell.NIR3NIR4.b2;
+  twiss;
+  exec track_twiss(s.cell.NIR3NIR4.b2,e.ds.rNIR3.b2,b2,baux,birNIR3b4);
+  birNIR3b4->mux=0;birNIR3b4->muy=0;
+
+  !LeftIRauxL
+  use,sequence=lhcb2,range=e.cell.NIR0NIR1.b2/s.cell.NIR0NIR1.b2;
+  savebeta,label=baux,place=e.cell.NIR0NIR1.b2;
+  twiss;
+  exec backtrack_twiss(s.ds.lNIR1.b2,e.cell.NIR0NIR1.b2,b2,eirNIR1b4,baux);
+  eirNIR1b4->mux=birNIR1b4->mux;birNIR1b4->mux=0;
+  eirNIR1b4->muy=birNIR1b4->muy;birNIR1b4->muy=0;
 
 };
 
@@ -726,23 +820,34 @@ system, "rm offset.ip*b*.tfs";
 
 
 cellphase(NIR1,NIR2,SEC,BIM): macro = {
+  use,sequence=lhcBIM,range=s.cell.SEC.BIM/e.cell.SEC.BIM;
+  savebeta,label=baux,place=s.cell.SEC.BIM;
+  twiss;
+  muxcellSECBIM=table(summ,q1);muycellSECBIM=table(summ,q2);
+};
 
-use,sequence=lhcBIM,range=s.cell.SEC.BIM/e.cell.SEC.BIM;
-savebeta,label=baux,place=s.cell.SEC.BIM;
-twiss;
-muxcellSECBIM=table(summ,q1);muycellSECBIM=table(summ,q2);
-
+cellphase_b4(NIR1,NIR2,SEC): macro = {
+  use,sequence=lhcb2,range=e.cell.SEC.b2/s.cell.SEC.b2;
+  savebeta,label=baux,place=e.cell.SEC.b2;
+  twiss;
+  muxcellSECb4=table(summ,q1);
+  muycellSECb4=table(summ,q2);
 };
 
 phasearc(NIR1,NIR2,SEC,BIM): macro = {
+  exec cellphase(NIR1,NIR2,SEC,BIM);
+  exec backtrack_twiss(e.ds.rNIR1.BIM,s.cell.SEC.BIM,BIM,eirNIR1auxBIM,baux);
+  eirNIR1auxBIM->mux=0;eirNIR1auxBIM->muy=0;
+  exec track_twiss(e.ds.rNIR1.BIM,s.ds.lNIR2.BIM,BIM,eirNIR1auxBIM,sirNIR2auxBIM);
+  muxSECBIM=sirNIR2auxBIM->mux;muySECBIM=sirNIR2auxBIM->muy;
+};
 
-exec cellphase(NIR1,NIR2,SEC,BIM);
-
-exec backtrack_twiss(e.ds.rNIR1.BIM,s.cell.SEC.BIM,BIM,eirNIR1auxBIM,baux);
-eirNIR1auxBIM->mux=0;eirNIR1auxBIM->muy=0;
-exec track_twiss(e.ds.rNIR1.BIM,s.ds.lNIR2.BIM,BIM,eirNIR1auxBIM,sirNIR2auxBIM);
-muxSECBIM=sirNIR2auxBIM->mux;muySECBIM=sirNIR2auxBIM->muy;
-
+phasearc_b4(NIR1,NIR2,SEC): macro = {
+  exec cellphase_b4(NIR1,NIR2,SEC);
+  exec backtrack_twiss(s.ds.lNIR2.b2,e.cell.SEC.b2,b2,eirNIR2auxb4,baux);
+  eirNIR2auxb4->mux=0;eirNIR2auxb4->muy=0;
+  exec track_twiss(s.ds.lNIR2.b2,e.ds.rNIR1.b2,b2,eirNIR2auxb4,sirNIR1auxb4);
+  muxSECb4=sirNIR1auxb4->mux;muySECb4=sirNIR1auxb4->muy;
 };
 
 globalphasearcweak(BIM): macro = {
@@ -1080,6 +1185,14 @@ refpxIP1BIM=table(twiss,IP1,px); refpyIP1BIM=table(twiss,IP1,py);
 refpxIP5BIM=table(twiss,IP5,px); refpyIP5BIM=table(twiss,IP5,py);
 refpxIP2BIM=table(twiss,IP2,px); refpyIP2BIM=table(twiss,IP2,py);
 refpxIP8BIM=table(twiss,IP8,px); refpyIP8BIM=table(twiss,IP8,py);
+refxIP3BIM=table(twiss,IP3,x); refyIP3BIM=table(twiss,IP3,y);
+refxIP4BIM=table(twiss,IP4,x); refyIP4BIM=table(twiss,IP4,y);
+refxIP6BIM=table(twiss,IP6,x); refyIP6BIM=table(twiss,IP6,y);
+refxIP7BIM=table(twiss,IP7,x); refyIP7BIM=table(twiss,IP7,y);
+refpxIP3BIM=table(twiss,IP3,px); refpyIP3BIM=table(twiss,IP3,py);
+refpxIP4BIM=table(twiss,IP4,px); refpyIP4BIM=table(twiss,IP4,py);
+refpxIP6BIM=table(twiss,IP6,px); refpyIP6BIM=table(twiss,IP6,py);
+refpxIP7BIM=table(twiss,IP7,px); refpyIP7BIM=table(twiss,IP7,py);
 value,refbetxIP1BIM,refbetyIP1BIM;
 value,refbetxIP5BIM,refbetyIP5BIM;
 value,refbetxIP2BIM,refbetyIP2BIM;
@@ -1634,6 +1747,109 @@ ksd1.a56b2=ksdstrong56;};
 
 };
 
+GLOBAL_REMATCHW2(Ix1,Iy1,Ix5,Iy5,BIM): macro = {
+
+if (BIM==1) {
+sign_I=1.;
+ksfstrong81=ksf1.a81b1;
+ksdstrong81=ksd2.a81b1;
+ksfstrong12=ksf1.a12b1;
+ksdstrong12=ksd1.a12b1;
+ksfstrong45=ksf1.a45b1;
+ksdstrong45=ksd2.a45b1;
+ksfstrong56=ksf1.a56b1;
+ksdstrong56=ksd1.a56b1;
+
+ksf1.a81b1:=ksfstrong81;
+ksd2.a81b1:=ksdstrong81;
+ksf1.a12b1:=ksfstrong12;
+ksd1.a12b1:=ksdstrong12;
+ksf1.a45b1:=ksfstrong45;
+ksd2.a45b1:=ksdstrong45;
+ksf1.a56b1:=ksfstrong56;
+ksd1.a56b1:=ksdstrong56;};
+
+if (BIM==2)
+{sign_I=-1.;
+ksfstrong81=ksf2.a81b2;
+ksdstrong81=ksd2.a81b2;
+ksfstrong12=ksf2.a12b2;
+ksdstrong12=ksd1.a12b2;
+ksfstrong45=ksf2.a45b2;
+ksdstrong45=ksd2.a45b2;
+ksfstrong56=ksf2.a56b2;
+ksdstrong56=ksd1.a56b2;
+
+ksf2.a81b2:=ksfstrong81;
+ksd2.a81b2:=ksdstrong81;
+ksf2.a12b2:=ksfstrong12;
+ksd1.a12b2:=ksdstrong12;
+ksf2.a45b2:=ksfstrong45;
+ksd2.a45b2:=ksdstrong45;
+ksf2.a56b2:=ksfstrong56;
+ksd1.a56b2:=ksdstrong56;};
+
+if (K2max==0) {
+  !K2max=1.280/0.017^2/23348.89927*2*600/550; !=0.4138703096
+  K2max=0.42;
+};
+
+match,use_macro;
+vary,name=ksfstrong81,lower=-K2max,upper=K2max;
+vary,name=ksdstrong81,lower=-K2max,upper=K2max;
+vary,name=ksfstrong12,lower=-K2max,upper=K2max;
+vary,name=ksdstrong12,lower=-K2max,upper=K2max;
+vary,name=ksfstrong45,lower=-K2max,upper=K2max;
+vary,name=ksdstrong45,lower=-K2max,upper=K2max;
+vary,name=ksfstrong56,lower=-K2max,upper=K2max;
+vary,name=ksdstrong56,lower=-K2max,upper=K2max;
+use_macro,name=globalw(BIM);
+constraint,expr= ip3dbetx=0;
+constraint,expr= ip3dbety=0;
+constraint,expr= ip3dalfx=0;
+constraint,expr= ip3dalfy=0;
+constraint,expr= ip7dbetx=0;
+constraint,expr= ip7dbety=0;
+constraint,expr= ip7dalfx=0;
+constraint,expr= ip7dalfy=0;
+constraint,expr= ip1dbetx=0;
+constraint,expr= ip1dbety=0;
+constraint,expr= ip1dalfx= sign_I*Ix1;
+constraint,expr= ip1dalfy=-sign_I*Iy1;
+constraint,expr= ip5dbetx=0;
+constraint,expr= ip5dbety=0;
+constraint,expr= ip5dalfx= sign_I*Ix5;
+constraint,expr= ip5dalfy=-sign_I*Iy5;
+jacobian, calls=4, tolerance=1.E-15, bisec=1;
+endmatch;
+
+if (BIM==1) {
+ksf1.a81b1=ksfstrong81;
+ksd2.a81b1=ksdstrong81;
+ksf1.a12b1=ksfstrong12;
+ksd1.a12b1=ksdstrong12;
+ksf1.a45b1=ksfstrong45;
+ksd2.a45b1=ksdstrong45;
+ksf1.a56b1=ksfstrong56;
+ksd1.a56b1=ksdstrong56;};
+
+if (BIM==2)
+{
+ksf2.a81b2=ksfstrong81;
+ksd2.a81b2=ksdstrong81;
+ksf2.a12b2=ksfstrong12;
+ksd1.a12b2=ksdstrong12;
+ksf2.a45b2=ksfstrong45;
+ksd2.a45b2=ksdstrong45;
+ksf2.a56b2=ksfstrong56;
+ksd1.a56b2=ksdstrong56;};
+
+};
+
+
+
+
+
 PRINTMS(norm,BIM): macro = {
 
 value,KSF1.a12BIM/norm,KSF2.a12BIM/norm,
@@ -1920,11 +2136,11 @@ on_disp=0;
 OFF_DISPCOR: macro = {
 !switch off all MCB participating in the dispersion correction in sectors 81/12/45/56
 !Left IR5-B1
-acbh14.r4b1=0;acbh16.r4b1=0;acbh14.l5b1=0;acbh12.l5b1=0;
+acbh12.r4b1=0;acbh14.r4b1=0;acbh16.r4b1=0;acbh14.l5b1=0;acbh12.l5b1=0;
 acbv13.r4b1=0;acbv15.r4b1=0;acbv15.l5b1=0;acbv13.l5b1=0;
-acbh14.r4b1x=0;acbh16.r4b1x=0;acbh14.l5b1x=0;acbh12.l5b1x=0;
+acbh12.r4b1x=0;acbh14.r4b1x=0;acbh16.r4b1x=0;acbh14.l5b1x=0;acbh12.l5b1x=0;
 acbv13.r4b1x=0;acbv15.r4b1x=0;acbv15.l5b1x=0;acbv13.l5b1x=0;
-acbh14.r4b1s=0;acbh16.r4b1s=0;acbh14.l5b1s=0;acbh12.l5b1s=0;
+acbh12.r4b1s=0;acbh14.r4b1s=0;acbh16.r4b1s=0;acbh14.l5b1s=0;acbh12.l5b1s=0;
 acbv13.r4b1s=0;acbv15.r4b1s=0;acbv15.l5b1s=0;acbv13.l5b1s=0;
 !Right IR5-B1
 acbh13.r5b1=0;acbh15.r5b1=0;acbh15.l6b1=0;acbh13.l6b1=0;
@@ -1934,11 +2150,11 @@ acbv12.r5b1x=0;acbv14.r5b1x=0;acbv16.l6b1x=0;acbv14.l6b1x=0;
 acbh13.r5b1s=0;acbh15.r5b1s=0;acbh15.l6b1s=0;acbh13.l6b1s=0;
 acbv12.r5b1s=0;acbv14.r5b1s=0;acbv16.l6b1s=0;acbv14.l6b1s=0;
 !Left IR1-B1
-acbh14.r8b1=0;acbh16.r8b1=0;acbh14.l1b1=0;acbh12.l1b1=0;
+acbh12.r8b1=0;acbh14.r8b1=0;acbh16.r8b1=0;acbh14.l1b1=0;acbh12.l1b1=0;
 acbv13.r8b1=0;acbv15.r8b1=0;acbv15.l1b1=0;acbv13.l1b1=0;
-acbh14.r8b1x=0;acbh16.r8b1x=0;acbh14.l1b1x=0;acbh12.l1b1x=0;
+acbh12.r8b1x=0;acbh14.r8b1x=0;acbh16.r8b1x=0;acbh14.l1b1x=0;acbh12.l1b1x=0;
 acbv13.r8b1x=0;acbv15.r8b1x=0;acbv15.l1b1x=0;acbv13.l1b1x=0;
-acbh14.r8b1s=0;acbh16.r8b1s=0;acbh14.l1b1s=0;acbh12.l1b1s=0;
+acbh12.r8b1s=0;acbh14.r8b1s=0;acbh16.r8b1s=0;acbh14.l1b1s=0;acbh12.l1b1s=0;
 acbv13.r8b1s=0;acbv15.r8b1s=0;acbv15.l1b1s=0;acbv13.l1b1s=0;
 !Right IR1-B1
 acbh13.r1b1=0;acbh15.r1b1=0;acbh15.l2b1=0;acbh13.l2b1=0;
@@ -1955,11 +2171,11 @@ acbv14.r4b2x=0;acbv16.r4b2x=0;acbv14.l5b2x=0;acbv12.l5b2x=0;
 acbh13.r4b2s=0;acbh15.r4b2s=0;acbh15.l5b2s=0;acbh13.l5b2s=0;
 acbv14.r4b2s=0;acbv16.r4b2s=0;acbv14.l5b2s=0;acbv12.l5b2s=0;
 !Right IR5-B2
-acbh12.r5b2=0;acbh14.r5b2=0;acbh16.l6b2=0;acbh14.l6b2=0;
+acbh12.r5b2=0;acbh14.r5b2=0;acbh16.l6b2=0;acbh14.l6b2=0;acbh12.l6b2=0;
 acbv13.r5b2=0;acbv15.r5b2=0;acbv15.l6b2=0;acbv13.l6b2=0;
-acbh12.r5b2x=0;acbh14.r5b2x=0;acbh16.l6b2x=0;acbh14.l6b2x=0;
+acbh12.r5b2x=0;acbh14.r5b2x=0;acbh16.l6b2x=0;acbh14.l6b2x=0;acbh12.l6b2x=0;
 acbv13.r5b2x=0;acbv15.r5b2x=0;acbv15.l6b2x=0;acbv13.l6b2x=0;
-acbh12.r5b2s=0;acbh14.r5b2s=0;acbh16.l6b2s=0;acbh14.l6b2s=0;
+acbh12.r5b2s=0;acbh14.r5b2s=0;acbh16.l6b2s=0;acbh14.l6b2s=0;acbh12.l6b2s=0;
 acbv13.r5b2s=0;acbv15.r5b2s=0;acbv15.l6b2s=0;acbv13.l6b2s=0;
 !Left IR1-B2
 acbh13.r8b2=0;acbh15.r8b2=0;acbh15.l1b2=0;acbh13.l1b2=0;
@@ -1969,11 +2185,11 @@ acbv14.r8b2x=0;acbv16.r8b2x=0;acbv14.l1b2x=0;acbv12.l1b2x=0;
 acbh13.r8b2s=0;acbh15.r8b2s=0;acbh15.l1b2s=0;acbh13.l1b2s=0;
 acbv14.r8b2s=0;acbv16.r8b2s=0;acbv14.l1b2s=0;acbv12.l1b2s=0;
 !Right IR1-B2
-acbh12.r1b2=0;acbh14.r1b2=0;acbh16.l2b2=0;acbh14.l2b2=0;
+acbh12.r1b2=0;acbh14.r1b2=0;acbh16.l2b2=0;acbh14.l2b2=0;acbh12.l2b2=0;
 acbv13.r1b2=0;acbv15.r1b2=0;acbv15.l2b2=0;acbv13.l2b2=0;
-acbh12.r1b2x=0;acbh14.r1b2x=0;acbh16.l2b2x=0;acbh14.l2b2x=0;
+acbh12.r1b2x=0;acbh14.r1b2x=0;acbh16.l2b2x=0;acbh14.l2b2x=0;acbh12.l2b2x=0;
 acbv13.r1b2x=0;acbv15.r1b2x=0;acbv15.l2b2x=0;acbv13.l2b2x=0;
-acbh12.r1b2s=0;acbh14.r1b2s=0;acbh16.l2b2s=0;acbh14.l2b2s=0;
+acbh12.r1b2s=0;acbh14.r1b2s=0;acbh16.l2b2s=0;acbh14.l2b2s=0;acbh12.l2b2s=0;
 acbv13.r1b2s=0;acbv15.r1b2s=0;acbv15.l2b2s=0;acbv13.l2b2s=0;
 
 on_disp=0;
@@ -2134,6 +2350,7 @@ CABLE_DISPCOR: macro = {
 on_xx1:=on_x1;on_ssep1:=on_sep1;
 on_xx5:=on_x5;on_ssep5:=on_sep5;
 !Left IR5-B1
+acbh12.r4b1:=(acbh12.r4b1x*cos(twopi*PHI_IR5/360.)*on_xx5+acbh12.r4b1s*sin(twopi*PHI_IR5/360.)*on_ssep5)*ON_DISP;
 acbh14.r4b1:=(acbh14.r4b1x*cos(twopi*PHI_IR5/360.)*on_xx5+acbh14.r4b1s*sin(twopi*PHI_IR5/360.)*on_ssep5)*ON_DISP;
 acbh16.r4b1:=(acbh16.r4b1x*cos(twopi*PHI_IR5/360.)*on_xx5+acbh16.r4b1s*sin(twopi*PHI_IR5/360.)*on_ssep5)*ON_DISP;
 acbh14.l5b1:=(acbh14.l5b1x*cos(twopi*PHI_IR5/360.)*on_xx5+acbh14.l5b1s*sin(twopi*PHI_IR5/360.)*on_ssep5)*ON_DISP;
@@ -2152,6 +2369,7 @@ acbv14.r5b1:=(acbv14.r5b1x*sin(twopi*PHI_IR5/360.)*on_xx5+acbv14.r5b1s*cos(twopi
 acbv16.l6b1:=(acbv16.l6b1x*sin(twopi*PHI_IR5/360.)*on_xx5+acbv16.l6b1s*cos(twopi*PHI_IR5/360.)*on_ssep5)*ON_DISP;
 acbv14.l6b1:=(acbv14.l6b1x*sin(twopi*PHI_IR5/360.)*on_xx5+acbv14.l6b1s*cos(twopi*PHI_IR5/360.)*on_ssep5)*ON_DISP;
 !Left IR1-B1
+acbh12.r8b1:=(acbh12.r8b1x*cos(twopi*PHI_IR1/360.)*on_xx1+acbh12.r8b1s*sin(twopi*PHI_IR1/360.)*on_ssep1)*ON_DISP;
 acbh14.r8b1:=(acbh14.r8b1x*cos(twopi*PHI_IR1/360.)*on_xx1+acbh14.r8b1s*sin(twopi*PHI_IR1/360.)*on_ssep1)*ON_DISP;
 acbh16.r8b1:=(acbh16.r8b1x*cos(twopi*PHI_IR1/360.)*on_xx1+acbh16.r8b1s*sin(twopi*PHI_IR1/360.)*on_ssep1)*ON_DISP;
 acbh14.l1b1:=(acbh14.l1b1x*cos(twopi*PHI_IR1/360.)*on_xx1+acbh14.l1b1s*sin(twopi*PHI_IR1/360.)*on_ssep1)*ON_DISP;
@@ -2183,6 +2401,7 @@ acbh12.r5b2:=(acbh12.r5b2x*cos(twopi*PHI_IR5/360.)*on_xx5+acbh12.r5b2s*sin(twopi
 acbh14.r5b2:=(acbh14.r5b2x*cos(twopi*PHI_IR5/360.)*on_xx5+acbh14.r5b2s*sin(twopi*PHI_IR5/360.)*on_ssep5)*ON_DISP;
 acbh16.l6b2:=(acbh16.l6b2x*cos(twopi*PHI_IR5/360.)*on_xx5+acbh16.l6b2s*sin(twopi*PHI_IR5/360.)*on_ssep5)*ON_DISP;
 acbh14.l6b2:=(acbh14.l6b2x*cos(twopi*PHI_IR5/360.)*on_xx5+acbh14.l6b2s*sin(twopi*PHI_IR5/360.)*on_ssep5)*ON_DISP;
+acbh12.l6b2:=(acbh12.l6b2x*cos(twopi*PHI_IR5/360.)*on_xx5+acbh12.l6b2s*sin(twopi*PHI_IR5/360.)*on_ssep5)*ON_DISP;
 acbv13.r5b2:=(acbv13.r5b2x*sin(twopi*PHI_IR5/360.)*on_xx5+acbv13.r5b2s*cos(twopi*PHI_IR5/360.)*on_ssep5)*ON_DISP;
 acbv15.r5b2:=(acbv15.r5b2x*sin(twopi*PHI_IR5/360.)*on_xx5+acbv15.r5b2s*cos(twopi*PHI_IR5/360.)*on_ssep5)*ON_DISP;
 acbv15.l6b2:=(acbv15.l6b2x*sin(twopi*PHI_IR5/360.)*on_xx5+acbv15.l6b2s*cos(twopi*PHI_IR5/360.)*on_ssep5)*ON_DISP;
@@ -2201,6 +2420,7 @@ acbh12.r1b2:=(acbh12.r1b2x*cos(twopi*PHI_IR1/360.)*on_xx1+acbh12.r1b2s*sin(twopi
 acbh14.r1b2:=(acbh14.r1b2x*cos(twopi*PHI_IR1/360.)*on_xx1+acbh14.r1b2s*sin(twopi*PHI_IR1/360.)*on_ssep1)*ON_DISP;
 acbh16.l2b2:=(acbh16.l2b2x*cos(twopi*PHI_IR1/360.)*on_xx1+acbh16.l2b2s*sin(twopi*PHI_IR1/360.)*on_ssep1)*ON_DISP;
 acbh14.l2b2:=(acbh14.l2b2x*cos(twopi*PHI_IR1/360.)*on_xx1+acbh14.l2b2s*sin(twopi*PHI_IR1/360.)*on_ssep1)*ON_DISP;
+acbh12.l2b2:=(acbh12.l2b2x*cos(twopi*PHI_IR1/360.)*on_xx1+acbh12.l2b2s*sin(twopi*PHI_IR1/360.)*on_ssep1)*ON_DISP;
 acbv13.r1b2:=(acbv13.r1b2x*sin(twopi*PHI_IR1/360.)*on_xx1+acbv13.r1b2s*cos(twopi*PHI_IR1/360.)*on_ssep1)*ON_DISP;
 acbv15.r1b2:=(acbv15.r1b2x*sin(twopi*PHI_IR1/360.)*on_xx1+acbv15.r1b2s*cos(twopi*PHI_IR1/360.)*on_ssep1)*ON_DISP;
 acbv15.l2b2:=(acbv15.l2b2x*sin(twopi*PHI_IR1/360.)*on_xx1+acbv15.l2b2s*cos(twopi*PHI_IR1/360.)*on_ssep1)*ON_DISP;
@@ -2519,12 +2739,14 @@ select,flag=twiss,clear;
 select,flag=twiss,
        column=name,s,l,
               lrad,angle,k1l,k2l,k3l,k1sl,k2sl,k3sl,hkick,vkick,kick,tilt,
-              betx,bety,alfx,alfy,dx,dpx,dy,dpy,mux,muy,x,y,px,py,
+              betx,bety,alfx,alfy,dx,dpx,dy,dpy,mux,muy,x,y,px,py,t,pt,
               wx,wy,phix,phiy,n1,ddx,ddy,ddpx,ddpy,
               keyword,aper_1,aper_2,aper_3,aper_4,
+              apoff_1,apoff_2,
               aptol_1,aptol_2,aptol_3,apertype,mech_sep;
 select,flag=aperture,
        column=name,s,n1,aper_1,aper_2,aper_3,aper_4,rtol,xtol,ytol,
+              apoff_1,apoff_2,
               betx,bety,dx,dy,x,y,apertype;
 };
 
@@ -2693,10 +2915,10 @@ printf,text="betx_IP2   =   %2.3f ;",value=refbetxip2b1;
 printf,text="bety_IP2   =   %2.3f ;",value=refbetyip2b1;
 printf,text="betx_IP8   =   %2.3f ;",value=refbetxip8b1;
 printf,text="bety_IP8   =   %2.3f ;",value=refbetyip8b1;
-show,on_x1,on_sep1,phi_IR1;
-show,on_x5,on_sep5,phi_IR5;
-show,on_x2,on_sep2,phi_IR2;
-show,on_x8,on_sep8,phi_IR8;
+show,phi_IR1,on_x1,on_sep1,on_o1,on_a1;
+show,phi_IR5,on_x5,on_sep5,on_o5,on_a5;
+show,phi_IR2,on_x2,on_sep2,on_o2,on_a2;
+show,phi_IR8,on_x8,on_sep8,on_o8,on_a8;
 
 print, text="";
 print, text=" !***Orbit configuration ***";
@@ -2744,7 +2966,7 @@ exec,_save_optics_ir7;
 };
 
 _save_optics_dipoles: macro={
-print,text="Dipoles";
+print,text=" !Dipoles";
 kd1.lr1       :=  ad1.lr1/l.mbxf;
 kd2.l1        :=  ad2.l1/l.mbrd ;
 kd2.r1        :=  ad2.r1/l.mbrd ;
@@ -2846,10 +3068,10 @@ on_xirnh  := on_xirn*cphi_IRirn;
 on_xirnv  := on_xirn*sphi_IRirn;
 on_sepirnh:=-on_sepirn*sphi_IRirn;
 on_sepirnv:= on_sepirn*cphi_IRirn;
-if(on_airnh==0){};
-if(on_oirnh==0){};
-if(on_airnv==0){};
-if(on_oirnv==0){};
+on_oirnh  := on_oirn*cphi_IRirn;
+on_oirnv  := on_oirn*sphi_IRirn;
+on_airnh  :=-on_airn*sphi_IRirn;
+on_airnv  := on_airn*cphi_IRirn;
 !show,on_xirn,on_sepirn,phi_IRirn;
 show,cphi_IRirn,sphi_IRirn;
 show,on_xirnh,on_sepirnh,on_airnh,on_oirnh;
@@ -3312,6 +3534,7 @@ show,mux81b1, muy81b1, mux81b2, muy81b2;
 };
 
 myslice: macro = {
+if (nslice_mbh==0){nslice_mbh=4;};
 if (MBX.4L2->l>0) {
   select, flag=makethin, clear;
   select, flag=makethin, class=mb, slice=2;
@@ -3327,12 +3550,11 @@ if (MBX.4L2->l>0) {
   select, flag=makethin, class=mbrd,  slice=4;   !new d2 (if needed)
   select, flag=makethin, class=mqyy,  slice=4;   !new q4
   select, flag=makethin, class=mqyl,  slice=4;   !new q5
-  select, flag=makethin, class=mbh,   slice=4;   !11T dipoles
   select, flag=makethin, pattern=mbx\.,    slice=4;
   select, flag=makethin, pattern=mbrb\.,   slice=4;
   select, flag=makethin, pattern=mbrc\.,   slice=4;
   select, flag=makethin, pattern=mbrs\.,   slice=4;
-  select, flag=makethin, pattern=mbh\.,    slice=4;
+  select, flag=makethin, pattern=mbh\.,    slice=nslice_mbh;
   select, flag=makethin, pattern=mqwa\.,   slice=4;
   select, flag=makethin, pattern=mqwb\.,   slice=4;
   select, flag=makethin, pattern=mqy\.,    slice=4;
@@ -3681,6 +3903,12 @@ call,file=tmp_ttstamp;
 system, "rm tmp_ttstamp";
 };
 
+
+crossing_enable: macro={
+on_x1=1;on_x5=1;on_sep1=1;on_sep5=1;
+on_x2=1;on_x8=1;on_sep2=1;on_sep8=1;on_lhcb=-1;on_alice=1;
+on_disp=1;
+};
 
 
 crossing_save: macro = {
@@ -4434,14 +4662,30 @@ exec,round(muxip7b1,4); exec,round(muyip7b1,4);
 exec,round(muxip7b2,4); exec,round(muyip7b2,4);
 exec,round(muxip8b1,4); exec,round(muyip8b1,4);
 exec,round(muxip8b2,4); exec,round(muyip8b2,4);
+exec,round(betxip1b1,3); exec,round(betyip1b1,3);
+exec,round(betxip1b2,3); exec,round(betyip1b2,3);
+exec,round(betxip5b1,3); exec,round(betyip5b1,3);
+exec,round(betxip5b2,3); exec,round(betyip5b2,3);
 exec,round(betxip2b1,3); exec,round(betyip2b1,3);
 exec,round(betxip2b2,3); exec,round(betyip2b2,3);
 exec,round(betxip8b1,3); exec,round(betyip8b1,3);
 exec,round(betxip8b2,3); exec,round(betyip8b2,3);
+alfxip1b1=0;alfyip1b1=0;
+alfxip1b2=0;alfyip1b2=0;
+alfxip5b1=0;alfyip5b1=0;
+alfxip5b2=0;alfyip5b2=0;
 alfxip2b1=0;alfyip2b1=0;
 alfxip2b2=0;alfyip2b2=0;
 alfxip8b1=0;alfyip8b1=0;
 alfxip8b2=0;alfyip8b2=0;
+exec,round(dxip2b1,3); exec,round(dpxip2b1,3);
+exec,round(dxip2b2,3); exec,round(dpxip2b2,3);
+exec,round(dxip8b1,3); exec,round(dpxip8b1,3);
+exec,round(dxip8b2,3); exec,round(dpxip8b2,3);
+exec,round(dxip1b1,3); exec,round(dpxip1b1,3);
+exec,round(dxip1b2,3); exec,round(dpxip1b2,3);
+exec,round(dxip5b1,3); exec,round(dpxip5b1,3);
+exec,round(dxip5b2,3); exec,round(dpxip5b2,3);
 };
 
 check_phasearc(BIM): macro={
@@ -4590,11 +4834,17 @@ call,file="/tmp/optknob_final.madx";
 system,"rm tmp/optknob_*";
 };
 
-check_ipknob(kkkk,irn): macro={
+check_ipknob(kkkk,irn,vvvv): macro={
 kkkkaux=kkkk;
-kkkk=1;
+kkkk=vvvv;
+if (on_disp==0){
 exec,mk_irtwiss(irn,b1);
 exec,mk_irtwiss(irn,b2);
+} else {
+exec,check_ip(b1);
+exec,check_ip(b2);
+};
+
 show,refxipirnb1;
 show,refxipirnb2;
 show,refyipirnb1;
@@ -4620,7 +4870,54 @@ tar_kkkk=(refxipirnb1-xipirnb1)^2+
          (refpyipirnb1-pyipirnb1)^2+
          (refpyipirnb2-pyipirnb2)^2;
 value,tar_kkkk;
+value,kkkk;
 kkkk=kkkkaux;
+};
+
+set_mo:macro={
+brho:=NRJ*1e9/clight;
+
+KOF.A12B1:=Kmax_MO*I_MOF/Imax_MO/brho; KOF.A23B1:=Kmax_MO*I_MOF/Imax_MO/brho;
+KOF.A34B1:=Kmax_MO*I_MOF/Imax_MO/brho; KOF.A45B1:=Kmax_MO*I_MOF/Imax_MO/brho;
+KOF.A56B1:=Kmax_MO*I_MOF/Imax_MO/brho; KOF.A67B1:=Kmax_MO*I_MOF/Imax_MO/brho;
+KOF.A78B1:=Kmax_MO*I_MOF/Imax_MO/brho; KOF.A81B1:=Kmax_MO*I_MOF/Imax_MO/brho;
+KOD.A12B1:=Kmax_MO*I_MOD/Imax_MO/brho; KOD.A23B1:=Kmax_MO*I_MOD/Imax_MO/brho;
+KOD.A34B1:=Kmax_MO*I_MOD/Imax_MO/brho; KOD.A45B1:=Kmax_MO*I_MOD/Imax_MO/brho;
+KOD.A56B1:=Kmax_MO*I_MOD/Imax_MO/brho; KOD.A67B1:=Kmax_MO*I_MOD/Imax_MO/brho;
+KOD.A78B1:=Kmax_MO*I_MOD/Imax_MO/brho; KOD.A81B1:=Kmax_MO*I_MOD/Imax_MO/brho;
+
+KOF.A12B2:=Kmax_MO*I_MOF/Imax_MO/brho; KOF.A23B2:=Kmax_MO*I_MOF/Imax_MO/brho;
+KOF.A34B2:=Kmax_MO*I_MOF/Imax_MO/brho; KOF.A45B2:=Kmax_MO*I_MOF/Imax_MO/brho;
+KOF.A56B2:=Kmax_MO*I_MOF/Imax_MO/brho; KOF.A67B2:=Kmax_MO*I_MOF/Imax_MO/brho;
+KOF.A78B2:=Kmax_MO*I_MOF/Imax_MO/brho; KOF.A81B2:=Kmax_MO*I_MOF/Imax_MO/brho;
+KOD.A12B2:=Kmax_MO*I_MOD/Imax_MO/brho; KOD.A23B2:=Kmax_MO*I_MOD/Imax_MO/brho;
+KOD.A34B2:=Kmax_MO*I_MOD/Imax_MO/brho; KOD.A45B2:=Kmax_MO*I_MOD/Imax_MO/brho;
+KOD.A56B2:=Kmax_MO*I_MOD/Imax_MO/brho; KOD.A67B2:=Kmax_MO*I_MOD/Imax_MO/brho;
+KOD.A78B2:=Kmax_MO*I_MOD/Imax_MO/brho; KOD.A81B2:=Kmax_MO*I_MOD/Imax_MO/brho;
+
+I_MOF:=I_MO; I_MOD:=I_MO;
+};
+
+
+madchrom2(bim): macro={
+  use,sequence=lhcbim; twiss;
+  qx0bim=table(summ,q1);
+  qx1bim=table(summ,dq1);
+  qy0bim=table(summ,q2);
+  qy1bim=table(summ,dq2);
+  dpp=.000001;
+  twiss,deltap=dpp;
+  qxppbim=table(summ,q1);
+  qyppbim=table(summ,q2);
+  twiss,deltap=-dpp;
+  qxmpbim=table(summ,q1);
+  qympbim=table(summ,q2);
+  qx2bim=(qxppbim-2*qx0bim+qxmpbim)/dpp^2;
+  qy2bim=(qyppbim-2*qy0bim+qympbim)/dpp^2;
+  qx1abim=(qxppbim-qxmpbim)/dpp/2;
+  qy1abim=(qyppbim-qympbim)/dpp/2;
+  value,qx0bim,qx1bim,qx2bim;
+  value,qy0bim,qy1bim,qy2bim;
 };
 
 

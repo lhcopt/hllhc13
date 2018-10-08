@@ -186,9 +186,9 @@ setvars_const,table=knob_on_oirnhv;
 brho=23348.89927;
 limitMCBXH1 := 2.5/brho *.42;
 limitMCBXH2 := 2.5/brho *.35;
-limitMCBXH3 := 4.5/brho *.21;
+limitMCBXH3 := 4.5/brho *.22;
 limitMCBRD  := 5.0/brho *.05;
-limitMCBYY  := 2.8/brho *.25;
+limitMCBYY  := 2.8/brho *.27;
 limitMCBY   := 2.8/brho *.90;
 limitMCBC   := 2.1/brho *.90;
 
@@ -318,6 +318,8 @@ create,table=knob_on_ccplirnhv,
               acbxhv3.lirn,
               acbrdhv4.lirnb1,
               acbrdhv4.lirnb2,
+              acbyhv4.lirnb1,
+              acbyhv4.lirnb2,
               acbyhvs4.lirnb1,
               acbyhvs4.lirnb2,
               acbyhvs5.lirnb1,
@@ -329,6 +331,8 @@ create,table=knob_on_ccprirnhv,
               acbxhv3.rirn,
               acbrdhv4.rirnb1,
               acbrdhv4.rirnb2,
+              acbyhv4.rirnb1,
+              acbyhv4.rirnb2,
               acbyhvs4.rirnb1,
               acbyhvs4.rirnb2,
               acbyhvs5.rirnb1,
@@ -453,8 +457,8 @@ match, sequence=lhcb1,lhcb2, beta0= birirnb1,birirnb2,
   vary,name=acbyhvs4.lirnb2, step=1.0E-12,lower=-climmcby4,upper=climmcby4;
   vary,name=acbyhvs4.rirnb2, step=1.0E-12,lower=-climmcby4,upper=climmcby4;
   acbyhv4.lirnb1 :=acbyhvs4.lirnb1;
-  acbyhv4.rirnb2 :=acbyhvs4.rirnb2;
-  acbyhv4.lirnb1 :=acbyhvs4.lirnb1;
+  acbyhv4.lirnb2 :=acbyhvs4.lirnb2;
+  acbyhv4.rirnb1 :=acbyhvs4.rirnb1;
   acbyhv4.rirnb2 :=acbyhvs4.rirnb2;
   vary,name=acbyhvs5.lirnb1, step=1.0E-12,lower=-climmcby5,upper=climmcby5;
   vary,name=acbyhvs5.lirnb2, step=1.0E-12,lower=-climmcby5,upper=climmcby5;
@@ -555,7 +559,6 @@ setvars_const,table=orbit_ir1v;
 setvars_const,table=orbit_ir5h;
 setvars_const,table=orbit_ir5v;
 
-
 cd2q4=0.2; cmcb12=1;
 
 exec,match_xing(1,h,x,295);
@@ -589,7 +592,8 @@ exec,match_ccs(5,h,x);
 exec,match_ccs(5,v,y);
 
 
-q4x=-0.0034; q4y=-0.0034;
+if (q4y==0){q4x=-0.0034;};
+if (q4y==0){q4y=-0.0034;};
 !if (is_thin==1){ q4y=-0.00340; };
 exec,match_off(1,h,x,2);
 exec,match_off(1,v,y,2);

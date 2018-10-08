@@ -42,13 +42,20 @@ deltaposD2  =        -15.3870000000 ;!max. field D2 35 Tm -> move D2 as close as
 deltaposQ4  =         10.047   ;
 deltaposQ5  =         11.0000000000 ;
 deltaposQ6  =          0.0000000000 ;
-on_cutMS.10 =          0            ;
-on_cutMS.14 =          0            ;
+deltaposCrab=                     0 ;
+deltaposMCBRD=                    0 ;
+deltaposTAXN =                    0 ;
+on_cutMS.10f =          0            ;
+on_cutMS.14f =          0            ;
+on_cutMS.10d =          0            ;
+on_cutMS.14d =          0            ;
 l.MBXF      =          6.27         ;
 l.MCBXFB    =          1.2          ;
 l.MCBXFA    =          2.2          ;
 l.MBRD      =          7.78         ;
 l.MCBRD     =          1.89         ;
+crabs_2     = 0                     ;
+cut_mcbrd   = 0                     ;
 };
 
 !value, l.MQXL,l.MQX,dq1q2a,dq2aq2b,dq2bq3;
@@ -313,10 +320,14 @@ install_ir15_b1_b2_alt(ENAME,SPOS1,SPOS2): macro={
 };
 
 newel_ir15_b12(ENAME,PARE): macro={
-        ENAMEL1.B1: PARE; ENAMEL1.B2: PARE;
-        ENAMER1.B1: PARE; ENAMER1.B2: PARE;
-        ENAMEL5.B1: PARE; ENAMEL5.B2: PARE;
-        ENAMER5.B1: PARE; ENAMER5.B2: PARE;
+        ENAMEL1.B1: PARE, mech_sep=-0.194;
+        ENAMER1.B1: PARE, mech_sep= 0.194;
+        ENAMEL5.B1: PARE, mech_sep=-0.194;
+        ENAMER5.B1: PARE, mech_sep= 0.194;
+        ENAMEL1.B2: PARE, mech_sep= 0.194*bv_aux;
+        ENAMER1.B2: PARE, mech_sep=-0.194*bv_aux;
+        ENAMEL5.B2: PARE, mech_sep= 0.194*bv_aux;
+        ENAMER5.B2: PARE, mech_sep=-0.194*bv_aux;
 };
 
 
@@ -788,50 +799,51 @@ posD2  := 157.9+deltaposD2; ! minimize distance D1-D2, maximum field 35 Tm
 !11 to fit three cavitities with 1.5 meter
 
 
-posBPMWQ  := posD2-l.MBRD/2-0.983-0.702-0.285/2;!BPMWQ.4R5.B1
-posMCBRDA  := posD2 + l.MBRD/2 + l.MCBRD/2 + 0.365;
-posMCBRDB  := posMCBRDA + l.MCBRD          + 0.365;
+posMCBRDA  := posD2 + l.MBRD/2 + l.MCBRD/2 + 0.365 + deltaposMCBRD;
+posMCBRDB  := posMCBRDA + l.MCBRD          + 0.365 ;
+
+posBPMWQ  := posD2-l.MBRD/2-0.983-0.702-0.285/2 + deltaposTAXN;!BPMWQ.4R5.B1
+sepBPMWQ  := round((posBPMWQ-posD1)/(posD2-posD1)*194)/1e3;
+
+
+MBRD.4L1.B1: MBRD, angle:=-ad2.l1, K0:=-kd2.l1, polarity=-1, mech_sep=-0.1880;
+MBRD.4R1.B1: MBRD, angle:= ad2.r1, K0:= kd2.r1, polarity=+1, mech_sep= 0.1880;
+MBRD.4L5.B1: MBRD, angle:=-ad2.l5, K0:=-kd2.l5, polarity=-1, mech_sep=-0.1880;
+MBRD.4R5.B1: MBRD, angle:= ad2.r5, K0:= kd2.r5, polarity=+1, mech_sep= 0.1880;
+
+MBRD.4L1.B2: MBRD, angle:=-ad2.l1, K0:=-kd2.l1, polarity=+1*bv_aux, mech_sep= 0.1880*bv_aux;
+MBRD.4R1.B2: MBRD, angle:= ad2.r1, K0:= kd2.r1, polarity=-1*bv_aux, mech_sep=-0.1880*bv_aux;
+MBRD.4L5.B2: MBRD, angle:=-ad2.l5, K0:=-kd2.l5, polarity=+1*bv_aux, mech_sep= 0.1880*bv_aux;
+MBRD.4R5.B2: MBRD, angle:= ad2.r5, K0:= kd2.r5, polarity=-1*bv_aux, mech_sep=-0.1880*bv_aux;
+
+MCBRDH.4L1.B1: MCBRDH, kick:= acbrdh4.l1b1, mech_sep=-0.1880;
+MCBRDH.4R1.B1: MCBRDH, kick:= acbrdh4.r1b1, mech_sep= 0.1880;
+MCBRDH.4L5.B1: MCBRDH, kick:= acbrdh4.l5b1, mech_sep=-0.1880;
+MCBRDH.4R5.B1: MCBRDH, kick:= acbrdh4.r5b1, mech_sep= 0.1880;
+MCBRDH.4L1.B2: MCBRDH, kick:=-acbrdh4.l1b2, mech_sep= 0.1880*bv_aux;
+MCBRDH.4R1.B2: MCBRDH, kick:=-acbrdh4.r1b2, mech_sep=-0.1880*bv_aux;
+MCBRDH.4L5.B2: MCBRDH, kick:=-acbrdh4.l5b2, mech_sep= 0.1880*bv_aux;
+MCBRDH.4R5.B2: MCBRDH, kick:=-acbrdh4.r5b2, mech_sep=-0.1880*bv_aux;
+MCBRDV.4L1.B1: MCBRDV, kick:= acbrdv4.l1b1*bv_aux, mech_sep=-0.1880;
+MCBRDV.4R1.B1: MCBRDV, kick:= acbrdv4.r1b1*bv_aux, mech_sep= 0.1880;
+MCBRDV.4L5.B1: MCBRDV, kick:= acbrdv4.l5b1*bv_aux, mech_sep=-0.1880;
+MCBRDV.4R5.B1: MCBRDV, kick:= acbrdv4.r5b1*bv_aux, mech_sep= 0.1880;
+MCBRDV.4L1.B2: MCBRDV, kick:=-acbrdv4.l1b2*bv_aux, mech_sep= 0.1880*bv_aux;
+MCBRDV.4R1.B2: MCBRDV, kick:=-acbrdv4.r1b2*bv_aux, mech_sep=-0.1880*bv_aux;
+MCBRDV.4L5.B2: MCBRDV, kick:=-acbrdv4.l5b2*bv_aux, mech_sep= 0.1880*bv_aux;
+MCBRDV.4R5.B2: MCBRDV, kick:=-acbrdv4.r5b2*bv_aux, mech_sep=-0.1880*bv_aux;
 
 
 
-MBRD.4L1.B1: MBRD, angle:=-ad2.l1, K0:=-kd2.l1, polarity=-1;
-MBRD.4R1.B1: MBRD, angle:= ad2.r1, K0:= kd2.r1, polarity=+1;
-MBRD.4L5.B1: MBRD, angle:=-ad2.l5, K0:=-kd2.l5, polarity=-1;
-MBRD.4R5.B1: MBRD, angle:= ad2.r5, K0:= kd2.r5, polarity=+1;
 
-MBRD.4L1.B2: MBRD, angle:=-ad2.l1, K0:=-kd2.l1, polarity=+1*bv_aux;
-MBRD.4R1.B2: MBRD, angle:= ad2.r1, K0:= kd2.r1, polarity=-1*bv_aux;
-MBRD.4L5.B2: MBRD, angle:=-ad2.l5, K0:=-kd2.l5, polarity=+1*bv_aux;
-MBRD.4R5.B2: MBRD, angle:= ad2.r5, K0:= kd2.r5, polarity=-1*bv_aux;
-
-MCBRDH.4L1.B1: MCBRDH, kick:= acbrdh4.l1b1;
-MCBRDH.4R1.B1: MCBRDH, kick:= acbrdh4.r1b1;
-MCBRDH.4L5.B1: MCBRDH, kick:= acbrdh4.l5b1;
-MCBRDH.4R5.B1: MCBRDH, kick:= acbrdh4.r5b1;
-MCBRDH.4L1.B2: MCBRDH, kick:=-acbrdh4.l1b2;
-MCBRDH.4R1.B2: MCBRDH, kick:=-acbrdh4.r1b2;
-MCBRDH.4L5.B2: MCBRDH, kick:=-acbrdh4.l5b2;
-MCBRDH.4R5.B2: MCBRDH, kick:=-acbrdh4.r5b2;
-MCBRDV.4L1.B1: MCBRDV, kick:= acbrdv4.l1b1*bv_aux;
-MCBRDV.4R1.B1: MCBRDV, kick:= acbrdv4.r1b1*bv_aux;
-MCBRDV.4L5.B1: MCBRDV, kick:= acbrdv4.l5b1*bv_aux;
-MCBRDV.4R5.B1: MCBRDV, kick:= acbrdv4.r5b1*bv_aux;
-MCBRDV.4L1.B2: MCBRDV, kick:=-acbrdv4.l1b2*bv_aux;
-MCBRDV.4R1.B2: MCBRDV, kick:=-acbrdv4.r1b2*bv_aux;
-MCBRDV.4L5.B2: MCBRDV, kick:=-acbrdv4.l5b2*bv_aux;
-MCBRDV.4R5.B2: MCBRDV, kick:=-acbrdv4.r5b2*bv_aux;
-
-
-
-
-BPMWQ.4L1.B1: BPMWQ;
-BPMWQ.4R1.B1: BPMWQ;
-BPMWQ.4L5.B1: BPMWQ;
-BPMWQ.4R5.B1: BPMWQ;
-BPMWQ.4L1.B2: BPMWQ;
-BPMWQ.4R1.B2: BPMWQ;
-BPMWQ.4L5.B2: BPMWQ;
-BPMWQ.4R5.B2: BPMWQ;
+BPMWQ.4L1.B1: BPMWQ, mech_sep=-sepBPMWQ;
+BPMWQ.4R1.B1: BPMWQ, mech_sep= sepBPMWQ;
+BPMWQ.4L5.B1: BPMWQ, mech_sep=-sepBPMWQ;
+BPMWQ.4R5.B1: BPMWQ, mech_sep= sepBPMWQ;
+BPMWQ.4L1.B2: BPMWQ, mech_sep= sepBPMWQ*bv_aux;
+BPMWQ.4R1.B2: BPMWQ, mech_sep=-sepBPMWQ*bv_aux;
+BPMWQ.4L5.B2: BPMWQ, mech_sep= sepBPMWQ*bv_aux;
+BPMWQ.4R5.B2: BPMWQ, mech_sep=-sepBPMWQ*bv_aux;
 
 
 ! separation recombination powering, 0.194 m separation between apertures
@@ -849,6 +861,7 @@ kd2.l5 :=ad2.l5/l.MBRD;
 kd2.r5 :=ad2.r5/l.MBRD;
 
 value, posD1,posD2,posD2-posD1,posMCBRDA,posMCBRDB;
+value, posBPMWQ,sepBPMWQ;
 value, ad1.lr1,l.MBXF,ad1.lr1/l.MBXF*brho,ad1.lr1*brho;
 value, ad2.l1,l.MBRD,ad2.l1/l.MBRD*brho,ad2.l1*brho;
 
@@ -865,8 +878,10 @@ exec,install_ir15_b12(BPMWQ.4, posBPMWQ);
 ! orientation:
 ! b1: h v - IP - h v
 ! b2: v h - IP - v h
+if (cut_mcbrd==0){
 exec,install_ir15_b1_b2_alt(MCBRDV.4,posMCBRDA,posMCBRDB);
 exec,install_ir15_b1_b2_alt(MCBRDH.4,posMCBRDB,posMCBRDA);
+};
 
 !===============================================
 ! Q4
@@ -889,39 +904,39 @@ posMCBY.D4 :=posMCBY.C4      - l.MCBYH   - 0.337;
 value,posQ4,posMCBY.A4,posMCBY.B4,posMCBY.C4,posMCBY.D4;
 
 
-MCBYV.A4L1.B1:MCBYV, KICK:=  acbyv4.l1b1, polarity=+1;
-MCBYH.A4L1.B1:MCBYH, KICK:=  acbyh4.l1b1, polarity=+1;
-MCBYV.A4R1.B1:MCBYV, KICK:=  acbyv4.r1b1, polarity=+1;
-MCBYH.A4R1.B1:MCBYH, KICK:=  acbyh4.r1b1, polarity=+1;
-MCBYV.A4L5.B1:MCBYV, KICK:=  acbyv4.l5b1, polarity=+1;
-MCBYH.A4L5.B1:MCBYH, KICK:=  acbyh4.l5b1, polarity=+1;
-MCBYV.A4R5.B1:MCBYV, KICK:=  acbyv4.r5b1, polarity=+1;
-MCBYH.A4R5.B1:MCBYH, KICK:=  acbyh4.r5b1, polarity=+1;
-MCBYV.B4L1.B1:MCBYV, KICK:=  acbyvs4.l1b1, polarity=+1;
-MCBYH.B4L1.B1:MCBYH, KICK:=  acbyhs4.l1b1, polarity=+1;
-MCBYV.B4R1.B1:MCBYV, KICK:=  acbyvs4.r1b1, polarity=+1;
-MCBYH.B4R1.B1:MCBYH, KICK:=  acbyhs4.r1b1, polarity=+1;
-MCBYV.B4L5.B1:MCBYV, KICK:=  acbyvs4.l5b1, polarity=+1;
-MCBYH.B4L5.B1:MCBYH, KICK:=  acbyhs4.l5b1, polarity=+1;
-MCBYV.B4R5.B1:MCBYV, KICK:=  acbyvs4.r5b1, polarity=+1;
-MCBYH.B4R5.B1:MCBYH, KICK:=  acbyhs4.r5b1, polarity=+1;
+MCBYV.A4L1.B1:MCBYV, KICK:=  acbyv4.l1b1, polarity=+1,mech_sep=-0.194;
+MCBYH.A4L1.B1:MCBYH, KICK:=  acbyh4.l1b1, polarity=+1,mech_sep=-0.194;
+MCBYV.A4R1.B1:MCBYV, KICK:=  acbyv4.r1b1, polarity=+1,mech_sep= 0.194;
+MCBYH.A4R1.B1:MCBYH, KICK:=  acbyh4.r1b1, polarity=+1,mech_sep= 0.194;
+MCBYV.A4L5.B1:MCBYV, KICK:=  acbyv4.l5b1, polarity=+1,mech_sep=-0.194;
+MCBYH.A4L5.B1:MCBYH, KICK:=  acbyh4.l5b1, polarity=+1,mech_sep=-0.194;
+MCBYV.A4R5.B1:MCBYV, KICK:=  acbyv4.r5b1, polarity=+1,mech_sep= 0.194;
+MCBYH.A4R5.B1:MCBYH, KICK:=  acbyh4.r5b1, polarity=+1,mech_sep= 0.194;
+MCBYV.B4L1.B1:MCBYV, KICK:=  acbyvs4.l1b1, polarity=+1,mech_sep=-0.194;
+MCBYH.B4L1.B1:MCBYH, KICK:=  acbyhs4.l1b1, polarity=+1,mech_sep=-0.194;
+MCBYV.B4R1.B1:MCBYV, KICK:=  acbyvs4.r1b1, polarity=+1,mech_sep= 0.194;
+MCBYH.B4R1.B1:MCBYH, KICK:=  acbyhs4.r1b1, polarity=+1,mech_sep= 0.194;
+MCBYV.B4L5.B1:MCBYV, KICK:=  acbyvs4.l5b1, polarity=+1,mech_sep=-0.194;
+MCBYH.B4L5.B1:MCBYH, KICK:=  acbyhs4.l5b1, polarity=+1,mech_sep=-0.194;
+MCBYV.B4R5.B1:MCBYV, KICK:=  acbyvs4.r5b1, polarity=+1,mech_sep= 0.194;
+MCBYH.B4R5.B1:MCBYH, KICK:=  acbyhs4.r5b1, polarity=+1,mech_sep= 0.194;
 
-MCBYV.A4L1.B2:MCBYV, KICK:= -acbyv4.l1b2*bv_aux, polarity=+1;
-MCBYH.A4L1.B2:MCBYH, KICK:= -acbyh4.l1b2, polarity=+1;
-MCBYV.A4R1.B2:MCBYV, KICK:= -acbyv4.r1b2*bv_aux, polarity=+1;
-MCBYH.A4R1.B2:MCBYH, KICK:= -acbyh4.r1b2, polarity=+1;
-MCBYV.A4L5.B2:MCBYV, KICK:= -acbyv4.l5b2*bv_aux, polarity=+1;
-MCBYH.A4L5.B2:MCBYH, KICK:= -acbyh4.l5b2, polarity=+1;
-MCBYV.A4R5.B2:MCBYV, KICK:= -acbyv4.r5b2*bv_aux, polarity=+1;
-MCBYH.A4R5.B2:MCBYH, KICK:= -acbyh4.r5b2, polarity=+1;
-MCBYV.B4L1.B2:MCBYV, KICK:= -acbyvs4.l1b2*bv_aux, polarity=+1;
-MCBYH.B4L1.B2:MCBYH, KICK:= -acbyhs4.l1b2, polarity=+1;
-MCBYV.B4R1.B2:MCBYV, KICK:= -acbyvs4.r1b2*bv_aux, polarity=+1;
-MCBYH.B4R1.B2:MCBYH, KICK:= -acbyhs4.r1b2, polarity=+1;
-MCBYV.B4L5.B2:MCBYV, KICK:= -acbyvs4.l5b2*bv_aux, polarity=+1;
-MCBYH.B4L5.B2:MCBYH, KICK:= -acbyhs4.l5b2, polarity=+1;
-MCBYV.B4R5.B2:MCBYV, KICK:= -acbyvs4.r5b2*bv_aux, polarity=+1;
-MCBYH.B4R5.B2:MCBYH, KICK:= -acbyhs4.r5b2, polarity=+1;
+MCBYV.A4L1.B2:MCBYV, KICK:= -acbyv4.l1b2*bv_aux,  polarity=+1, mech_sep= 0.194*bv_aux;
+MCBYH.A4L1.B2:MCBYH, KICK:= -acbyh4.l1b2,         polarity=+1, mech_sep= 0.194*bv_aux;
+MCBYV.A4R1.B2:MCBYV, KICK:= -acbyv4.r1b2*bv_aux,  polarity=+1, mech_sep=-0.194*bv_aux;
+MCBYH.A4R1.B2:MCBYH, KICK:= -acbyh4.r1b2,         polarity=+1, mech_sep=-0.194*bv_aux;
+MCBYV.A4L5.B2:MCBYV, KICK:= -acbyv4.l5b2*bv_aux,  polarity=+1, mech_sep= 0.194*bv_aux;
+MCBYH.A4L5.B2:MCBYH, KICK:= -acbyh4.l5b2,         polarity=+1, mech_sep= 0.194*bv_aux;
+MCBYV.A4R5.B2:MCBYV, KICK:= -acbyv4.r5b2*bv_aux,  polarity=+1, mech_sep=-0.194*bv_aux;
+MCBYH.A4R5.B2:MCBYH, KICK:= -acbyh4.r5b2,         polarity=+1, mech_sep=-0.194*bv_aux;
+MCBYV.B4L1.B2:MCBYV, KICK:= -acbyvs4.l1b2*bv_aux, polarity=+1, mech_sep= 0.194*bv_aux;
+MCBYH.B4L1.B2:MCBYH, KICK:= -acbyhs4.l1b2,        polarity=+1, mech_sep= 0.194*bv_aux;
+MCBYV.B4R1.B2:MCBYV, KICK:= -acbyvs4.r1b2*bv_aux, polarity=+1, mech_sep=-0.194*bv_aux;
+MCBYH.B4R1.B2:MCBYH, KICK:= -acbyhs4.r1b2,        polarity=+1, mech_sep=-0.194*bv_aux;
+MCBYV.B4L5.B2:MCBYV, KICK:= -acbyvs4.l5b2*bv_aux, polarity=+1, mech_sep= 0.194*bv_aux;
+MCBYH.B4L5.B2:MCBYH, KICK:= -acbyhs4.l5b2,        polarity=+1, mech_sep= 0.194*bv_aux;
+MCBYV.B4R5.B2:MCBYV, KICK:= -acbyvs4.r5b2*bv_aux, polarity=+1, mech_sep=-0.194*bv_aux;
+MCBYH.B4R5.B2:MCBYH, KICK:= -acbyhs4.r5b2,        polarity=+1, mech_sep=-0.194*bv_aux;
 
 exec,newel_ir15_b12(BPMYA.4,BPMYA);
 
@@ -944,14 +959,14 @@ exec,install_ir15_b1_b2_alt(MCBYV.B4,posMCBY.B4,posMCBY.A4);
 l.BPMQB= 0.0;! l.BPMQB = 0
 BPMQB: MONITOR,    L := l.BPMQB  ; ! large ap. for Q5 maybe from old q4 ones
 
-MQY.5R1.B1:MQY,K1 :=  kq5.r1b1, polarity=+1;
-MQY.5L5.B1:MQY,K1 :=  kq5.l5b1, polarity=-1;
-MQY.5R5.B1:MQY,K1 :=  kq5.r5b1, polarity=+1;
-MQY.5L1.B1:MQY,K1 :=  kq5.l1b1, polarity=-1;
-MQY.5R1.B2:MQY,K1 := -kq5.r1b2*bv_aux, polarity=-1;
-MQY.5L5.B2:MQY,K1 := -kq5.l5b2*bv_aux, polarity=+1;
-MQY.5R5.B2:MQY,K1 := -kq5.r5b2*bv_aux, polarity=-1;
-MQY.5L1.B2:MQY,K1 := -kq5.l1b2*bv_aux, polarity=+1;
+MQY.5L1.B1:MQY,K1 :=  kq5.l1b1,        polarity=-1, mech_sep=-0.194       ;
+MQY.5L5.B1:MQY,K1 :=  kq5.l5b1,        polarity=-1, mech_sep=-0.194       ;
+MQY.5R1.B1:MQY,K1 :=  kq5.r1b1,        polarity=+1, mech_sep= 0.194       ;
+MQY.5R5.B1:MQY,K1 :=  kq5.r5b1,        polarity=+1, mech_sep= 0.194       ;
+MQY.5L1.B2:MQY,K1 := -kq5.l1b2*bv_aux, polarity=+1, mech_sep= 0.194*bv_aux;
+MQY.5L5.B2:MQY,K1 := -kq5.l5b2*bv_aux, polarity=+1, mech_sep= 0.194*bv_aux;
+MQY.5R1.B2:MQY,K1 := -kq5.r1b2*bv_aux, polarity=-1, mech_sep=-0.194*bv_aux;
+MQY.5R5.B2:MQY,K1 := -kq5.r5b2*bv_aux, polarity=-1, mech_sep=-0.194*bv_aux;
 
 !MCBYH.5R1.B1: MCBYH, KICK :=  acbch5.r1b1, polarity=+1;
 !MCBYV.5L5.B1: MCBYV, KICK :=  acbcv5.l5b1*bv_aux, polarity=+1;
@@ -963,31 +978,34 @@ MQY.5L1.B2:MQY,K1 := -kq5.l1b2*bv_aux, polarity=+1;
 !MCBYH.5L1.B2: MCBYH, KICK := -acbch5.l1b2, polarity=+1;
 
 ! MQY B - A for all MQY the B corrector is closest to the MQY
-MCBYV.A5R1.B2:MCBYV, KICK:= acbyvs5.r1b2*bv_aux, polarity=+1;
-MCBYH.5R1.B2 :MCBYH, KICK:= acbyhs5.r1b2, polarity=+1;
-MCBYV.B5R1.B2:MCBYV, KICK:= acbyv5.r1b2*bv_aux, polarity=+1;
-MCBYH.B5L5.B2:MCBYH, KICK:= acbyh5.l5b2, polarity=+1;
-MCBYV.5L5.B2 :MCBYV, KICK:= acbyvs5.l5b2*bv_aux, polarity=+1;
-MCBYH.A5L5.B2:MCBYH, KICK:= acbyhs5.l5b2, polarity=+1;
-MCBYV.A5R5.B2:MCBYV, KICK:= acbyvs5.r5b2*bv_aux, polarity=+1;
-MCBYH.5R5.B2 :MCBYH, KICK:= acbyhs5.r5b2, polarity=+1;
-MCBYV.B5R5.B2:MCBYV, KICK:= acbyv5.r5b2*bv_aux, polarity=+1;
-MCBYH.B5L1.B2:MCBYH, KICK:= acbyh5.l1b2, polarity=+1;
-MCBYV.5L1.B2 :MCBYV, KICK:= acbyvs5.l1b2*bv_aux, polarity=+1;
-MCBYH.A5L1.B2:MCBYH, KICK:= acbyhs5.l1b2, polarity=+1;
 
-MCBYH.A5R1.B1:MCBYH, KICK:= -acbyhs5.r1b1, polarity=+1;
-MCBYV.5R1.B1 :MCBYV, KICK:= -acbyvs5.r1b1*bv_aux, polarity=+1;
-MCBYH.B5R1.B1:MCBYH, KICK:= -acbyh5.r1b1, polarity=+1;
-MCBYV.B5L5.B1:MCBYV, KICK:= -acbyv5.l5b1*bv_aux, polarity=+1;
-MCBYH.5L5.B1 :MCBYH, KICK:= -acbyhs5.l5b1, polarity=+1;
-MCBYV.A5L5.B1:MCBYV, KICK:= -acbyvs5.l5b1*bv_aux, polarity=+1;
-MCBYH.A5R5.B1:MCBYH, KICK:= -acbyhs5.r5b1, polarity=+1;
-MCBYV.5R5.B1 :MCBYV, KICK:= -acbyvs5.r5b1*bv_aux, polarity=+1;
-MCBYH.B5R5.B1:MCBYH, KICK:= -acbyh5.r5b1, polarity=+1;
-MCBYV.B5L1.B1:MCBYV, KICK:= -acbyv5.l1b1*bv_aux, polarity=+1;
-MCBYH.5L1.B1 :MCBYH, KICK:= -acbyhs5.l1b1, polarity=+1;
-MCBYV.A5L1.B1:MCBYV, KICK:= -acbyvs5.l1b1*bv_aux, polarity=+1;
+MCBYH.5L1.B1 :MCBYH, KICK:= -acbyhs5.l1b1, polarity=+1, mech_sep=-0.194;
+MCBYH.5L5.B1 :MCBYH, KICK:= -acbyhs5.l5b1, polarity=+1, mech_sep=-0.194;
+MCBYH.A5R1.B1:MCBYH, KICK:= -acbyhs5.r1b1, polarity=+1, mech_sep= 0.194;
+MCBYH.A5R5.B1:MCBYH, KICK:= -acbyhs5.r5b1, polarity=+1, mech_sep= 0.194;
+MCBYH.B5R1.B1:MCBYH, KICK:= -acbyh5.r1b1,  polarity=+1, mech_sep= 0.194;
+MCBYH.B5R5.B1:MCBYH, KICK:= -acbyh5.r5b1,  polarity=+1, mech_sep= 0.194;
+MCBYV.5R1.B1 :MCBYV, KICK:= -acbyvs5.r1b1, polarity=+1, mech_sep= 0.194;
+MCBYV.5R5.B1 :MCBYV, KICK:= -acbyvs5.r5b1, polarity=+1, mech_sep= 0.194;
+MCBYV.A5L1.B1:MCBYV, KICK:= -acbyvs5.l1b1, polarity=+1, mech_sep=-0.194;
+MCBYV.A5L5.B1:MCBYV, KICK:= -acbyvs5.l5b1, polarity=+1, mech_sep=-0.194;
+MCBYV.B5L1.B1:MCBYV, KICK:= -acbyv5.l1b1,  polarity=+1, mech_sep=-0.194;
+MCBYV.B5L5.B1:MCBYV, KICK:= -acbyv5.l5b1,  polarity=+1, mech_sep=-0.194;
+
+
+MCBYH.5R1.B2 :MCBYH, KICK:= acbyhs5.r1b2,        polarity=+1, mech_sep=-0.194*bv_aux;
+MCBYH.5R5.B2 :MCBYH, KICK:= acbyhs5.r5b2,        polarity=+1, mech_sep=-0.194*bv_aux;
+MCBYH.A5L1.B2:MCBYH, KICK:= acbyhs5.l1b2,        polarity=+1, mech_sep= 0.194*bv_aux;
+MCBYH.A5L5.B2:MCBYH, KICK:= acbyhs5.l5b2,        polarity=+1, mech_sep= 0.194*bv_aux;
+MCBYH.B5L1.B2:MCBYH, KICK:= acbyh5.l1b2,         polarity=+1, mech_sep= 0.194*bv_aux;
+MCBYH.B5L5.B2:MCBYH, KICK:= acbyh5.l5b2,         polarity=+1, mech_sep= 0.194*bv_aux;
+MCBYV.5L1.B2 :MCBYV, KICK:= acbyvs5.l1b2*bv_aux, polarity=+1, mech_sep= 0.194*bv_aux;
+MCBYV.5L5.B2 :MCBYV, KICK:= acbyvs5.l5b2*bv_aux, polarity=+1, mech_sep= 0.194*bv_aux;
+MCBYV.A5R1.B2:MCBYV, KICK:= acbyvs5.r1b2*bv_aux, polarity=+1, mech_sep=-0.194*bv_aux;
+MCBYV.A5R5.B2:MCBYV, KICK:= acbyvs5.r5b2*bv_aux, polarity=+1, mech_sep=-0.194*bv_aux;
+MCBYV.B5R1.B2:MCBYV, KICK:= acbyv5.r1b2*bv_aux,  polarity=+1, mech_sep=-0.194*bv_aux;
+MCBYV.B5R5.B2:MCBYV, KICK:= acbyv5.r5b2*bv_aux,  polarity=+1, mech_sep=-0.194*bv_aux;
+
 
 
 posQ5  := 196.490 + deltaPosQ5; !new layout (excel file): 207.49
@@ -998,14 +1016,14 @@ dposMCBY.B5 := (l.MQY + l.MCBYV)/2 + 0.372; !same as nominal note that in IR2-8-
 dposMCBY.5  := dposMCBY.B5 + (l.MCBYH + l.MCBYV)/2 + 0.396; !be better
 dposMCBY.A5 := dposMCBY.5  + (l.MCBYV + l.MCBYH)/2 + 0.396;
 
-BPMYA.5R1.B1:BPMYA;
-BPMYA.5L5.B1:BPMYA;
-BPMYA.5R5.B1:BPMYA;
-BPMYA.5L1.B1:BPMYA;
-BPMYA.5R1.B2:BPMYA;
-BPMYA.5L5.B2:BPMYA;
-BPMYA.5R5.B2:BPMYA;
-BPMYA.5L1.B2:BPMYA;
+BPMYA.5L1.B1:BPMYA, mech_sep=-0.194;
+BPMYA.5L5.B1:BPMYA, mech_sep=-0.194;
+BPMYA.5R1.B1:BPMYA, mech_sep= 0.194;
+BPMYA.5R5.B1:BPMYA, mech_sep= 0.194;
+BPMYA.5L1.B2:BPMYA, mech_sep= 0.194*bv_aux;
+BPMYA.5L5.B2:BPMYA, mech_sep= 0.194*bv_aux;
+BPMYA.5R1.B2:BPMYA, mech_sep=-0.194*bv_aux;
+BPMYA.5R5.B2:BPMYA, mech_sep=-0.194*bv_aux;
 
 
 !exec,newel_ir15_b12(BPMQB.5,BPMQB);
@@ -1128,14 +1146,14 @@ endedit;
 posMSQ10    := l.MQML/2 +0.1605+l.MS/2;
 posMCBQ10   := posMSQ10+l.MS/2 +0.085+l.MCBV/2;
 
-MCBH.10L1.B1: MCBH, KICK := acbh10.l1b1, polarity=+1;
-MCBH.10L5.B1: MCBH, KICK := acbh10.l5b1, polarity=+1;
-MCBV.10R1.B1: MCBV, KICK := acbv10.r1b1*bv_aux, polarity=+1;
-MCBV.10R5.B1: MCBV, KICK := acbv10.r5b1*bv_aux, polarity=+1;
-MCBV.10L1.B2: MCBV, KICK := acbv10.l1b2*bv_aux, polarity=+1;
-MCBV.10L5.B2: MCBV, KICK := acbv10.l5b2*bv_aux, polarity=+1;
-MCBH.10R1.B2: MCBH, KICK := acbh10.r1b2, polarity=+1;
-MCBH.10R5.B2: MCBH, KICK := acbh10.r5b2, polarity=+1;
+MCBH.10L1.B1: MCBH, KICK := acbh10.l1b1,        polarity=+1, mech_sep=-0.194       ;
+MCBH.10L5.B1: MCBH, KICK := acbh10.l5b1,        polarity=+1, mech_sep=-0.194       ;
+MCBV.10R1.B1: MCBV, KICK := acbv10.r1b1*bv_aux, polarity=+1, mech_sep= 0.194       ;
+MCBV.10R5.B1: MCBV, KICK := acbv10.r5b1*bv_aux, polarity=+1, mech_sep= 0.194       ;
+MCBV.10L1.B2: MCBV, KICK := acbv10.l1b2*bv_aux, polarity=+1, mech_sep= 0.194*bv_aux;
+MCBV.10L5.B2: MCBV, KICK := acbv10.l5b2*bv_aux, polarity=+1, mech_sep= 0.194*bv_aux;
+MCBH.10R1.B2: MCBH, KICK := acbh10.r1b2,        polarity=+1, mech_sep=-0.194*bv_aux;
+MCBH.10R5.B2: MCBH, KICK := acbh10.r5b2,        polarity=+1, mech_sep=-0.194*bv_aux;
 
 
 DISABLE_SEXT(MS.10):macro={
@@ -1167,15 +1185,29 @@ MS.10L1.B1: MS,K2:=0;
 MS.10L5.B1: MS,K2:=0;
 MS.10R1.B2: MS,K2:=0, polarity=+1*bv_aux;
 MS.10R5.B2: MS,K2:=0, polarity=+1*bv_aux;
-on_cutMS.10=1;
+on_cutMS.10f=1;
+};
+
+DISABLE_SEXT_F_ALT(MS.14):macro={
+MS.14R8.B1: MS,K2:=0;
+MS.14R4.B1: MS,K2:=0;
+MS.14L2.B2: MS,K2:=0, polarity=+1*bv_aux;
+MS.14L6.B2: MS,K2:=0, polarity=+1*bv_aux;
+on_cutMS.14f=1;
+};
+
+
+
+DISABLE_SEXT_D(MS.10):macro={
+MS.10R1.B1: MS,K2:=0;
+MS.10R5.B1: MS,K2:=0;
+MS.10L1.B2: MS,K2:=0, polarity=+1*bv_aux;
+MS.10L5.B2: MS,K2:=0, polarity=+1*bv_aux;
+on_cutMS.10d=1;
 };
 
 exec,ENABLE_SEXT(MS.10);
 
-value,posMSQ10,posMCBQ10;
-value,on_cutMS.10,on_cutMS.14;
-if (on_cutMS.10==1){exec, DISABLE_SEXT(MS.10);};
-if (on_cutMS.14==1){exec, DISABLE_SEXT(MS.14);};
 
 ! Q10
 if(bv_aux == 1){
@@ -1202,6 +1234,15 @@ install,element=MCBV.10L5.B2,at=posMCBQ10*bv_aux, from=MQML.10L5.B2;
 install,element=MCBH.10R5.B2,at=posMCBQ10*bv_aux, from=MQML.10R5.B2;
 endedit;
 
+value,posMSQ10,posMCBQ10;
+value,on_cutMS.10,on_cutMS.14;
+if (on_cutMS.10==1){exec, DISABLE_SEXT(MS.10);};
+if (on_cutMS.14==1){exec, DISABLE_SEXT(MS.14);};
+if (on_cutMS.10f==1){exec, DISABLE_SEXT_F(MS.10);};
+if (on_cutMS.14f==1){exec, DISABLE_SEXT_F(MS.14);};
+if (on_cutMS.10d==1){exec, DISABLE_SEXT_D(MS.10);};
+if (on_cutMS.14d==1){exec, DISABLE_SEXT_D(MS.14);};
+
 ! ===============================================
 ! Crab cavities
 ! ===============================================
@@ -1210,41 +1251,60 @@ crabrf:=hrf400/lhclength*clight;
 
 crab_make_tkicker(NNN,FFF): macro {
 omega_crabsc:=twopi*HRF400/LHCLENGTH;
-z_crab:=0;
-sin_crab:=sin(omega_crabsc*z_crab);
+z_crab:=0; ! positive means head of the bunch i.e. z=-cT and z==t(madx)
+
+phi_crab_l1b1 := 0;
+phi_crab_r1b1 := 0;
+phi_crab_l1b2 := 0;
+phi_crab_r1b2 := 0;
+phi_crab_l5b1 := 0;
+phi_crab_r5b1 := 0;
+phi_crab_l5b2 := 0;
+phi_crab_r5b2 := 0;
+
+sin_crab_l1b1:=sin(-omega_crabsc*z_crab+twopi*phi_crab_l1b1);
+sin_crab_r1b1:=sin(-omega_crabsc*z_crab+twopi*phi_crab_r1b1);
+sin_crab_l1b2:=sin(-omega_crabsc*z_crab+twopi*phi_crab_l1b2);
+sin_crab_r1b2:=sin(-omega_crabsc*z_crab+twopi*phi_crab_r1b2);
+sin_crab_l5b1:=sin(-omega_crabsc*z_crab+twopi*phi_crab_l5b1);
+sin_crab_r5b1:=sin(-omega_crabsc*z_crab+twopi*phi_crab_r5b1);
+sin_crab_l5b2:=sin(-omega_crabsc*z_crab+twopi*phi_crab_l5b2);
+sin_crab_r5b2:=sin(-omega_crabsc*z_crab+twopi*phi_crab_r5b2);
+
+!sin_crab:=sin(omega_crabsc*z_crab);
 cosi1:=cos(twopi*phi_IR1/360.);sinu1:=sin(twopi*phi_IR1/360.);
 cosi5:=cos(twopi*phi_IR5/360.);sinu5:=sin(twopi*phi_IR5/360.);
 on_crab1=0;on_crab5=0;
-acfca.NNNl1.b1: tkicker, l=0, HKICK:=on_crab1*ahcrab_l1b1/FFF*sin_crab*cosi1,VKICK:=on_crab1*avcrab_l1b1/FFF*sin_crab*sinu1*bv_aux;
-acfca.NNNl1.b2: tkicker, l=0, HKICK:=on_crab1*ahcrab_l1b2/FFF*sin_crab*cosi1,VKICK:=on_crab1*avcrab_l1b2/FFF*sin_crab*sinu1*bv_aux;
-acfca.NNNr1.b1: tkicker, l=0, HKICK:=on_crab1*ahcrab_r1b1/FFF*sin_crab*cosi1,VKICK:=on_crab1*avcrab_r1b1/FFF*sin_crab*sinu1*bv_aux;
-acfca.NNNr1.b2: tkicker, l=0, HKICK:=on_crab1*ahcrab_r1b2/FFF*sin_crab*cosi1,VKICK:=on_crab1*avcrab_r1b2/FFF*sin_crab*sinu1*bv_aux;
-acfca.NNNl5.b1: tkicker, l=0, HKICK:=on_crab5*ahcrab_l5b1/FFF*sin_crab*cosi5,VKICK:=on_crab5*avcrab_l5b1/FFF*sin_crab*sinu5*bv_aux;
-acfca.NNNl5.b2: tkicker, l=0, HKICK:=on_crab5*ahcrab_l5b2/FFF*sin_crab*cosi5,VKICK:=on_crab5*avcrab_l5b2/FFF*sin_crab*sinu5*bv_aux;
-acfca.NNNr5.b1: tkicker, l=0, HKICK:=on_crab5*ahcrab_r5b1/FFF*sin_crab*cosi5,VKICK:=on_crab5*avcrab_r5b1/FFF*sin_crab*sinu5*bv_aux;
-acfca.NNNr5.b2: tkicker, l=0, HKICK:=on_crab5*ahcrab_r5b2/FFF*sin_crab*cosi5,VKICK:=on_crab5*avcrab_r5b2/FFF*sin_crab*sinu5*bv_aux;
+acfca.NNNl1.b1: tkicker, l=0, HKICK:=on_crab1*ahcrab_l1b1/FFF*sin_crab_l1b1*cosi1,VKICK:=on_crab1*avcrab_l1b1/FFF*sin_crab_l1b1*sinu1*bv_aux, mech_sep=-0.194;
+acfca.NNNl1.b2: tkicker, l=0, HKICK:=on_crab1*ahcrab_l1b2/FFF*sin_crab_l1b2*cosi1,VKICK:=on_crab1*avcrab_l1b2/FFF*sin_crab_l1b2*sinu1*bv_aux, mech_sep= 0.194*bv_aux;
+acfca.NNNr1.b1: tkicker, l=0, HKICK:=on_crab1*ahcrab_r1b1/FFF*sin_crab_r1b1*cosi1,VKICK:=on_crab1*avcrab_r1b1/FFF*sin_crab_r1b1*sinu1*bv_aux, mech_sep= 0.194;
+acfca.NNNr1.b2: tkicker, l=0, HKICK:=on_crab1*ahcrab_r1b2/FFF*sin_crab_r1b2*cosi1,VKICK:=on_crab1*avcrab_r1b2/FFF*sin_crab_r1b2*sinu1*bv_aux, mech_sep=-0.194*bv_aux;
+acfca.NNNl5.b1: tkicker, l=0, HKICK:=on_crab5*ahcrab_l5b1/FFF*sin_crab_l5b1*cosi5,VKICK:=on_crab5*avcrab_l5b1/FFF*sin_crab_l5b1*sinu5*bv_aux, mech_sep=-0.194;
+acfca.NNNl5.b2: tkicker, l=0, HKICK:=on_crab5*ahcrab_l5b2/FFF*sin_crab_l5b2*cosi5,VKICK:=on_crab5*avcrab_l5b2/FFF*sin_crab_l5b2*sinu5*bv_aux, mech_sep= 0.194*bv_aux;
+acfca.NNNr5.b1: tkicker, l=0, HKICK:=on_crab5*ahcrab_r5b1/FFF*sin_crab_r5b1*cosi5,VKICK:=on_crab5*avcrab_r5b1/FFF*sin_crab_r5b1*sinu5*bv_aux, mech_sep= 0.194;
+acfca.NNNr5.b2: tkicker, l=0, HKICK:=on_crab5*ahcrab_r5b2/FFF*sin_crab_r5b2*cosi5,VKICK:=on_crab5*avcrab_r5b2/FFF*sin_crab_r5b2*sinu5*bv_aux, mech_sep=-0.194*bv_aux;
 };
 
 crab_make_marker(NNN): macro {
-acfca.NNNl1.b1: marker;
-acfca.NNNl1.b2: marker;
-acfca.NNNr1.b1: marker;
-acfca.NNNr1.b2: marker;
-acfca.NNNl5.b1: marker;
-acfca.NNNl5.b2: marker;
-acfca.NNNr5.b1: marker;
-acfca.NNNr5.b2: marker;
+acfca.NNNl1.b1: marker, mech_sep=-0.194;
+acfca.NNNl1.b2: marker, mech_sep= 0.194*bv_aux;
+acfca.NNNr1.b1: marker, mech_sep= 0.194;
+acfca.NNNr1.b2: marker, mech_sep=-0.194*bv_aux;
+acfca.NNNl5.b1: marker, mech_sep=-0.194;
+acfca.NNNl5.b2: marker, mech_sep= 0.194*bv_aux;
+acfca.NNNr5.b1: marker, mech_sep= 0.194;
+acfca.NNNr5.b2: marker, mech_sep=-0.194*bv_aux;
 };
 
 crab_make_vac_marker(NNN): macro={
-vacfca.NNNl1.b1: marker;
-vacfca.NNNl1.b2: marker;
-vacfca.NNNr1.b1: marker;
-vacfca.NNNr1.b2: marker;
-vacfca.NNNl5.b1: marker;
-vacfca.NNNl5.b2: marker;
-vacfca.NNNr5.b1: marker;
-vacfca.NNNr5.b2: marker;
+vacfca.NNNl1.b1: marker, mech_sep=-0.194;
+vacfca.NNNl1.b2: marker, mech_sep= 0.194*bv_aux;
+vacfca.NNNr1.b1: marker, mech_sep= 0.194;
+vacfca.NNNr1.b2: marker, mech_sep=-0.194*bv_aux;
+vacfca.NNNl5.b1: marker, mech_sep=-0.194;
+vacfca.NNNl5.b2: marker, mech_sep= 0.194*bv_aux;
+vacfca.NNNr5.b1: marker, mech_sep= 0.194;
+vacfca.NNNr5.b2: marker, mech_sep=-0.194*bv_aux;
 };
 
 
@@ -1260,14 +1320,18 @@ _crab_make_rf(NNN,SIDE,IRN,BIM,FFF): macro {
 
 _crab_make_cc(nnn,side,irn,bim,fff): macro {
     !sigmas=0.075;
-    ahcrabref_sideirnbim:=ahcrab_sideirnbim/fff*cosiirn;
-    avcrabref_sideirnbim:=avcrab_sideirnbim/fff*sinuirn;
-    acrabref_sideirnbim:=sqrt(ahcrabref_sideirnbim^2+avcrabref_sideirnbim^2);
-    !vcrabref_sideirnbim:=acrabref_sideirnbim/sigmas*nrj*1e9*clight/(2*pi*     crabrf);
-    vcrabref_sideirnbim:=acrabref_sideirnbim*nrj*1e9/1e6;
-    acfca.nnnsideirn.bim: crabcavity, l=0, volt:=on_crabirn*                  vcrabref_sideirnbim,
-    lag=0.0,freq=crabrf/1e6,tilt=phi_irirn/180*pi,rv3=1e9,rv4=1e9;
-    print,text="making acrabccnnn.sideirnbim";
+    vhcrabref_sideirnbim:=ahcrab_sideirnbim/fff*cosiirn*nrj*1e9/1e6;
+    vvcrabref_sideirnbim:=avcrab_sideirnbim/fff*sinuirn*nrj*1e9/1e6;
+    acfcah.nnnsideirn.bim: crabcavity, l=0,
+      volt:=on_crabirn*vhcrabref_sideirnbim,
+      lag:=phi_crab_sideirnbim,
+      freq=crabrf/1e6,tilt=0,rv3=1e9,rv4=1e9;
+    acfcav.nnnsideirn.bim: crabcavity, l=0,
+      volt:=on_crabirn*vvcrabref_sideirnbim,
+      lag:=phi_crab_sideirnbim,
+      freq=crabrf/1e6,tilt=pi/2,rv3=1e9,rv4=1e9;
+    print,text="making acfcah.nnnsideirn.bim";
+    print,text="making acfcav.nnnsideirn.bim";
 };
 
 crab_make_cc(NNN,FFF): macro {
@@ -1319,6 +1383,62 @@ install,element=vacfca.NNNr1.b2,at= PFFF*bv_aux,from=IP1;
 endedit;
 };
 
+crab_installhv(NNN,PFFF,PBBB): macro ={
+value,PFFF,PBBB;
+if(bv_aux == 1){
+seqedit, sequence=lhcb1;
+install,element=acfcah.NNNl5.b1,at=-PBBB,from=IP5;
+install,element=acfcah.NNNr5.b1,at= PFFF,from=IP5;
+install,element=acfcah.NNNl1.b1,at=-PBBB,from=IP1.L1;
+install,element=acfcah.NNNr1.b1,at= PFFF,from=IP1;
+install,element=acfcav.NNNl5.b1,at=-PBBB,from=IP5;
+install,element=acfcav.NNNr5.b1,at= PFFF,from=IP5;
+install,element=acfcav.NNNl1.b1,at=-PBBB,from=IP1.L1;
+install,element=acfcav.NNNr1.b1,at= PFFF,from=IP1;
+endedit;
+};
+seqedit, sequence=lhcb2;
+install,element=acfcah.NNNl5.b2,at=-PFFF*bv_aux,from=IP5;
+install,element=acfcah.NNNr5.b2,at= PBBB*bv_aux,from=IP5;
+install,element=acfcah.NNNl1.b2,at=-PFFF*bv_aux,from=IP1.L1;
+install,element=acfcah.NNNr1.b2,at= PBBB*bv_aux,from=IP1;
+install,element=acfcav.NNNl5.b2,at=-PFFF*bv_aux,from=IP5;
+install,element=acfcav.NNNr5.b2,at= PBBB*bv_aux,from=IP5;
+install,element=acfcav.NNNl1.b2,at=-PFFF*bv_aux,from=IP1.L1;
+install,element=acfcav.NNNr1.b2,at= PBBB*bv_aux,from=IP1;
+endedit;
+};
+
+
+
+
+
+
+crab_removehv(NNN): macro ={
+if(bv_aux == 1){
+seqedit, sequence=lhcb1;
+remove,element=acfcah.NNNl5.b1;
+remove,element=acfcah.NNNr5.b1;
+remove,element=acfcah.NNNl1.b1;
+remove,element=acfcah.NNNr1.b1;
+remove,element=acfcav.NNNl5.b1;
+remove,element=acfcav.NNNr5.b1;
+remove,element=acfcav.NNNl1.b1;
+remove,element=acfcav.NNNr1.b1;
+endedit;
+};
+seqedit, sequence=lhcb2;
+remove,element=acfcah.NNNl5.b2;
+remove,element=acfcah.NNNr5.b2;
+remove,element=acfcah.NNNl1.b2;
+remove,element=acfcah.NNNr1.b2;
+remove,element=acfcav.NNNl5.b2;
+remove,element=acfcav.NNNr5.b2;
+remove,element=acfcav.NNNl1.b2;
+remove,element=acfcav.NNNr1.b2;
+endedit;
+};
+
 crab_remove(NNN): macro ={
 if(bv_aux == 1){
 seqedit, sequence=lhcb1;
@@ -1347,18 +1467,26 @@ endedit;
 
 exec,crab_make_tkicker(A,2);
 exec,crab_make_tkicker(B,2);
+if (crabs_2==0){
 exec,crab_make_marker(C);
 exec,crab_make_marker(D);
+};
 
 exec,crab_make_vac_marker(A);
 exec,crab_make_vac_marker(B);
+if (crabs_2==0){
 exec,crab_make_vac_marker(C);
 exec,crab_make_vac_marker(D);
+};
+
 
 exec,crab_remove(A);
 exec,crab_remove(B);
+if (crabs_2==0){
 exec,crab_remove(C);
 exec,crab_remove(D);
+};
+
 
 
 !  B1-> { 4.4 C 1.3 C 5.3 C 1.3 C 1   }
@@ -1371,7 +1499,7 @@ exec,crab_remove(D);
 !posCRABC1 = posCRAB+6.600;posCRABC2=posCRAB+10.00;
 !posCRABD1 = posCRAB+7.650;posCRABD2=posCRAB+11.05;
 
-posCRAB   = 153.942 ; ! mechanical start
+posCRAB   = 153.942+deltaposCrab ; ! mechanical start 153.942 !posD2+11.429
 posCRABA1 = posCRAB+0.875;posCRABA2=posCRAB + 4.695;
 posCRABB1 = posCRAB+1.925 ;posCRABB2=posCRAB+ 5.745;
 posCRABC1 = posCRAB+8.315 ;posCRABC2=posCRAB+12.135;
@@ -1383,9 +1511,10 @@ value, posCRABA2,posCRABB2,posCRABC2,posCRABD2;
 !staggered
 exec,crab_install(A,posCRABA1,posCRABA2);
 exec,crab_install(B,posCRABB1,posCRABB2);
+if (crabs_2==0){
 exec,crab_install(C,posCRABC1,posCRABC2);
 exec,crab_install(D,posCRABD1,posCRABD2);
-
+};
 
 !===============================================
 ! Masks
@@ -1453,12 +1582,29 @@ if (L.TAXN==0) {L.TAXN=3.332;};
 !D2 region, posBPMWQ = BPM right in front of D2
 
 
-posTCLX   := posD2-l.MBRD/2-0.983-1.933;
-posTCTXH  := posTCLX-1.757;
-posTCTV   := posTCTXH-2.001;
-posTAXN   := posTCTV-1.482-l.TAXN/2;
+posTCLX   := posD2-l.MBRD/2-0.983-1.933 + deltaposTAXN;
+posTCTXH  := posTCLX-1.757 ;
+posTCTPV   := posTCTXH-2.001 ;
+posTAXN   := posTCTPV-1.482-l.TAXN/2 ;
 
-value,posTAXN,posTCTV,posTCTXH,posTCLX;
+posTAXNA  := posTAXN - L.TAXN/2;
+posTAXNB  := posTAXN + L.TAXN/2;
+posTCLXA  := posTCLX - L.TCLX/2;
+posTCLXB  := posTCLX + L.TCLX/2;
+posTCTXHA  := posTCTXH - L.TCTXH/2;
+posTCTXHB  := posTCTXH + L.TCTXH/2;
+posTCTPVA  := posTCTPV - L.TCTPV/2;
+posTCTPVB  := posTCTPV + L.TCTPV/2;
+
+sepTCLX   := round((posTCLX -posD1)/(posD2-posD1)*194)/1e3;
+sepTCTXH  := round((posTCTXH-posD1)/(posD2-posD1)*194)/1e3;
+sepTCTV   := round((posTCTPV -posD1)/(posD2-posD1)*194)/1e3;
+sepTAXN   := round((posTAXN -posD1)/(posD2-posD1)*194)/1e3;
+sepTAXNA  := round((posTAXN -posD1- L.TAXN/2)/(posD2-posD1)*194)/1e3;
+sepTAXNB  := round((posTAXN -posD1+ L.TAXN/2)/(posD2-posD1)*194)/1e3;
+
+value,posTAXN,posTCTPV,posTCTXH,posTCLX;
+value,sepTAXN, sepTAXNA, sepTAXNB, sepTCTV, sepTCTXH, sepTCLX;
 
 !Q5/Q6 region
 !IP side
@@ -1467,9 +1613,9 @@ posTCL.5Q := posQ5 -  6.300 ;
 posTCL.6C := posQ6 - l.mqml/2-0.192-l.mcbch-0.926-1.405-2.010  ; !was 1.760
 posTCL.6Q := posQ6 - l.mqml/2-1.411-1.405-2.010;! 6.976 ;
 
-posTCTV.6Q := posQ5 + l.mqy/2+1.435+1.915; !8.7655 - 4.235; !left !was 1.664
+posTCTPV.6Q := posQ5 + l.mqy/2+1.435+1.915; !8.7655 - 4.235; !left !was 1.664
 posTCTH.6Q := posQ5 + l.mqy/2+1.435+1.915+2.000;!10.765 - 4.235; !left
-!posTCTV.6C := posQ5 +  8.158 ; !right
+!posTCTPV.6C := posQ5 +  8.158 ; !right
 !posTCTH.6C := posQ5 + 10.158 ; !right
 
 
@@ -1477,13 +1623,45 @@ posTCTH.6Q := posQ5 + l.mqy/2+1.435+1.915+2.000;!10.765 - 4.235; !left
 value,posTCL.5C,posTCL.5Q,posTCL.6C,posTCL.6Q;
 
 
+L.TCTH=1;
+L.TCTV=1;
 
-TCLX.4R1.B1: TCL; TCLX.4R5.B1: TCL;
-TCLX.4L1.B2: TCL; TCLX.4L5.B2: TCL;
-TCL.5R1.B1: TCL; TCL.5R5.B1: TCL;
-TCL.5L1.B2: TCL; TCL.5L5.B2: TCL;
-TCL.6R1.B1: TCL; TCL.6R5.B1: TCL;
-TCL.6L1.B2: TCL; TCL.6L5.B2: TCL;
+TCTH: rcollimator, L:=L.TCTH;
+TCTV: rcollimator, L:=L.TCTV;
+
+L.TCLX=1;
+TCLX: rcollimator, L:=L.TCLX;
+
+TCLX.4R1.B1: TCLX, mech_sep= sepTCLX;
+TCLX.4L1.B2: TCLX, mech_sep= sepTCLX*bv_aux;
+TCLX.4R5.B1: TCLX, mech_sep= sepTCLX;
+TCLX.4L5.B2: TCLX, mech_sep= sepTCLX*bv_aux;
+
+VTCLX.4R1.A.B2: marker, mech_sep=-sepTCLX;
+VTCLX.4L1.A.B1: marker, mech_sep=-sepTCLX*bv_aux;
+VTCLX.4R5.A.B2: marker, mech_sep=-sepTCLX;
+VTCLX.4L5.A.B1: marker, mech_sep=-sepTCLX*bv_aux;
+
+VTCLX.4R1.B.B2: marker, mech_sep=-sepTCLX;
+VTCLX.4L1.B.B1: marker, mech_sep=-sepTCLX*bv_aux;
+VTCLX.4R5.B.B2: marker, mech_sep=-sepTCLX;
+VTCLX.4L5.B.B1: marker, mech_sep=-sepTCLX*bv_aux;
+
+
+TCL.5R1.B1: TCL, mech_sep= 0.194;
+TCL.5L1.B2: TCL, mech_sep= 0.194*bv_aux;
+TCL.5R5.B1: TCL, mech_sep= 0.194;
+TCL.5L5.B2: TCL, mech_sep= 0.194*bv_aux;
+
+
+
+TCL.6R1.B1: TCL, mech_sep= 0.194;
+TCL.6L1.B2: TCL, mech_sep= 0.194*bv_aux;
+TCL.6R5.B1: TCL, mech_sep= 0.194;
+TCL.6L5.B2: TCL, mech_sep= 0.194*bv_aux;
+
+
+
 
 TAXN: RCOLLIMATOR, l:=l.TAXN;
 
@@ -1492,26 +1670,78 @@ TAXN.4R5: TAXN;
 TAXN.4L1: TAXN;
 TAXN.4L5: TAXN;
 
-TCTV: RCOLLIMATOR, l:=l.TCT;
-TCTH: RCOLLIMATOR, l:=l.TCT;
-TCTXH.4L1.B1: TCTH; TCTXH.4L5.B1: TCTH;
-TCTPV.4L1.B1: TCTV; TCTPV.4L5.B1: TCTV;
-TCTXH.4R1.B2: TCTH; TCTXH.4R5.B2: TCTH;
-TCTPV.4R1.B2: TCTV; TCTPV.4R5.B2: TCTV;
+VTAXNA.4L1.B1: marker, mech_sep=-sepTAXNA;
+VTAXNA.4L1.B2: marker, mech_sep= sepTAXNA*bv_aux;
+VTAXNA.4L5.B1: marker, mech_sep=-sepTAXNA;
+VTAXNA.4L5.B2: marker, mech_sep= sepTAXNA*bv_aux;
+VTAXNA.4R1.B1: marker, mech_sep= sepTAXNA;
+VTAXNA.4R1.B2: marker, mech_sep=-sepTAXNA*bv_aux;
+VTAXNA.4R5.B1: marker, mech_sep= sepTAXNA;
+VTAXNA.4R5.B2: marker, mech_sep=-sepTAXNA*bv_aux;
+VTAXNB.4L1.B1: marker, mech_sep=-sepTAXNB;
+VTAXNB.4L1.B2: marker, mech_sep= sepTAXNB*bv_aux;
+VTAXNB.4L5.B1: marker, mech_sep=-sepTAXNB;
+VTAXNB.4L5.B2: marker, mech_sep= sepTAXNB*bv_aux;
+VTAXNB.4R1.B1: marker, mech_sep= sepTAXNB;
+VTAXNB.4R1.B2: marker, mech_sep=-sepTAXNB*bv_aux;
+VTAXNB.4R5.B1: marker, mech_sep= sepTAXNB;
+VTAXNB.4R5.B2: marker, mech_sep=-sepTAXNB*bv_aux;
 
-TCTH.6L1.B1: TCTH; TCTH.6L5.B1: TCTH;
-TCTV.6L1.B1: TCTV; TCTV.6L5.B1: TCTV;
-TCTH.6R1.B2: TCTH; TCTH.6R5.B2: TCTH;
-TCTV.6R1.B2: TCTV; TCTV.6R5.B2: TCTV;
+
+l.TCTPV=1; l.TCTHX=1;
+
+TCTPV: RCOLLIMATOR, l:=l.TCTPV;
+TCTHX: RCOLLIMATOR, l:=l.TCTHX;
+TCTPV.4L1.B1: TCTPV, mech_sep=-sepTCTPV;
+TCTPV.4L5.B1: TCTPV, mech_sep=-sepTCTPV;
+TCTPV.4R1.B2: TCTPV, mech_sep=-sepTCTPV*bv_aux;
+TCTPV.4R5.B2: TCTPV, mech_sep=-sepTCTPV*bv_aux;
+TCTXH.4L1.B1: TCTHX, mech_sep=-sepTCTXH;
+TCTXH.4L5.B1: TCTHX, mech_sep=-sepTCTXH;
+TCTXH.4R1.B2: TCTHX, mech_sep=-sepTCTXH*bv_aux;
+TCTXH.4R5.B2: TCTHX, mech_sep=-sepTCTXH*bv_aux;
+
+VTCTPV.4L1.A.B2: marker, mech_sep= sepTCTPV*bv_aux;
+VTCTPV.4L5.A.B2: marker, mech_sep= sepTCTPV*bv_aux;
+VTCTPV.4R1.A.B1: marker, mech_sep= sepTCTPV;
+VTCTPV.4R5.A.B1: marker, mech_sep= sepTCTPV;
+VTCTXH.4L1.A.B2: marker, mech_sep= sepTCTXH*bv_aux;
+VTCTXH.4L5.A.B2: marker, mech_sep= sepTCTXH*bv_aux;
+VTCTXH.4R1.A.B1: marker, mech_sep= sepTCTXH;
+VTCTXH.4R5.A.B1: marker, mech_sep= sepTCTXH;
+
+VTCTPV.4L1.B.B2: marker, mech_sep= sepTCTPV*bv_aux;
+VTCTPV.4L5.B.B2: marker, mech_sep= sepTCTPV*bv_aux;
+VTCTPV.4R1.B.B1: marker, mech_sep= sepTCTPV;
+VTCTPV.4R5.B.B1: marker, mech_sep= sepTCTPV;
+VTCTXH.4L1.B.B2: marker, mech_sep= sepTCTXH*bv_aux;
+VTCTXH.4L5.B.B2: marker, mech_sep= sepTCTXH*bv_aux;
+VTCTXH.4R1.B.B1: marker, mech_sep= sepTCTXH;
+VTCTXH.4R5.B.B1: marker, mech_sep= sepTCTXH;
+
+
+TCTH.6L1.B1: TCTH, mech_sep=-0.194;
+TCTV.6L1.B1: TCTV, mech_sep=-0.194;
+TCTH.6R1.B2: TCTH, mech_sep=-0.194*bv_aux;
+TCTV.6R1.B2: TCTV, mech_sep=-0.194*bv_aux;
+TCTH.6L5.B1: TCTH, mech_sep=-0.194;
+TCTV.6L5.B1: TCTV, mech_sep=-0.194;
+TCTH.6R5.B2: TCTH, mech_sep=-0.194*bv_aux;
+TCTV.6R5.B2: TCTV, mech_sep=-0.194*bv_aux;
+
 
 l.BPTXaux=0.285;
 posBPTX=posTCLMB.4C-1.5/2-0.301-l.BPTXaux/2;
 
 
-APWL.5R5.B1: APWL; APWL.5R5.B2: APWL;
-APWL.5L5.B1: APWL; APWL.5L5.B2: APWL;
-APWL.5R1.B1: APWL; APWL.5R1.B2: APWL;
-APWL.5L1.B1: APWL; APWL.5L1.B2: APWL;
+APWL.5L1.B1: APWL, mech_sep=-0.194;
+APWL.5L1.B2: APWL, mech_sep= 0.194*bv_aux;
+APWL.5L5.B1: APWL, mech_sep=-0.194;
+APWL.5L5.B2: APWL, mech_sep= 0.194*bv_aux;
+APWL.5R1.B1: APWL, mech_sep= 0.194;
+APWL.5R1.B2: APWL, mech_sep=-0.194*bv_aux;
+APWL.5R5.B1: APWL, mech_sep= 0.194;
+APWL.5R5.B2: APWL, mech_sep=-0.194*bv_aux;
 
 L.APWLaux=0.6;
 posAPWL1=posTCLMB.4C-1.5/2-0.301-0.285-1.002-L.APWLaux/2;
@@ -1519,22 +1749,36 @@ posAPWL2=posAPWL1-L.APWLaux ;
 
 exec,install_ir15_b1_b2(APWL.5,posAPWL1,posAPWL2);
 exec,install_ir15_cmn(TAXN.4,posTAXN);
+exec,install_ir15_b1_b2(VTAXNA.4,posTAXNA,posTAXNA);
+exec,install_ir15_b1_b2(VTAXNB.4,posTAXNB,posTAXNB);
 
 if(bv_aux == 1){
 seqedit,sequence=lhcb1;
 !! ... TCTH
 install,element=TCTXH.4L1.B1, at= -posTCTXH,   from= IP1.L1;
 install,element=TCTXH.4L5.B1, at= -posTCTXH,   from= IP5;
+install,element=VTCTXH.4R1.A.B1, at= posTCTXHA,   from= IP1;
+install,element=VTCTXH.4R5.A.B1, at= posTCTXHA,   from= IP5;
+install,element=VTCTXH.4R1.B.B1, at= posTCTXHB,   from= IP1;
+install,element=VTCTXH.4R5.B.B1, at= posTCTXHB,   from= IP5;
 install,element=TCTH.6L1.B1, at= -posTCTH.6Q,   from= IP1.L1;
 install,element=TCTH.6L5.B1, at= -posTCTH.6Q,   from= IP5;
 !! ... TCTV
-install,element=TCTPV.4L1.B1, at= -posTCTV, from=IP1.L1;
-install,element=TCTPV.4L5.B1, at= -posTCTV, from=IP5;
-install,element=TCTV.6L1.B1, at= -posTCTV.6Q,   from= IP1.L1;
-install,element=TCTV.6L5.B1, at= -posTCTV.6Q,   from= IP5;
+install,element=TCTPV.4L1.B1, at= -posTCTPV, from=IP1.L1;
+install,element=TCTPV.4L5.B1, at= -posTCTPV, from=IP5;
+install,element=VTCTPV.4R1.A.B1, at= posTCTPVA, from=IP1;
+install,element=VTCTPV.4R5.A.B1, at= posTCTPVA, from=IP5;
+install,element=VTCTPV.4R1.B.B1, at= posTCTPVB, from=IP1;
+install,element=VTCTPV.4R5.B.B1, at= posTCTPVB, from=IP5;
+install,element=TCTV.6L1.B1, at= -posTCTPV.6Q,   from= IP1.L1;
+install,element=TCTV.6L5.B1, at= -posTCTPV.6Q,   from= IP5;
 ! ... TCL
 install,element=TCLX.4R1.B1,  at= posTCLX, from=IP1;
 install,element=TCLX.4R5.B1,  at= posTCLX, from=IP5;
+install,element=VTCLX.4L1.A.B1,  at= -posTCLXA, from=IP1.L1;
+install,element=VTCLX.4L5.A.B1,  at= -posTCLXA, from=IP5;
+install,element=VTCLX.4L1.B.B1,  at= -posTCLXB, from=IP1.L1;
+install,element=VTCLX.4L5.B.B1,  at= -posTCLXB, from=IP5;
 install,element=TCL.5R1.B1,  at= posTCL.5C, from=IP1;
 install,element=TCL.5R5.B1,  at= posTCL.5C, from=IP5;
 install,element=TCL.6R1.B1,  at= posTCL.6C, from=IP1;
@@ -1547,18 +1791,30 @@ endedit;
 
 seqedit,sequence=lhcb2;
 ! ... TCTH
+install,element=VTCTXH.4L1.A.B2, at= -posTCTXHA*bv_aux,   from= IP1.L1;
+install,element=VTCTXH.4L5.A.B2, at= -posTCTXHA*bv_aux,   from= IP5;
+install,element=VTCTXH.4L1.B.B2, at= -posTCTXHB*bv_aux,   from= IP1.L1;
+install,element=VTCTXH.4L5.B.B2, at= -posTCTXHB*bv_aux,   from= IP5;
 install,element=TCTXH.4R1.B2, at=  posTCTXH*bv_aux,   from= IP1;
 install,element=TCTXH.4R5.B2, at=  posTCTXH*bv_aux,   from= IP5;
 install,element=TCTH.6R1.B2, at=  posTCTH.6Q*bv_aux,   from= IP1;
 install,element=TCTH.6R5.B2, at=  posTCTH.6Q*bv_aux,   from= IP5;
 ! ... TCTV
-install,element=TCTPV.4R1.B2, at= posTCTV*bv_aux, from=IP1;
-install,element=TCTPV.4R5.B2, at= posTCTV*bv_aux, from=IP5;
-install,element=TCTV.6R1.B2, at= posTCTV.6Q*bv_aux, from=IP1;
-install,element=TCTV.6R5.B2, at= posTCTV.6Q*bv_aux, from=IP5;
+install,element=TCTPV.4R1.B2, at= posTCTPV*bv_aux, from=IP1;
+install,element=TCTPV.4R5.B2, at= posTCTPV*bv_aux, from=IP5;
+install,element=VTCTPV.4L1.A.B2, at= -posTCTPVA*bv_aux, from=IP1.L1;
+install,element=VTCTPV.4L5.A.B2, at= -posTCTPVA*bv_aux, from=IP5;
+install,element=VTCTPV.4L1.B.B2, at= -posTCTPVB*bv_aux, from=IP1.L1;
+install,element=VTCTPV.4L5.B.B2, at= -posTCTPVB*bv_aux, from=IP5;
+install,element=TCTV.6R1.B2, at= posTCTPV.6Q*bv_aux, from=IP1;
+install,element=TCTV.6R5.B2, at= posTCTPV.6Q*bv_aux, from=IP5;
 ! ... TCL
 install,element=TCLX.4L1.B2,  at= -posTCLX*bv_aux, from=IP1.L1;
 install,element=TCLX.4L5.B2,  at= -posTCLX*bv_aux, from=IP5;
+install,element=VTCLX.4R1.A.B2,  at= posTCLXA*bv_aux, from=IP1;
+install,element=VTCLX.4R5.A.B2,  at= posTCLXA*bv_aux, from=IP5;
+install,element=VTCLX.4R1.B.B2,  at= posTCLXB*bv_aux, from=IP1;
+install,element=VTCLX.4R5.B.B2,  at= posTCLXB*bv_aux, from=IP5;
 install,element=TCL.5L1.B2,  at= -posTCL.5C*bv_aux, from=IP1.L1;
 install,element=TCL.5L5.B2,  at= -posTCL.5C*bv_aux, from=IP5;
 install,element=TCL.6L1.B2,  at= -posTCL.6Q*bv_aux, from=IP1.L1;
@@ -1575,8 +1831,274 @@ mbh_ir7q8=1;mbh_ir7q10=0;
 mbh_ir1q8=0;mbh_ir1q9=0;mbh_ir1q10=0;
 mbh_ir5q8=0;mbh_ir5q9=0;mbh_ir5q10=0;
 
-call,file="slhc/toolkit/install_mbh.madx";
+!call,file="slhc/toolkit/install_mbh.madx";
 
 
+l.MBH                = 5.307; !28/11/2017 F. Savary
+Kmax_MBH             = 11.23;
+Kmin_MBH             = 0.2460;!..to be reviewed
+Imax_MBH             = 11850;
+l.tcld              = 1;
+
+
+
+!mbh_rm_mcs=0; ! =1 remove mcs
+!mbh_rm_mcdo=0; ! =1 remove mco,mcd
+
+MBH: RBEND, L := l.MBH, Kmax := Kmax_MBH, Kmin := Kmin_MBH, 
+    Calib := Kmax_MBH / Imax_MBH;
+
+tcld: RCOLLIMATOR, L=l.tcld;
+
+if (mylhcbeam>2){
+  bv_aux=-1;
+} else {
+  bv_aux=1;
+};
+
+
+
+install_mbh(mbm,mbn,irn,ira,irb): macro={
+print, text="installing MBH in Qmbn  IRirn in the ARCirairb";
+
+abh.airnirb=ab.airnirb/2;   kbh.airnirb=abh.airnirb/l.mbh;
+abh.airairn=ab.airairn/2;   kbh.airairn=abh.airairn/l.mbh;
+
+!tolerances from DS MB Q13-Q7
+mbh_sag=l.MBH/ab.a78*2*(1/cos(ab.a78/4)-1)+(0.7225*0.0051/4); !sagitta + drift
+mbh_shift=-mbh_sag+0.0013*0;
+g_MBH=0.017150;
+r_MBH:=0.022+mbh_shift;
+r_tol_MBH=0.0009;
+h_tol_MBH=0.0008;
+v_tol_MBH=0.0005;
+
+
+if (irn==7){
+mech_sep_mbh_lirnb1:= 0.194+mbh_shift*2;
+mech_sep_mbh_rirnb1:= 0.194+mbh_shift*2;
+mech_sep_mbh_lirnb2:=-0.194+mbh_shift*2;
+mech_sep_mbh_rirnb2:=-0.194+mbh_shift*2;
+};
+
+if (irn==2){
+mech_sep_mbh_lirnb1:= 0.194+mbh_shift*2;
+mech_sep_mbh_rirnb1:=-0.194+mbh_shift*2;
+mech_sep_mbh_lirnb2:=-0.194+mbh_shift*2;
+mech_sep_mbh_rirnb2:= 0.194+mbh_shift*2;
+};
+
+if (irn==1 || irn==5){
+mech_sep_mbh_lirnb1:=-0.194+mbh_shift*2;
+mech_sep_mbh_rirnb1:= 0.194+mbh_shift*2;
+mech_sep_mbh_lirnb2:= 0.194+mbh_shift*2;
+mech_sep_mbh_rirnb2:=-0.194+mbh_shift*2;
+};
+
+
+mbh.ambnrirn.b1:mbh, angle:= abh.airnirb, k0:= kbh.airnirb,  polarity=+1, mech_sep:=mech_sep_mbh_rirnb1;
+mbh.bmbnrirn.b1:mbh, angle:= abh.airnirb, k0:= kbh.airnirb,  polarity=+1, mech_sep:=mech_sep_mbh_rirnb1;
+mbh.ambnlirn.b2:mbh, angle:=-abh.airairn, k0:=-kbh.airairn,  polarity=+1, mech_sep:=mech_sep_mbh_lirnb2;
+mbh.bmbnlirn.b2:mbh, angle:=-abh.airairn, k0:=-kbh.airairn,  polarity=+1, mech_sep:=mech_sep_mbh_lirnb2;
+mbh.ambnrirn.b2:mbh, angle:=-abh.airnirb, k0:=-kbh.airnirb,  polarity=+1, mech_sep:=mech_sep_mbh_rirnb2;
+mbh.bmbnrirn.b2:mbh, angle:=-abh.airnirb, k0:=-kbh.airnirb,  polarity=+1, mech_sep:=mech_sep_mbh_rirnb2;
+mbh.ambnlirn.b1:mbh, angle:= abh.airairn, k0:= kbh.airairn,  polarity=+1, mech_sep:=mech_sep_mbh_lirnb1;
+mbh.bmbnlirn.b1:mbh, angle:= abh.airairn, k0:= kbh.airairn,  polarity=+1, mech_sep:=mech_sep_mbh_lirnb1;
+
+
+
+
+
+value,mbh_hsag,g_mbh,r_mbh;
+
+mbh.ambnrirn.b1,APERTYPE=RECTELLIPSE,APERTURE:={r_MBH,g_MBH,r_MBH,r_MBH},APER_TOL={r_tol_MBH,h_tol_MBH,v_tol_MBH};
+mbh.bmbnrirn.b1,APERTYPE=RECTELLIPSE,APERTURE:={r_MBH,g_MBH,r_MBH,r_MBH},APER_TOL={r_tol_MBH,h_tol_MBH,v_tol_MBH};
+mbh.ambnlirn.b2,APERTYPE=RECTELLIPSE,APERTURE:={r_MBH,g_MBH,r_MBH,r_MBH},APER_TOL={r_tol_MBH,h_tol_MBH,v_tol_MBH};
+mbh.bmbnlirn.b2,APERTYPE=RECTELLIPSE,APERTURE:={r_MBH,g_MBH,r_MBH,r_MBH},APER_TOL={r_tol_MBH,h_tol_MBH,v_tol_MBH};
+mbh.ambnrirn.b2,APERTYPE=RECTELLIPSE,APERTURE:={r_MBH,g_MBH,r_MBH,r_MBH},APER_TOL={r_tol_MBH,h_tol_MBH,v_tol_MBH};
+mbh.bmbnrirn.b2,APERTYPE=RECTELLIPSE,APERTURE:={r_MBH,g_MBH,r_MBH,r_MBH},APER_TOL={r_tol_MBH,h_tol_MBH,v_tol_MBH};
+mbh.ambnlirn.b1,APERTYPE=RECTELLIPSE,APERTURE:={r_MBH,g_MBH,r_MBH,r_MBH},APER_TOL={r_tol_MBH,h_tol_MBH,v_tol_MBH};
+mbh.bmbnlirn.b1,APERTYPE=RECTELLIPSE,APERTURE:={r_MBH,g_MBH,r_MBH,r_MBH},APER_TOL={r_tol_MBH,h_tol_MBH,v_tol_MBH};
+
+
+
+tcld.mbnrirn.b1: tcld;
+tcld.mbnlirn.b2: tcld;
+vtcld.mbnlirn.b1: tcld;
+vtcld.mbnrirn.b2: tcld;
+
+
+
+s.tcld.mbnrirn.b1: marker;
+s.tcld.mbnlirn.b2: marker;
+e.tcld.mbnrirn.b1: marker;
+e.tcld.mbnlirn.b2: marker;
+
+pos_mbr=mb.mbmmbnrirn.b1->at;
+pos_mbl=mb.mbmmbnlirn.b1->at;
+
+value, pos_mbr, pos_mbl;
+
+if(bv_aux == 1){
+Option, -echo,warn,info;
+seqedit,sequence=lhcb1;
+remove,element=mb.mbmmbnrirn.b1;
+remove,element=mb.mbmmbnlirn.b1;
+if (mbh_rm_mcs == 1){
+remove,element=mcs.mbmmbnrirn.b1;
+remove,element=mcs.mbmmbnlirn.b1;
+};
+if (mbh_rm_mcdo == 1){
+remove,element=mco.mbnlirn.b1;
+remove,element=mco.mbnrirn.b1;
+remove,element=mco.mbnlirn.b1;
+remove,element=mco.mbnrirn.b1;
+remove,element=mcd.mbnlirn.b1;
+remove,element=mcd.mbnrirn.b1;
+remove,element=mcd.mbnlirn.b1;
+remove,element=mcd.mbnrirn.b1;
+};
+remove,element=mbh.ambnrirn.b1;
+remove,element=mbh.ambnlirn.b1;
+remove,element=s.tcld.mbnrirn.b1;
+remove,element=tcld.mbnrirn.b1  ;
+remove,element=e.tcld.mbnrirn.b1;
+remove,element=mbh.bmbnrirn.b1   ;
+remove,element=mbh.bmbnlirn.b1   ;
+remove,element=vtcld.mbnrirn.b1;
+install,element=mbh.ambnlirn.b1  ,at=pos_mbl-4.454,from=ipirn;
+install,element=vtcld.mbnrirn.b1 ,at=pos_mbl    ,from=ipirn;
+install,element=mbh.bmbnlirn.b1  ,at=pos_mbl+4.454,from=ipirn;
+install,element=mbh.ambnrirn.b1  ,at=pos_mbr-4.454,from=ipirn;
+install,element=s.tcld.mbnrirn.b1,at=pos_mbr-0.5,from=ipirn;
+install,element=tcld.mbnrirn.b1  ,at=pos_mbr    ,from=ipirn;
+install,element=e.tcld.mbnrirn.b1,at=pos_mbr+0.5,from=ipirn;
+install,element=mbh.bmbnrirn.b1  ,at=pos_mbr+4.454,from=ipirn;
+endedit;
+};
+
+pos_mbl=mb.mbmmbnlirn.b2->at;
+pos_mbr=mb.mbmmbnrirn.b2->at;
+
+seqedit,sequence=lhcb2;
+remove,element=mb.mbmmbnlirn.b2;
+remove,element=mb.mbmmbnrirn.b2;
+if (__mbmbm>0){
+remove,element=mcs.mbmmbnrirn.b2;
+remove,element=mcs.mbmmbnlirn.b2;
+};
+if (__mbmbm==1){
+remove,element=mco.mbnlirn.b2;
+remove,element=mco.mbnrirn.b2;
+remove,element=mco.mbnlirn.b2;
+remove,element=mco.mbnrirn.b2;
+remove,element=mcd.mbnlirn.b2;
+remove,element=mcd.mbnrirn.b2;
+remove,element=mcd.mbnlirn.b2;
+remove,element=mcd.mbnrirn.b2;
+};
+remove,element=mbh.ambnlirn.b2;
+remove,element=mbh.ambnrirn.b2;
+remove,element=s.tcld.mbnlirn.b2;
+remove,element=s.tcld.mbnrirn.b2;
+remove,element=tcld.mbnlirn.b2  ;
+remove,element=tcld.mbnrirn.b2  ;
+remove,element=e.tcld.mbnlirn.b2;
+remove,element=e.tcld.mbnrirn.b2;
+remove,element=mbh.bmbnlirn.b2   ;
+remove,element=mbh.bmbnrirn.b2   ;
+remove,element=vtcld.mbnrirn.b2;
+install,element=mbh.ambnlirn.b2,  at=pos_mbl-bv_aux*4.454,from=ipirn;
+install,element=s.tcld.mbnlirn.b2,at=pos_mbl-bv_aux*0.5,from=ipirn;
+install,element=tcld.mbnlirn.b2  ,at=pos_mbl           ,from=ipirn;
+install,element=e.tcld.mbnlirn.b2,at=pos_mbl+bv_aux*0.5,from=ipirn;
+install,element=mbh.bmbnlirn.b2,  at=pos_mbl+bv_aux*4.454,from=ipirn;
+install,element=mbh.ambnrirn.b2,  at=pos_mbr-bv_aux*4.454,from=ipirn;
+install,element=vtcld.mbnrirn.b2, at=pos_mbr           ,from=ipirn;
+install,element=mbh.bmbnrirn.b2,  at=pos_mbr+bv_aux*4.454,from=ipirn;
+endedit;
+Option, -echo,-warn,-info;
+
+!show,mbh.ambnrirn.b1;
+!show,mbh.ambnlirn.b2;
+
+};
+
+seqedit,sequence=lhcb1;flatten;cycle,start=IP3;flatten;endedit;
+seqedit,sequence=lhcb2;flatten;cycle,start=IP3;flatten;endedit;
+
+
+if (mbh_ir1q8 >0){ exec,install_mbh(b,8 ,1,8,2); };
+if (mbh_ir1q9 >0){ exec,install_mbh(b,9 ,1,8,2); };
+if (mbh_ir1q10>0){ exec,install_mbh(b,10,1,8,2); };
+
+if (mbh_ir2q8 >0){ exec,install_mbh(a,8 ,2,1,3); };
+if (mbh_ir2q10>0){ exec,install_mbh(a,10,2,1,3); };
+
+if (mbh_ir5q8 >0){ exec,install_mbh(b,8 ,5,4,6); };
+if (mbh_ir5q9 >0){ exec,install_mbh(b,9 ,5,4,6); };
+if (mbh_ir5q10>0){ exec,install_mbh(b,10,5,4,6); };
+
+if (mbh_ir7q8 >0){ exec,install_mbh(b,8 ,7,6,8); };
+if (mbh_ir7q10>0){ exec,install_mbh(b,10,7,6,8); };
+
+
+!end slhc/toolkit/install_mbh.madx
+
+!set default lag for cavities
+
+LAGRF400.B1=0.5;
+LAGRF400.B2=0.;
 
 endedit;
+
+
+ELENS.5L4.B1: marker;
+ELENS.5L4.B2: marker;
+ELENS.5R4.B1: marker;
+ELENS.5R4.B2: marker;
+
+if(bv_aux ==1){
+  seqedit,sequence=lhcb1;
+  remove,element=ELENS.5L4.B1;
+  remove,element=ELENS.5R4.B1;
+  install,element=ELENS.5L4.B1,  at=-40,from=ip4;
+  install,element=ELENS.5R4.B1,  at= 40,from=ip4;
+  endedit;
+};
+
+seqedit,sequence=lhcb2;
+remove,element=ELENS.5L4.B2;
+remove,element=ELENS.5R4.B2;
+install,element=ELENS.5L4.B2,  at=-40*bv_aux,from=ip4;
+install,element=ELENS.5R4.B2,  at= 40*bv_aux,from=ip4;
+endedit;
+
+
+
+! TCLD in point 2
+! https://indico.cern.ch/event/680374/  9/12/2017
+! https://indico.cern.ch/event/680374/contributions/2787337/attachments/1570745/2477819/ICL_Meeting_-_11TTCLD_-_CCTCLD_v.3.pptx
+
+posTCLD.2=425.71735;
+value,posTCLD.2;
+
+
+TCLD.11R2.B1: TCLD;
+TCLD.11L2.B2: TCLD;
+
+
+if(bv_aux ==1){
+  seqedit,sequence=lhcb1;
+  remove,element=TCLD.11R2.B1;
+  remove,element=LECL.11R2.B1;
+  install,element=TCLD.11R2.B1,  at=posTCLD.2,from=ip2;
+  endedit;
+};
+
+seqedit,sequence=lhcb2;
+remove,element=TCLD.11L2.B2;
+remove,element=LEBR.11L2.B2;
+install,element=TCLD.11L2.B2,  at=-posTCLD.2*bv_aux,from=ip2;
+endedit;
+

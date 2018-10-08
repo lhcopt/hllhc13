@@ -1,0 +1,33 @@
+option, warn,info;
+system,"ln -fns /afs/cern.ch/eng/lhc/optics/runIII lhc";
+system,"ln -fns /afs/cern.ch/eng/lhc/optics/HLLHCV1.3  slhc";
+
+
+option, -echo, -warn,info;
+call,file="slhc/toolkit/macro.madx";
+call,file="lhc/lhc.seq";
+call,file="slhc/toolkit/macro.madx";
+
+exec,mk_beam(7000);
+call,file="slhc/hllhc_sequence.madx";
+
+seqedit,sequence=lhcb1;flatten;cycle,start=IP3;endedit;
+seqedit,sequence=lhcb2;flatten;cycle,start=IP3;endedit;
+
+
+call,file="slhc/opt_150_150_150_150.madx";
+
+betx_IP1   =   0.150 ; bety_IP1   =   0.150 ;
+betx_IP5   =   0.150 ; bety_IP5   =   0.150 ;
+
+exec,round_phases;
+
+call,file="slhc/toolkit/rematch_hllhc.madx";
+
+exec,save_optics_hllhc(new_optics.madx);
+
+
+
+
+
+

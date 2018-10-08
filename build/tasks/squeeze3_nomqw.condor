@@ -1,0 +1,12 @@
+        executable              = madx_wrapper.sh
+        arguments               = job_mksqueeze3_nomqw.madx
+        output                  = std.$(ClusterId).$(ProcId).out
+        error                   = std.$(ClusterId).$(ProcId).err
+        log                     = condor.$(ClusterId).$(ProcId).log
+        initial_dir             = $(dirname)
+        transfer_input_files    = job_mksqueeze3_nomqw.madx
+        transfer_output_files   = result.tgz
+        +MaxRuntime = 2400
+        queue dirname in squeeze3_nomqw/500, squeeze3_nomqw/490, squeeze3_nomqw/480, squeeze3_nomqw/470, squeeze3_nomqw/460, squeeze3_nomqw/450, squeeze3_nomqw/440, squeeze3_nomqw/430, squeeze3_nomqw/420, squeeze3_nomqw/410, squeeze3_nomqw/400, squeeze3_nomqw/390, squeeze3_nomqw/380, squeeze3_nomqw/370, squeeze3_nomqw/360, squeeze3_nomqw/350, squeeze3_nomqw/340, squeeze3_nomqw/330, squeeze3_nomqw/320, squeeze3_nomqw/310, squeeze3_nomqw/300, squeeze3_nomqw/290, squeeze3_nomqw/280, squeeze3_nomqw/270, squeeze3_nomqw/260, squeeze3_nomqw/250, squeeze3_nomqw/240, squeeze3_nomqw/230, squeeze3_nomqw/220, squeeze3_nomqw/210, squeeze3_nomqw/200, squeeze3_nomqw/190, squeeze3_nomqw/180, squeeze3_nomqw/170, squeeze3_nomqw/160, squeeze3_nomqw/150
+        ##queue dirname matching (squeeze3_nomqw/*)
+        

@@ -45,12 +45,15 @@ apq8=2512; apq6=apq8; apq7=apq8;
 scl=0.15; sch=0.99;
 no_match_beta=0; jac_calls=10; jac_tol=1e-14;
 while(betxip8b1>1.4){
-  betxip8b1=betxip8b1-0.1;
   match_on_triplet=0; call,file="slhc/toolkit/rematch_ir8b12.madx";
+  betxip8b1=betxip8b1-0.1;
 };
 call,file="slhc/toolkit/rematch_xing_ir28.madx";
 call,file="slhc/toolkit/rematch_w.madx";
-call,file="slhc/toolkit/rematch_disp.madx";
+call,file="slhc/toolkit/rematch_disp_new.madx";
+
+call,file="slhc/toolkit/mk_arc_trims.madx";
+
 
 if (bbb<=500){
     if (is_thin==0){exec,save_optics_hllhc(opt_bbb_bbb_bbb_bbb.madx);};

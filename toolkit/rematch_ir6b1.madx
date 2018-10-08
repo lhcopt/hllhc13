@@ -1,6 +1,6 @@
 scale = 23348.89927;
 scmin := 0.03*7000./nrj;
-sch=0.99;
+sch=0.99; if (is_thin==1){sch=1;};
 qtlimit2 := sch*160.0/scale;
 qtlimit3 := sch*200.0/scale;
 qtlimit4 := sch*125.0/scale;
@@ -23,9 +23,9 @@ use,sequence=lhcb1,range=s.ds.l6.b1/e.ds.r6.b1;
 match,      sequence=lhcb1, beta0=bir6b1;
 weight,mux=10,muy=10;
 if(nomatch_beta==0){
-constraint,sequence=lhcb1,range=ip6,bety=betyip6b1;
 constraint,sequence=lhcb1,range=ip6,betx=betxip6b1;
 constraint,sequence=lhcb1,range=ip6,alfx=alfxip6b1;
+constraint,sequence=lhcb1,range=ip6,bety=betyip6b1;
 constraint,sequence=lhcb1,range=ip6,alfy=alfyip6b1;
 };
 if(nomatch_dx==0){
