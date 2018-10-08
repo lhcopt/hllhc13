@@ -308,6 +308,7 @@ select,flag=twiss,
               betx,bety,dx,dy,x,y,px,py,
               apertype,aper_1,aper_2,aper_3,aper_4,
               aptol_1,aptol_2,aptol_3,mech_sep,
+              apoff_1,apoff_2,
        range=s.ds.lnir.bim/e.ds.rnir.bim;
 if(FULL==0)
 {use,sequence=lhcbim,range=s.ds.lnir.bim/e.ds.rnir.bim;
@@ -329,6 +330,7 @@ select,flag=aperture,clear;
 select,flag=aperture,
        column=name,s,betx,bety,dx,dy,x,y,n1,px,py,
              apertype,aper_1,aper_2,aper_3,aper_4,
+             apoff_1,apoff_2,
              rtol,xtol,ytol;
 if (version >=50208) {
    aperture,range=s.ds.lnir.bim/e.ds.rnir.bim,
@@ -378,6 +380,7 @@ select,flag=aperture,clear;
 select,flag=aperture,
        column=name,s,betx,bety,dx,dy,x,y,n1,
              apertype,aper_1,aper_2,aper_3,aper_4,
+             apoff_1,apoff_2,
              rtol,xtol,ytol;
 if (version >=50208) {
 aperture,range=e.ds.rNARC1.BIM/s.ds.lNARC2.BIM,
@@ -1182,6 +1185,14 @@ refpxIP1BIM=table(twiss,IP1,px); refpyIP1BIM=table(twiss,IP1,py);
 refpxIP5BIM=table(twiss,IP5,px); refpyIP5BIM=table(twiss,IP5,py);
 refpxIP2BIM=table(twiss,IP2,px); refpyIP2BIM=table(twiss,IP2,py);
 refpxIP8BIM=table(twiss,IP8,px); refpyIP8BIM=table(twiss,IP8,py);
+refxIP3BIM=table(twiss,IP3,x); refyIP3BIM=table(twiss,IP3,y);
+refxIP4BIM=table(twiss,IP4,x); refyIP4BIM=table(twiss,IP4,y);
+refxIP6BIM=table(twiss,IP6,x); refyIP6BIM=table(twiss,IP6,y);
+refxIP7BIM=table(twiss,IP7,x); refyIP7BIM=table(twiss,IP7,y);
+refpxIP3BIM=table(twiss,IP3,px); refpyIP3BIM=table(twiss,IP3,py);
+refpxIP4BIM=table(twiss,IP4,px); refpyIP4BIM=table(twiss,IP4,py);
+refpxIP6BIM=table(twiss,IP6,px); refpyIP6BIM=table(twiss,IP6,py);
+refpxIP7BIM=table(twiss,IP7,px); refpyIP7BIM=table(twiss,IP7,py);
 value,refbetxIP1BIM,refbetyIP1BIM;
 value,refbetxIP5BIM,refbetyIP5BIM;
 value,refbetxIP2BIM,refbetyIP2BIM;
@@ -2731,9 +2742,11 @@ select,flag=twiss,
               betx,bety,alfx,alfy,dx,dpx,dy,dpy,mux,muy,x,y,px,py,t,pt,
               wx,wy,phix,phiy,n1,ddx,ddy,ddpx,ddpy,
               keyword,aper_1,aper_2,aper_3,aper_4,
+              apoff_1,apoff_2,
               aptol_1,aptol_2,aptol_3,apertype,mech_sep;
 select,flag=aperture,
        column=name,s,n1,aper_1,aper_2,aper_3,aper_4,rtol,xtol,ytol,
+              apoff_1,apoff_2,
               betx,bety,dx,dy,x,y,apertype;
 };
 
@@ -3521,6 +3534,7 @@ show,mux81b1, muy81b1, mux81b2, muy81b2;
 };
 
 myslice: macro = {
+if (nslice_mbh==0){nslice_mbh=4;};
 if (MBX.4L2->l>0) {
   select, flag=makethin, clear;
   select, flag=makethin, class=mb, slice=2;
@@ -3536,12 +3550,11 @@ if (MBX.4L2->l>0) {
   select, flag=makethin, class=mbrd,  slice=4;   !new d2 (if needed)
   select, flag=makethin, class=mqyy,  slice=4;   !new q4
   select, flag=makethin, class=mqyl,  slice=4;   !new q5
-  select, flag=makethin, class=mbh,   slice=4;   !11T dipoles
   select, flag=makethin, pattern=mbx\.,    slice=4;
   select, flag=makethin, pattern=mbrb\.,   slice=4;
   select, flag=makethin, pattern=mbrc\.,   slice=4;
   select, flag=makethin, pattern=mbrs\.,   slice=4;
-  select, flag=makethin, pattern=mbh\.,    slice=4;
+  select, flag=makethin, pattern=mbh\.,    slice=nslice_mbh;
   select, flag=makethin, pattern=mqwa\.,   slice=4;
   select, flag=makethin, pattern=mqwb\.,   slice=4;
   select, flag=makethin, pattern=mqy\.,    slice=4;
@@ -4824,8 +4837,14 @@ system,"rm tmp/optknob_*";
 check_ipknob(kkkk,irn,vvvv): macro={
 kkkkaux=kkkk;
 kkkk=vvvv;
+if (on_disp==0){
 exec,mk_irtwiss(irn,b1);
 exec,mk_irtwiss(irn,b2);
+} else {
+exec,check_ip(b1);
+exec,check_ip(b2);
+};
+
 show,refxipirnb1;
 show,refxipirnb2;
 show,refyipirnb1;

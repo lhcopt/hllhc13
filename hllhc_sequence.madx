@@ -1596,8 +1596,6 @@ posTCTXHB  := posTCTXH + L.TCTXH/2;
 posTCTPVA  := posTCTPV - L.TCTPV/2;
 posTCTPVB  := posTCTPV + L.TCTPV/2;
 
-
-
 sepTCLX   := round((posTCLX -posD1)/(posD2-posD1)*194)/1e3;
 sepTCTXH  := round((posTCTXH-posD1)/(posD2-posD1)*194)/1e3;
 sepTCTV   := round((posTCTPV -posD1)/(posD2-posD1)*194)/1e3;
@@ -1607,7 +1605,6 @@ sepTAXNB  := round((posTAXN -posD1+ L.TAXN/2)/(posD2-posD1)*194)/1e3;
 
 value,posTAXN,posTCTPV,posTCTXH,posTCLX;
 value,sepTAXN, sepTAXNA, sepTAXNB, sepTCTV, sepTCTXH, sepTCLX;
-
 
 !Q5/Q6 region
 !IP side
@@ -1867,23 +1864,49 @@ print, text="installing MBH in Qmbn  IRirn in the ARCirairb";
 abh.airnirb=ab.airnirb/2;   kbh.airnirb=abh.airnirb/l.mbh;
 abh.airairn=ab.airairn/2;   kbh.airairn=abh.airairn/l.mbh;
 
-mbh.ambnrirn.b1:mbh, angle:= abh.airnirb, k0= kbh.airnirb,  polarity=+1;
-mbh.bmbnrirn.b1:mbh, angle:= abh.airnirb, k0= kbh.airnirb,  polarity=+1;
-mbh.ambnlirn.b2:mbh, angle:=-abh.airairn, k0=-kbh.airairn,  polarity=+1;
-mbh.bmbnlirn.b2:mbh, angle:=-abh.airairn, k0=-kbh.airairn,  polarity=+1;
-mbh.ambnrirn.b2:mbh, angle:=-abh.airnirb, k0=-kbh.airnirb,  polarity=+1;
-mbh.bmbnrirn.b2:mbh, angle:=-abh.airnirb, k0=-kbh.airnirb,  polarity=+1;
-mbh.ambnlirn.b1:mbh, angle:= abh.airairn, k0= kbh.airairn,  polarity=+1;
-mbh.bmbnlirn.b1:mbh, angle:= abh.airairn, k0= kbh.airairn,  polarity=+1;
-
-
 !tolerances from DS MB Q13-Q7
-mbh_hsag=l.MBH/ab.a78*2*(1/cos(ab.a78/4)-1)/2; !half sagitta
+mbh_sag=l.MBH/ab.a78*2*(1/cos(ab.a78/4)-1)+(0.7225*0.0051/4); !sagitta + drift
+mbh_shift=-mbh_sag+0.0013*0;
 g_MBH=0.017150;
-r_MBH:=0.022-MBH_hsag;
+r_MBH:=0.022+mbh_shift;
 r_tol_MBH=0.0009;
 h_tol_MBH=0.0008;
 v_tol_MBH=0.0005;
+
+
+if (irn==7){
+mech_sep_mbh_lirnb1:= 0.194+mbh_shift*2;
+mech_sep_mbh_rirnb1:= 0.194+mbh_shift*2;
+mech_sep_mbh_lirnb2:=-0.194+mbh_shift*2;
+mech_sep_mbh_rirnb2:=-0.194+mbh_shift*2;
+};
+
+if (irn==2){
+mech_sep_mbh_lirnb1:= 0.194+mbh_shift*2;
+mech_sep_mbh_rirnb1:=-0.194+mbh_shift*2;
+mech_sep_mbh_lirnb2:=-0.194+mbh_shift*2;
+mech_sep_mbh_rirnb2:= 0.194+mbh_shift*2;
+};
+
+if (irn==1 || irn==5){
+mech_sep_mbh_lirnb1:=-0.194+mbh_shift*2;
+mech_sep_mbh_rirnb1:= 0.194+mbh_shift*2;
+mech_sep_mbh_lirnb2:= 0.194+mbh_shift*2;
+mech_sep_mbh_rirnb2:=-0.194+mbh_shift*2;
+};
+
+
+mbh.ambnrirn.b1:mbh, angle:= abh.airnirb, k0:= kbh.airnirb,  polarity=+1, mech_sep:=mech_sep_mbh_rirnb1;
+mbh.bmbnrirn.b1:mbh, angle:= abh.airnirb, k0:= kbh.airnirb,  polarity=+1, mech_sep:=mech_sep_mbh_rirnb1;
+mbh.ambnlirn.b2:mbh, angle:=-abh.airairn, k0:=-kbh.airairn,  polarity=+1, mech_sep:=mech_sep_mbh_lirnb2;
+mbh.bmbnlirn.b2:mbh, angle:=-abh.airairn, k0:=-kbh.airairn,  polarity=+1, mech_sep:=mech_sep_mbh_lirnb2;
+mbh.ambnrirn.b2:mbh, angle:=-abh.airnirb, k0:=-kbh.airnirb,  polarity=+1, mech_sep:=mech_sep_mbh_rirnb2;
+mbh.bmbnrirn.b2:mbh, angle:=-abh.airnirb, k0:=-kbh.airnirb,  polarity=+1, mech_sep:=mech_sep_mbh_rirnb2;
+mbh.ambnlirn.b1:mbh, angle:= abh.airairn, k0:= kbh.airairn,  polarity=+1, mech_sep:=mech_sep_mbh_lirnb1;
+mbh.bmbnlirn.b1:mbh, angle:= abh.airairn, k0:= kbh.airairn,  polarity=+1, mech_sep:=mech_sep_mbh_lirnb1;
+
+
+
 
 
 value,mbh_hsag,g_mbh,r_mbh;
@@ -1901,6 +1924,10 @@ mbh.bmbnlirn.b1,APERTYPE=RECTELLIPSE,APERTURE:={r_MBH,g_MBH,r_MBH,r_MBH},APER_TO
 
 tcld.mbnrirn.b1: tcld;
 tcld.mbnlirn.b2: tcld;
+vtcld.mbnlirn.b1: tcld;
+vtcld.mbnrirn.b2: tcld;
+
+
 
 s.tcld.mbnrirn.b1: marker;
 s.tcld.mbnlirn.b2: marker;
@@ -1938,13 +1965,15 @@ remove,element=tcld.mbnrirn.b1  ;
 remove,element=e.tcld.mbnrirn.b1;
 remove,element=mbh.bmbnrirn.b1   ;
 remove,element=mbh.bmbnlirn.b1   ;
-install,element=mbh.ambnlirn.b1  ,at=pos_mbl-4.4,from=ipirn;
-install,element=mbh.bmbnlirn.b1  ,at=pos_mbl+4.4,from=ipirn;
-install,element=mbh.ambnrirn.b1  ,at=pos_mbr-4.4,from=ipirn;
+remove,element=vtcld.mbnrirn.b1;
+install,element=mbh.ambnlirn.b1  ,at=pos_mbl-4.454,from=ipirn;
+install,element=vtcld.mbnrirn.b1 ,at=pos_mbl    ,from=ipirn;
+install,element=mbh.bmbnlirn.b1  ,at=pos_mbl+4.454,from=ipirn;
+install,element=mbh.ambnrirn.b1  ,at=pos_mbr-4.454,from=ipirn;
 install,element=s.tcld.mbnrirn.b1,at=pos_mbr-0.5,from=ipirn;
 install,element=tcld.mbnrirn.b1  ,at=pos_mbr    ,from=ipirn;
 install,element=e.tcld.mbnrirn.b1,at=pos_mbr+0.5,from=ipirn;
-install,element=mbh.bmbnrirn.b1  ,at=pos_mbr+4.4,from=ipirn;
+install,element=mbh.bmbnrirn.b1  ,at=pos_mbr+4.454,from=ipirn;
 endedit;
 };
 
@@ -1978,13 +2007,15 @@ remove,element=e.tcld.mbnlirn.b2;
 remove,element=e.tcld.mbnrirn.b2;
 remove,element=mbh.bmbnlirn.b2   ;
 remove,element=mbh.bmbnrirn.b2   ;
-install,element=mbh.ambnlirn.b2,  at=pos_mbl-bv_aux*4.4,from=ipirn;
+remove,element=vtcld.mbnrirn.b2;
+install,element=mbh.ambnlirn.b2,  at=pos_mbl-bv_aux*4.454,from=ipirn;
 install,element=s.tcld.mbnlirn.b2,at=pos_mbl-bv_aux*0.5,from=ipirn;
 install,element=tcld.mbnlirn.b2  ,at=pos_mbl           ,from=ipirn;
 install,element=e.tcld.mbnlirn.b2,at=pos_mbl+bv_aux*0.5,from=ipirn;
-install,element=mbh.bmbnlirn.b2,  at=pos_mbl+bv_aux*4.4,from=ipirn;
-install,element=mbh.ambnrirn.b2,  at=pos_mbr-bv_aux*4.4,from=ipirn;
-install,element=mbh.bmbnrirn.b2,  at=pos_mbr+bv_aux*4.4,from=ipirn;
+install,element=mbh.bmbnlirn.b2,  at=pos_mbl+bv_aux*4.454,from=ipirn;
+install,element=mbh.ambnrirn.b2,  at=pos_mbr-bv_aux*4.454,from=ipirn;
+install,element=vtcld.mbnrirn.b2, at=pos_mbr           ,from=ipirn;
+install,element=mbh.bmbnrirn.b2,  at=pos_mbr+bv_aux*4.454,from=ipirn;
 endedit;
 Option, -echo,-warn,-info;
 

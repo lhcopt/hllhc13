@@ -1,0 +1,33 @@
+option, warn,info;
+system,"ln -fns /eos/project/a/abpdata/lhc/optics/runIII lhc";
+system,"ln -fns /eos/project/a/abpdata/lhc/optics/HLLHCV1.3  slhc";
+
+
+option, -echo, -warn,info;
+call,file="slhc/toolkit/macro.madx";
+call,file="slhc/aperture/const_for_aperture.madx";
+call,file="lhc/lhc.seq";
+call,file="slhc/toolkit/macro.madx";
+
+exec,mk_beam(7000);
+
+call,file="slhc/hllhc_sequence.madx";
+call,file="lhc/aperture/aperture.b1.madx";
+call,file="lhc/aperture/aperture.b2.madx";
+call,file="lhc/aperture/aper_tol.b1.madx";
+call,file="lhc/aperture/aper_tol.b2.madx";
+!call,file="slhc/aperture/exp_pipe_model_after_LS3.madx";
+!call,file="slhc/aperture/exp_pipe_install_after_LS3.madx";
+call,file="slhc/aperture/aperture_upgrade_IT.madx";
+call,file="slhc/aperture/aperture_upgrade_MS.madx";
+
+seqedit,sequence=lhcb1;flatten;cycle,start=IP3;endedit;
+seqedit,sequence=lhcb2;flatten;cycle,start=IP3;endedit;
+
+
+
+call,file="slhc/opt_150_150_150_150.madx";
+on_x1=295;on_x5=295;on_x2=200;on_x8=-200;
+on_lhcb=1; on_alice=1;
+
+exec,check_ip(b1); exec,check_ip(b2);

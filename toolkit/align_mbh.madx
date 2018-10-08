@@ -20,7 +20,7 @@ ealign, dx=dx_EELEM;
 select, flag=error, clear;
 !r_MBHt=0.022;
 !show,EELEM;
-!EELEM,APERTYPE=RECTELLIPSE,APERTURE={r_MBHt,g_MBH,r_MBHt,r_MBHt},APER_TOL={r_tol_MBH,h_tol_MBH,v_tol_MBH};
+!EELEM,APERTYPE=RECTELLIPSE,APERTURE={r_MBHt,g_MBH,r_MBHt,r_MBHt},APER_TOL={r_tol_MBH,h_tol_MBH,v_tol_MBH},APER_OFFSET={dx_EELEM,0};
 };
 };
 

@@ -73,8 +73,8 @@ g_D2=r_D2 - t_CT_D2;
 !r2_D2:=43.5-1.5*(1-no_bs_tol); !C. Garion 9/4/2015 3mm CB, 1.5mm mech tol
 !r1_D2:=38.5-1.5*(1-no_bs_tol)-2.5;  !C. Garion 30/11/2015 3mm CB, 1.5mm mech tol 100mm
 !r2_D2:=43-1.5*(1-no_bs_tol)-2.5;    !C. Garion 30/11/2015 3mm CB, 1.5mm mech tol 100mm
-r1_D2:=38.5-1.5*(1-no_bs_tol);  !C. Garion 30/11/2015 3mm CB, 1.5mm mech tol
-r2_D2:=43-1.5*(1-no_bs_tol);    !C. Garion 30/11/2015 3mm CB, 1.5mm mech tol
+r1_D2:=38.5-1.5*(1-no_bs_tol)-rmod_D2*1e3;  !C. Garion 30/11/2015 3mm CB, 1.5mm mech tol
+r2_D2:=43-1.5*(1-no_bs_tol)-rmod_D2*1e3;    !C. Garion 30/11/2015 3mm CB, 1.5mm mech tol
 
 r_D2=sqrt((sqrt(2)*r1_D2-r2_D2)^2+r2_D2^2)/1e3;
 g_D2=r1_D2/1e3;
@@ -275,7 +275,8 @@ r_tol_BPM_Q6 =r_tol_Q5; h_tol_BPM_Q6 =h_tol_Q5; v_tol_BPM_Q6 =v_tol_Q5;
 !a_TAN=0.0370; b_TAN=0.0320; !95mm
 !was a 26 mm radius circle nominally,see also offset files
 !where the aperture sep. of the TAN has been reduced from 160 mm to 155 mm
-a_TAN=0.0425-1.5e-3*(1-no_bs_tol); b_TAN=0.0425-1.5e-3*(1-no_bs_tol);
+a_TAN=0.0425-1.5e-3*(1-no_bs_tol)-rmod_TAXN;
+b_TAN=0.0425-1.5e-3*(1-no_bs_tol)-rmod_TAXN;
 r_tol_TAN:=0.00084+r_tol_TAN_mod;
 h_tol_TAN:=0.00136+h_tol_TAN_mod;v_tol_TAN:=0.001+v_tol_TAN_mod;
 
@@ -460,9 +461,8 @@ MS.10R5.B2,   APER_TOL:={ 0.000840,    0.000580,     0.000650 };
 MS.10L1.B2,   APER_TOL:={ 0.000840,    0.000670,     0.000410 };
 
 
-mbh_hsag=l.MBH/ab.a78*2*(1/cos(ab.a78/4)-1)/2; !half sagitta
 g_MBH=0.017150;
-r_MBH:=0.022-MBH_hsag;
+r_MBH:=0.022+mbh_shift;
 r_tol_MBH=0.0009;
 h_tol_MBH=0.0008;
 v_tol_MBH=0.0005;

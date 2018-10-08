@@ -1,0 +1,401 @@
+option, warn,info;
+system,"rm -rf temp"; system,"mkdir temp";
+system,"ln -fns /afs/cern.ch/eng/lhc/optics/HLLHCV1.3 slhc";
+system,"ln -fns /afs/cern.ch/eng/lhc/optics/runIII lhc";
+
+Option, -echo,-warn,-info;
+call,file="lhc/lhc.seq";
+call,file="slhc/toolkit/macro.madx";
+call,file="slhc/toolkit/optics_log.madx";
+Option, -echo,warn,-info,no_fatal_stop;
+
+exec,mk_beam(7000);
+
+call,file="slhc/hllhc_sequence.madx";
+call,file="slhc/opt_500_500_500_500.madx";
+call,file="opt_500_500_500_500_v2.madx";
+
+exec,check_ip(b1); exec,check_ip(b2);
+
+seqedit,sequence=lhcB1; flatten; cycle,start=s.ds.l3.B1; endedit;
+seqedit,sequence=lhcB2; flatten; cycle,start=s.ds.l3.B2; endedit;
+
+exec,selectIR15(5,45,56,b1); exec,selectIR15(5,45,56,b2);
+exec,selectIR15(1,81,12,b1); exec,selectIR15(1,81,12,b2);
+exec,mk_irtwiss(5,b1); exec,mk_irtwiss(5,b2);
+
+on_holdselect=1; jac_calls=   10;jac_tol=1e-20; jac_bisec=3; tar=0;
+
+return;
+
+! create lin table
+exec,make_opticstbl_ir5hl(ir5sq2_lin,2);nnn=1;
+call,file="opt_500_500_500_500_v2.madx";
+fill,table=ir5sq2_lin,row=nnn; nnn=nnn+1;
+call,file="opt_2000_2000_2000_2000.madx";
+fill,table=ir5sq2_lin,row=nnn; nnn=nnn+1;
+call,file="opt_6000_6000_6000_6000v3.madx";
+fill,table=ir5sq2_lin,row=nnn; nnn=nnn+1;
+call,file="opt_30000_30000_30000_30000.madx";
+fill,table=ir5sq2_lin,row=nnn; nnn=nnn+1;
+write,table=ir5sq2_lin,file=ir5sq2_lin.tfs;
+
+
+grad=132.6; scl=0.12; sch=0.96;sc79=0.99;bmaxds=200;imb=1.20;
+apq1011=1200; apq789:=apq1011; apq6:=apq789; apq5:=apq6;apq4:=apq5;
+match_inj_tunes=0; ir5q5sym=-1;
+
+! create table
+exec,make_opticstbl_ir5hl(ir5sq,31);
+call,file="opt_500_500_500_500_v2.madx";
+match_on_triplet=0; call,file="rematch_ir15_b12.madx";
+fill,table=ir5sq,row=1;write,table=ir5sq,file=ir5sq.tfs;
+nnn=2;call,file=sq2_lin.madx;
+no_match_beta=1;
+match_on_triplet=0; call,file="rematch_ir15_b12.madx";
+nnn=3;call,file=sq2b_lin.madx;
+match_on_triplet=0; call,file="rematch_ir15_b12.madx";
+fill,table=ir5sq,row=21;write,table=ir5sq,file=ir5sq.tfs;
+
+! make squeeze 0.5 to 2
+iii=0;while(iii<=10 && tar<1e-12){
+nnn=1.0+iii/10;
+call,file=sq2_lin.madx;
+no_match_beta=1;
+match_on_triplet=3; call,file="rematch_ir15_b12.madx";
+no_match_beta=0;
+match_on_triplet=3; call,file="rematch_ir15_b12.madx";
+match_on_triplet=0; call,file="rematch_ir15_b12.madx";
+iii=iii+1;
+fill,table=ir5sq,row=iii;write,table=ir5sq,file=ir5sq.tfs;
+};
+
+
+! make squeeze 2 to 6
+iii=10;while(iii<=20 && tar<1e-12){
+nnn=2.0+(iii-10)/10;
+call,file=sq2b_lin.madx;
+no_match_beta=1;
+match_on_triplet=3; call,file="rematch_ir15_b12.madx";
+no_match_beta=0;
+match_on_triplet=3; call,file="rematch_ir15_b12.madx";
+match_on_triplet=0; call,file="rematch_ir15_b12.madx";
+iii=iii+1;
+fill,table=ir5sq,row=iii;write,table=ir5sq,file=ir5sq.tfs;
+};
+
+! make squeeze 6 to 30
+iii=20;while(iii<=30 && tar<1e-12){
+nnn=3.0+(iii-20)/10;
+call,file=sq2c_lin.madx;
+no_match_beta=1;
+match_on_triplet=3; call,file="rematch_ir15_b12.madx";
+no_match_beta=0;
+match_on_triplet=3; call,file="rematch_ir15_b12.madx";
+match_on_triplet=0; call,file="rematch_ir15_b12.madx";
+iii=iii+1;
+fill,table=ir5sq,row=iii;write,table=ir5sq,file=ir5sq.tfs;
+};
+
+
+
+return;
+
+
+exec,make_opticstbl_ir5hl(ir5sqf,99);
+
+betyip5b1:=betxip5b1; betxip5b2:=betxip5b1; betyip5b2:=betxip5b1;
+
+betxip5b1=0.5;step=0.05; iii=1;
+while(betxip5b1<2.0){
+call,file="sqf2_nlin.madx";
+!exec,mk_irtwiss(5,b1); exec,mk_irtwiss(5,b2);
+!betxip5b2=refbetxip5b2;betyip5b2=refbetyip5b2;betyip5b1=refbetyip5b1;
+match_on_triplet=3; call,file="rematch_ir15_b12.madx";
+fill,table=ir5sqf,row=iii;
+value,betxip5b1,iii;
+betxip5b1=betxip5b1+step; iii=iii+1;
+};
+
+betxip5b1=2.0;step=0.2; iii=31;
+while(betxip5b1<6.0){
+call,file="sq2b_nlin.madx";
+!exec,mk_irtwiss(5,b1); exec,mk_irtwiss(5,b2);
+!betxip5b2=refbetxip5b2;betyip5b2=refbetyip5b2;betyip5b1=refbetyip5b1;
+match_on_triplet=3; call,file="rematch_ir15_b12.madx";
+fill,table=ir5sqf,row=iii;
+betxip5b1=betxip5b1+step; iii=iii+1;
+};
+
+betxip5b1=6.0;step=0.5;iii=51;
+!betxip5b1=25.5;step=0.5;iii=90;
+while(betxip5b1<30.1){
+call,file="sq2c_nlin.madx";
+!exec,mk_irtwiss(5,b1); exec,mk_irtwiss(5,b2);
+!betxip5b2=refbetxip5b2;betyip5b2=refbetyip5b2;betyip5b1=refbetyip5b1;
+match_on_triplet=3; call,file="rematch_ir15_b12.madx";
+fill,table=ir5sqf,row=iii;
+betxip5b1=betxip5b1+step; iii=iii+1;
+};
+write,table=ir5sqf,file=ir5sqf.tfs;
+
+value,iii,betxip5b1;
+
+exec,mk_irtwiss(5,b1); exec,mk_irtwiss(5,b2);
+betxip5b2=refbetxip5b2;betyip5b2=refbetyip5b2;betyip5b1=refbetyip5b1;
+
+
+betxip5b1=4.0;
+call,file="sq2b_nlin.madx";
+exec,mk_irtwiss(5,b1); exec,mk_irtwiss(5,b2);
+
+betxip5b1=20.0;
+call,file="sq2c_nlin.madx";
+exec,mk_irtwiss(5,b1); exec,mk_irtwiss(5,b2);
+
+! create lin table
+exec,make_opticstbl_ir5hl(ir5sq1,2);nnn=1;
+call,file="opt_500_500_500_500_v2.madx";
+fill,table=ir5sq1,row=nnn; nnn=nnn+1;
+call,file="opt_6000_6000_6000_6000v3.madx";
+fill,table=ir5sq1,row=nnn; nnn=nnn+1;
+write,table=ir5sq1,file=ir5sq1.tfs;
+
+grad=132.6; scl=0.12; sch=0.90;sc79=0.99;bmaxds=200;imb=1.20;
+apq1011=1200; apq789:=apq1011; apq6:=apq789; apq5:=apq6;apq4:=apq5;
+match_inj_tunes=0;
+
+! create table
+exec,make_opticstbl_ir5hl(ir5sq,21);
+nnn=2;call,file=sq_lin.madx;
+match_on_triplet=0; call,file="rematch_ir15_b12.madx";
+fill,table=ir5sq,row=21;write,table=ir5sq,file=ir5sq.tfs;
+
+
+! make squeeze
+iii=0;while(iii<=20 && tar<1e-12){
+nnn=1.0+iii/20;
+call,file=sq_lin.madx;
+no_match_beta=1;
+match_on_triplet=3; call,file="rematch_ir15_b12.madx";
+no_match_beta=0;
+match_on_triplet=3; call,file="rematch_ir15_b12.madx";
+match_on_triplet=0; call,file="rematch_ir15_b12.madx";
+iii=iii+1;
+fill,table=ir5sq,row=iii;write,table=ir5sq,file=ir5sq.tfs;
+};
+
+
+
+
+! create lin table
+exec,make_opticstbl_ir5hl(ir5sq3_lin,3);nnn=1;
+call,file="opt_500_500_500_500_v2.madx";
+fill,table=ir5sq3_lin,row=nnn; nnn=nnn+1;
+call,file="opt_2000_2000_2000_2000.madx";
+fill,table=ir5sq3_lin,row=nnn; nnn=nnn+1;
+call,file="opt_6000_6000_6000_6000v2.madx";
+fill,table=ir5sq3_lin,row=nnn; nnn=nnn+1;
+write,table=ir5sq3_lin,file=ir5sq3_lin.tfs;
+
+! create table
+exec,make_opticstbl_ir5hl(ir5sq,21);
+call,file="opt_500_500_500_500_v2.madx";
+match_on_triplet=0; call,file="rematch_ir15_b12.madx";
+fill,table=ir5sq,row=1;write,table=ir5sq,file=ir5sq.tfs;
+nnn=2;call,file=sq2_lin.madx;
+no_match_beta=1;
+match_on_triplet=0; call,file="rematch_ir15_b12.madx";
+nnn=3;call,file=sq2b_lin.madx;
+match_on_triplet=0; call,file="rematch_ir15_b12.madx";
+fill,table=ir5sq,row=21;write,table=ir5sq,file=ir5sq.tfs;
+
+! make squeeze
+iii=0;while(iii<=10 && tar<1e-12){
+nnn=1.0+iii/10;
+call,file=sq2_lin.madx;
+no_match_beta=1;
+match_on_triplet=3; call,file="rematch_ir15_b12.madx";
+no_match_beta=0;
+match_on_triplet=3; call,file="rematch_ir15_b12.madx";
+match_on_triplet=0; call,file="rematch_ir15_b12.madx";
+iii=iii+1;
+fill,table=ir5sq,row=iii;write,table=ir5sq,file=ir5sq.tfs;
+};
+
+
+iii=11;while(iii<=20 && tar<1e-12){
+nnn=2.0+(iii-11)/9;
+call,file=sq3b_lin.madx;
+no_match_beta=1;
+match_on_triplet=3; call,file="rematch_ir15_b12.madx";
+no_match_beta=0;
+match_on_triplet=3; call,file="rematch_ir15_b12.madx";
+match_on_triplet=0; call,file="rematch_ir15_b12.madx";
+iii=iii+1;
+fill,table=ir5sq,row=iii;write,table=ir5sq,file=ir5sq.tfs;
+};
+
+
+
+call,file=opt_500_500_500_500_noq10_v2.madx;
+exec,check_ip(b1); exec,check_ip(b2);
+call,file="slhc/toolkit/rematch_crabs.madx";
+
+on_holdselect=1; jac_calls=   10;jac_tol=1e-20; jac_bisec=3; tar=0;
+
+grad=132.6; scl=0.20; sch=0.90;sc79=0.99;bmaxds=200;imb=1.20;
+apq1011=1200; apq789:=apq1011; apq6:=apq789; apq5:=apq6;apq4:=apq5;
+match_inj_tunes=0; match_on_aperture=0;
+
+betxip5b1=2.0;
+betyip5b1:=betxip5b1; betxip5b2:=betxip5b1; betyip5b2:=betxip5b1;
+
+KQTL11.L5B1=-50/scale;
+match_on_triplet=3; call,file="rematch_ir15_b12.madx";
+match_on_triplet=0; call,file="rematch_ir15_b12.madx";
+
+
+call,file="slhc/toolkit/rematch_xing_ir15.madx";
+call,file="slhc/toolkit/rematch_xing_ir28.madx";
+call,file="slhc/toolkit/rematch_w.madx";
+call,file="slhc/toolkit/rematch_disp.madx";
+call,file="rematch_crabs.madx";
+
+
+exec,save_optics_hllhc(opt_2000_2000_2000_2000_noq10_v3.madx);
+
+
+call,file=opt_2000_2000_2000_2000_noq10_v2.madx;
+grad=132.6; scl=0.40; sch=0.90;sc79=0.99;bmaxds=200;imb=1.20;
+apq1011=1250; apq789:=apq1011; apq6:=apq789; apq5:=apq6;apq4:=apq5*1.5;
+match_inj_tunes=1;
+match_on_aperture=1;
+
+betxip5b1=2.0;
+betyip5b1:=betxip5b1; betxip5b2:=betxip5b1; betyip5b2:=betxip5b1;
+
+apq1011=187;
+match_on_triplet=3; call,file="rematch_ir15_b12.madx";
+match_on_triplet=0; call,file="rematch_ir15_b12.madx";
+
+
+call,file="slhc/toolkit/rematch_xing_ir15.madx";
+call,file="slhc/toolkit/rematch_xing_ir28.madx";
+call,file="slhc/toolkit/rematch_w.madx";
+call,file="slhc/toolkit/rematch_disp.madx";
+call,file="rematch_crabs.madx";
+
+
+exec,save_optics_hllhc(opt_6000_6000_6000_6000_noq10_v2.madx);
+
+
+
+! create lin table
+exec,make_opticstbl_ir5hl(ir5sq4_lin,3);
+call,file="opt_500_500_500_500_noq10_v2.madx";
+nnn=1;fill,table=ir5sq4_lin,row=nnn;
+call,file="opt_2000_2000_2000_2000_noq10_v3.madx";
+nnn=2;fill,table=ir5sq4_lin,row=nnn;
+call,file="opt_6000_6000_6000_6000_noq10_v3.madx";
+nnn=3;fill,table=ir5sq4_lin,row=nnn;
+write,table=ir5sq4_lin,file=ir5sq4_lin.tfs;
+
+
+! create lin table
+exec,make_opticstbl_ir5hl(ir5sq5_lin,3);
+call,file="opt_500_500_500_500_noq10_v2.madx";
+nnn=1;fill,table=ir5sq5_lin,row=nnn;
+call,file="opt_2000_2000_2000_2000_noq10_v2.madx";
+nnn=2;fill,table=ir5sq5_lin,row=nnn;
+call,file="opt_6000_6000_6000_6000_noq10_v3.madx";
+nnn=3;fill,table=ir5sq5_lin,row=nnn;
+write,table=ir5sq5_lin,file=ir5sq5_lin.tfs;
+
+
+
+! create table
+grad=132.6; scl=0.10; sch=0.90;sc79=0.99;bmaxds=200;imb=1.20;
+apq1011=1250; apq789:=apq1011; apq6:=apq789; apq5:=apq6;apq4:=apq5*1.5;
+match_inj_tunes=0; match_on_aperture=0;
+jac_calls=10;
+
+exec,make_opticstbl_ir5hl(ir5sq,21);
+call,file="opt_500_500_500_500_noq10_v2.madx";
+nnn=1;call,file=sq5_lin.madx;
+match_on_triplet=0; call,file="rematch_ir15_b12.madx";
+fill,table=ir5sq,row=1;write,table=ir5sq,file=ir5sq.tfs;
+nnn=2;call,file=sq5_lin.madx;
+no_match_beta=1;
+match_on_triplet=0; call,file="rematch_ir15_b12.madx";
+nnn=3;call,file=sq5b_lin.madx;
+match_on_triplet=0; call,file="rematch_ir15_b12.madx";
+fill,table=ir5sq,row=21;write,table=ir5sq,file=ir5sq.tfs;
+
+! make squeeze
+iii=0;while(iii<=10 && tar<1e-12){
+nnn=1.0+iii/10;
+call,file=sq5_lin.madx;
+no_match_beta=1;
+match_on_triplet=3; call,file="rematch_ir15_b12.madx";
+no_match_beta=0;
+match_on_triplet=3; call,file="rematch_ir15_b12.madx";
+match_on_triplet=0; call,file="rematch_ir15_b12.madx";
+iii=iii+1;
+fill,table=ir5sq,row=iii;write,table=ir5sq,file=ir5sq.tfs;
+};
+
+
+iii=11;while(iii<=20 && tar<1e-12){
+nnn=2.0+(iii-11)/9;
+call,file=sq5b_lin.madx;
+no_match_beta=1;
+match_on_triplet=3; call,file="rematch_ir15_b12.madx";
+no_match_beta=0;
+match_on_triplet=3; call,file="rematch_ir15_b12.madx";
+match_on_triplet=0; call,file="rematch_ir15_b12.madx";
+iii=iii+1;
+fill,table=ir5sq,row=iii;write,table=ir5sq,file=ir5sq.tfs;
+};
+
+
+
+
+call,file="sq5_nlin.madx";
+betxip5b1=2.00;
+exec,mk_irtwiss(5,b1); exec,mk_irtwiss(5,b2);
+
+call,file="sq5b_nlin.madx";
+betxip5b1=3.14;
+exec,mk_irtwiss(5,b1); exec,mk_irtwiss(5,b2);
+
+! optimize transition beta
+call,file="opt_500_500_500_500_v2.madx";
+
+grad=132.6; scl=0.12; sch=0.90;sc79=0.99;bmaxds=200;imb=1.20;
+apq1011=1200; apq789:=apq1011; apq6:=apq789; apq5:=apq6;apq4:=apq5;
+match_inj_tunes=0;
+betxip5b1=2.0;
+betyip5b1:=betxip5b1; betxip5b2:=betxip5b1; betyip5b2:=betxip5b1;
+
+scl=0.20;
+match_on_triplet=3; call,file="rematch_ir15_b12.madx";
+
+call,file="slhc/toolkit/rematch_xing_ir15.madx";
+call,file="slhc/toolkit/rematch_w.madx";
+call,file="slhc/toolkit/rematch_disp.madx";
+call,file="slhc/toolkit/rematch_crabs.madx";
+
+exec,save_optics_hllhc(opt_2000_2000_2000_2000.madx);
+
+
+exec,save_optics_hllhc(opt_500_500_500_500_v2.madx);
+
+fill,table=ir5sq,row=16;write,table=ir5sq,file=ir5sq.tfs;
+
+
+call,file="sqf2_nlin.madx";
+betxip5b1=1.14;
+exec,mk_irtwiss(5,b1); exec,mk_irtwiss(5,b2);
+
+
