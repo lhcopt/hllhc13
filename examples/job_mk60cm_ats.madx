@@ -1,0 +1,93 @@
+option, warn,info;
+system,"rm -rf temp"; system,"mkdir temp";
+system,"ln -fns /afs/cern.ch/eng/lhc/optics/HLLHCV1.3 slhc";
+system,"ln -fns /afs/cern.ch/eng/lhc/optics/runIII lhc";
+
+Option, -echo,-warn,-info;
+call,file="lhc/lhc.seq";
+call,file="slhc/toolkit/macro.madx";
+call,file="slhc/toolkit/optics_log.madx";
+Option, -echo,warn,-info,no_fatal_stop;
+
+
+exec,mk_beam(7000);
+seqedit,sequence=lhcb1; flatten; cycle,start=s.ds.l3.b1; endedit;
+seqedit,sequence=lhcb2; flatten; cycle,start=s.ds.l3.b2; endedit;
+
+call,file="slhc/hllhc_sequence.madx";
+call,file="slhc/opt_150_150_150_150.madx";
+exec,check_ip(b1); exec,check_ip(b2);
+
+readmytable,file="slhc/ir5/ir5sqfv3.tfs",table=ir5sq2;
+
+make_opt(bbb5,aaa): macro={
+call,file="slhc/toolkit/rematch_hllhc.madx";
+
+if (tarsqueeze>1e-15){
+   value, tarsqueeze;
+   print, text="matching not converged";
+   exit;
+};
+
+if (is_thin==0){exec,save_optics_hllhc(opt_round_bbb5_atsaaa.madx);};
+if (is_thin==1){exec,save_optics_hllhc(opt_round_bbb5_atsaaa_thin.madx);};
+};
+
+call_ats(sss): macro={
+  call,file="slhc/squeeze2/opt_sss_sss_sss_sss.madx";
+  if (MBX.4L2->l==0) {
+    call,file="slhc/squeeze2/opt_sss_sss_sss_sss_thin.madx";
+  };
+};
+
+
+set_opt(bbb5,aaa): macro={
+
+ats=aaa/1000;
+sss=round(500/ats/10)*10;
+value,sss;
+exec,call_ats($sss);
+
+ref5=bbb5/1000*ats;
+betxip5b1=11;iii=61;while(betxip5b1>=ref5 && iii>0){
+setvars,table=ir5sq2,row=iii;iii=iii-1; };
+setvars_lin,table=ir5sq2,row1=iii+2,row2=iii+1,param=ttt5;
+ttt5=0;bb1=betxip5b1; ttt5=1;bb2=betxip5b1;
+ttt5=(bb1-ref5)/(bb1-bb2);!value,ttt5,betxip5b1,ref5;
+exec,copyir5to1;
+betx0_IP1=ref5; bety0_IP1=ref5; betx0_IP5=ref5; bety0_IP5=ref5;
+betx_IP1=bbb5/1000; bety_IP1=bbb5/1000; betx_IP5=bbb5/1000; bety_IP5=bbb5/1000;
+
+value,ref5,betx_IP1;
+exec,check_ip(b1); exec,check_ip(b2);
+
+exec,make_opt(bbb5,aaa);
+};
+
+!ATS factor 1.7, beta*=60cm
+!exec,set_opt(600,1100);
+!exec,set_opt(600,1300);
+!exec,set_opt(600,1500);
+exec,set_opt(600,1900);
+!exec,set_opt(600,2500);
+!exec,set_opt(600,1700);
+!exec,set_opt(600,2200);
+!exec,set_opt(600,3000);
+!exec,set_opt(600,3333);
+exec,myslice;
+!exec,set_opt(600,1100);
+!exec,set_opt(600,1300);
+!exec,set_opt(600,1500);
+exec,set_opt(600,1900);
+!exec,set_opt(600,2500);
+!exec,set_opt(600,1700);
+!exec,set_opt(600,2200);
+!exec,set_opt(600,3000);
+!exec,set_opt(600,3333);
+
+!exec,set_opt(%B5,%AAA);
+!exec,set_opt(%B5,%AAA);
+
+!system,"ls -l";
+
+!system,"tar cvfz result.tgz *.madx *.tfs";
